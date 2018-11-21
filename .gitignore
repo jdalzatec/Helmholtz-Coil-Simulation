@@ -102,3 +102,10 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# pipenv files
+Pipfile
+Pipfile.lock
+
+# mac files
+.DS_Store
