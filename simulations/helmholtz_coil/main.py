@@ -18,13 +18,18 @@ def main():
     d = R
 
     coils = [
-        CircularCoil(R, N, I, -0.5 * d, "crimson"),
+        CircularCoil(R, N, I, - 0.5 * d, "crimson"),
         CircularCoil(R, N, I, 0.5 * d, "crimson"),
     ]
 
 
-    z_arr = numpy.linspace(-R*12/25, R*12/25, 50)
-    rho_arr = numpy.linspace(0.000001, R, 50)
+    z_arr = numpy.linspace(-R*0.5, R*0.5, 50)
+    rho_arr = numpy.linspace(0.0, R, 50)
+
+    rho_arr[rho_arr == 0.0] = numpy.finfo(numpy.float32).eps
+    for coil in coils:
+        z_arr[z_arr == coil.pos_z] = coil.pos_z - numpy.finfo(numpy.float32).eps
+    
     
     z_grid, rho_grid = numpy.meshgrid(z_arr, rho_arr)
     z_grid = z_grid.T
@@ -44,11 +49,19 @@ def main():
     norm = numpy.sqrt(Brho_grid**2 + Bz_grid**2)
 
     max_val = 1000
-    # overpass is for set the >= symbol in case of norm >= max_val
-    overpass = False
+    # surpass is for set the >= symbol in case of norm >= max_val
+    surpass = False
     if numpy.any(norm >= max_val):
-        overpass = True
+        surpass = True
         norm[norm >= max_val] = max_val
+
+    min_val = 500
+    # underpass is for set the <= symbol in case of norm <= max_val
+    underpass = False
+    if numpy.any(norm <= min_val):
+        underpass = True
+        norm[norm <= min_val] = min_val
+    
 
     min_val = numpy.floor(numpy.min(norm))
     max_val = numpy.ceil(numpy.max(norm))
@@ -70,9 +83,15 @@ def main():
     cbar.set_ticks(labels)
     labels = [str(s) for s in labels]
 
-    # in case of overpass is true, the last label is modified
-    if overpass:
+    # in case of surpass is true, the last label is modified
+    if surpass:
         labels[-1] = r"$\geq$ " + labels[-1]
+
+    # in case of underpass is true, the first label is modified
+    if surpass:
+        labels[0] = r"$\leq$ " + labels[0]
+    
+    
     cbar.ax.set_yticklabels(labels)
 
 

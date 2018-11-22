@@ -14,11 +14,10 @@ def main():
     N=50
     I=1.0
     R=1.0
-    d = R
 
     coils = [
-        CircularCoil(R, N, I, -0.5 * d, "crimson"),
-        CircularCoil(R, N, I, 0.5 * d, "royalblue"),
+        CircularCoil(R, N, I, -0.5 * R, "crimson"),
+        CircularCoil(R, N, I, 0.5 * R, "royalblue"),
         CircularCoil(2 * R, N, I, 0.0, "black"),
     ]
 
