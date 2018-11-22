@@ -88,7 +88,7 @@ def main():
         labels[-1] = r"$\geq$ " + labels[-1]
 
     # in case of underpass is true, the first label is modified
-    if surpass:
+    if underpass:
         labels[0] = r"$\leq$ " + labels[0]
     
     
