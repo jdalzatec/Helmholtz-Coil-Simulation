@@ -8,6 +8,8 @@ import matplotlib
 matplotlib.style.use('classic')
 import numpy
 
+from functions import Bz
+
 
 def main():
     mu0=1.0
@@ -24,10 +26,7 @@ def main():
     rho = 0.00001
 
     z_arr = numpy.linspace(-1, 1, 50)
-    Bz_arr = numpy.zeros_like(z_arr)
-    for i, z in enumerate(z_arr):
-        for coil in coils:
-            Bz_arr[i] += mu0 * coil.Bz(rho, z)
+    Bz_arr = Bz(coils, rho, z_arr, mu0)
 
 
     Bz_teo = numpy.zeros_like(z_arr)

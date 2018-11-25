@@ -8,6 +8,7 @@ import matplotlib
 matplotlib.style.use('classic')
 import numpy
 
+from functions import Bz, Brho, Bz_Brho
 
 
 def main():
@@ -23,8 +24,8 @@ def main():
     ]
 
 
-    z_arr = numpy.linspace(-R*0.5, R*0.5, 50)
-    rho_arr = numpy.linspace(0.0, R, 50)
+    z_arr = numpy.linspace(-R*0.5, R*0.5, 100)
+    rho_arr = numpy.linspace(0.0, R, 100)
 
     rho_arr[rho_arr == 0.0] = numpy.finfo(numpy.float32).eps
     for coil in coils:
@@ -35,15 +36,9 @@ def main():
     z_grid = z_grid.T
     rho_grid = rho_grid.T
 
-    Bz_grid = numpy.zeros_like(z_grid)
-    Brho_grid = numpy.zeros_like(z_grid)
-
-    for i in range(len(z_arr)):
-        for j in range(len(rho_arr)):
-            z, rho = z_grid[i, j], rho_grid[i, j]
-            for coil in coils:
-                Bz_grid[i, j] += mu0 * coil.Bz(rho, z)
-                Brho_grid[i, j] += mu0 * coil.Brho(rho, z)
+    Bz_grid = Bz(coils, rho_arr, z_arr, mu0)
+    Brho_grid = Brho(coils, rho_arr, z_arr, mu0)
+    # Bz_grid, Brho_grid = Bz_Brho(coils, rho_arr, z_arr, mu0)
 
 
     norm = numpy.sqrt(Brho_grid**2 + Bz_grid**2)
