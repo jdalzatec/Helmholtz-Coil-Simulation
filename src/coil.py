@@ -1,14 +1,18 @@
 import numpy
 from functions import  *
 
-
-class CircularCoil(object):
-    def __init__(self, radius, num_turns, I, pos_z, color="black"):
-        self.radius = radius
+class Coil(object):
+    def __init__(self, num_turns, I, pos_z, color="black"):
         self.num_turns = num_turns
         self.I = I
         self.pos_z = pos_z
         self.color = color
+        
+
+class CircularCoil(Coil):
+    def __init__(self, radius, num_turns, I, pos_z, color="black"):
+        Coil.__init__(self, num_turns, I, pos_z, color)
+        self.radius = radius
 
 
     def Brho(self, rho, z):
