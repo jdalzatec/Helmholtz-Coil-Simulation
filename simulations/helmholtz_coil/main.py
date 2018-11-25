@@ -12,7 +12,7 @@ from functions import Bz, Brho, Bz_Brho
 
 
 def main():
-    mu0=1.0
+    mu0=4 * numpy.pi * 1e-7
     N=100
     I=4.8
     R=0.5
@@ -24,8 +24,8 @@ def main():
     ]
 
 
-    z_arr = numpy.linspace(-R*0.5, R*0.5, 100)
-    rho_arr = numpy.linspace(0.0, R, 100)
+    z_arr = numpy.linspace(-0.5 * R, 0.5 * R, 20)
+    rho_arr = numpy.linspace(0, R, 20)
 
     rho_arr[rho_arr == 0.0] = numpy.finfo(numpy.float32).eps
     for coil in coils:
@@ -43,14 +43,14 @@ def main():
 
     norm = numpy.sqrt(Brho_grid**2 + Bz_grid**2)
 
-    max_val = 1000
+    max_val = 1e-3
     # surpass is for set the >= symbol in case of norm >= max_val
     surpass = False
     if numpy.any(norm >= max_val):
         surpass = True
         norm[norm >= max_val] = max_val
 
-    min_val = 500
+    min_val = 5e-4
     # underpass is for set the <= symbol in case of norm <= max_val
     underpass = False
     if numpy.any(norm <= min_val):
@@ -58,8 +58,8 @@ def main():
         norm[norm <= min_val] = min_val
     
 
-    min_val = numpy.floor(numpy.min(norm))
-    max_val = numpy.ceil(numpy.max(norm))
+    min_val = numpy.min(norm)
+    max_val = numpy.max(norm)
 
     assert(max_val > min_val)
 
@@ -68,25 +68,23 @@ def main():
 
     pyplot.figure()
     mesh = pyplot.pcolormesh(z_grid, rho_grid, norm,
-        shading="gouraud", vmin=min_val, vmax=max_val, cmap=cmap)
+        shading="gouraud", cmap=cmap)
     mesh = pyplot.pcolormesh(z_grid, -rho_grid, norm,
-        shading="gouraud", vmin=min_val, vmax=max_val, cmap=cmap)
-    cbar = pyplot.colorbar(mesh)
-    
+        shading="gouraud", cmap=cmap)
+    cbar = pyplot.colorbar(mesh, format='%.2e')
+
     # set the ticks and ticks labels for the color bar
     labels = numpy.linspace(min_val, max_val, 5)
     cbar.set_ticks(labels)
-    labels = [str(s) for s in labels]
+    labels = ['%.2e' % s for s in labels]
+
 
     # in case of surpass is true, the last label is modified
-    if surpass:
-        labels[-1] = r"$\geq$ " + labels[-1]
+    if surpass: labels[-1] = r"$\geq$ " + labels[-1]
 
     # in case of underpass is true, the first label is modified
-    if underpass:
-        labels[0] = r"$\leq$ " + labels[0]
-    
-    
+    if underpass: labels[0] = r"$\leq$ " + labels[0]
+
     cbar.ax.set_yticklabels(labels)
 
 
