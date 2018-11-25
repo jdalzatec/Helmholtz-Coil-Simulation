@@ -1,5 +1,5 @@
 import numpy
-from functions import  *
+from elliptical import  *
 
 class Coil(object):
     def __init__(self, num_turns, I, pos_z, color="black"):
@@ -8,6 +8,7 @@ class Coil(object):
         self.pos_z = pos_z
         self.color = color
         
+
 
 class CircularCoil(Coil):
     def __init__(self, radius, num_turns, I, pos_z, color="black"):
