@@ -8,7 +8,7 @@ import matplotlib
 matplotlib.style.use('classic')
 import numpy
 
-from functions import Bz, Brho, Bz_Brho
+from functions import *
 
 
 def main():
@@ -23,8 +23,7 @@ def main():
         CircularCoil(R, N, I, 0.5 * d, "crimson"),
     ]
 
-
-    z_arr = numpy.linspace(-0.5 * R, 0.5 * R, 20)
+    z_arr = numpy.linspace(-0.5 * R, 0.5 * R, 21)
     rho_arr = numpy.linspace(0, R, 20)
 
     rho_arr[rho_arr == 0.0] = numpy.finfo(numpy.float32).eps
@@ -42,6 +41,12 @@ def main():
 
 
     norm = numpy.sqrt(Brho_grid**2 + Bz_grid**2)
+
+    #compute bottom left coords of rectangle of homogeneity homo
+    uniformity_grid = uniformity(coils, norm, mu0)
+    homo = 99
+    z, y = homogeneity(uniformity_grid, z_arr, rho_arr, homo)
+
 
     max_val = 1e-3
     # surpass is for set the >= symbol in case of norm >= max_val
@@ -91,6 +96,10 @@ def main():
     for coil in coils:
         pyplot.plot([coil.pos_z, coil.pos_z], [-coil.radius, coil.radius],
             lw=coil.num_turns / 10, color=coil.color)
+    
+    # plot homogeneity rectangle
+    pyplot.gca().add_patch(pyplot.Rectangle((z, y), abs(2 * z), abs(2 * y), fill=False, edgecolor='black', linewidth=coil.num_turns / 50))
+ 
 
     pyplot.grid()
     pyplot.xlabel(r"$z$", fontsize=30)
