@@ -60,3 +60,56 @@ class CoilListRow(Gtk.Box):
         self.txtCurrent.set_property("text", str(current))
         self.txtPosition.set_property("text", str(position))
 
+
+    def get_values(self):
+        params = {
+            "shape": self.shapeComboBox.get_active_text(),
+            "radius": float(self.txtRadius.get_text()),
+            "turns": int(self.txtTurns.get_text()),
+            "current": float(self.txtCurrent.get_text()),
+            "position": float(self.txtPosition.get_text()),
+        }
+        return params
+
+    def validate_values(self):
+        radius = self.txtRadius.get_text()
+
+        if radius == "":
+            raise Exception("paila")
+            return False
+
+        radius = float(radius)
+
+        if radius <= 0:
+            raise Exception("paila")
+            return False
+
+        turns = self.txtTurns.get_text()
+
+        if turns == "":
+            raise Exception("paila")
+            return False
+
+        turns = int(turns)
+
+        if turns <= 0:
+            raise Exception("paila")
+            return False
+
+        current = self.txtCurrent.get_text()
+
+        if current == "":
+            raise Exception("paila")
+            return False
+
+        current = float(current)
+
+        position = self.txtPosition.get_text()
+
+        if position == "":
+            raise Exception("paila")
+            return False
+
+        position = float(position)
+
+        return True

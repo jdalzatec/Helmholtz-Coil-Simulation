@@ -1,6 +1,13 @@
 import numpy
 from elliptical import  *
 
+def CreateCoil(shape, radius, turns, current, position):
+    if shape == "Circular":
+        return CircularCoil(radius, turns, current, position)
+    
+
+
+
 class Coil(object):
     def __init__(self, num_turns, I, pos_z, color="black"):
         self.num_turns = num_turns
