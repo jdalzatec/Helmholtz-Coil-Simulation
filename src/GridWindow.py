@@ -91,9 +91,14 @@ class GridWindow(Gtk.Dialog):
         content = self.get_content_area()
         content.pack_start(box, False, False, 10)
 
-        self.add_button("Auto", Gtk.ResponseType.HELP)
-        self.add_button("Ok", Gtk.ResponseType.OK)
+        self.add_button("Revert", Gtk.ResponseType.HELP)
+        self.add_button("Run", Gtk.ResponseType.OK)
         self.add_button("Cancel", Gtk.ResponseType.CANCEL)
 
 
         self.show_all()
+
+window = GridWindow(None)
+window.connect("destroy", Gtk.main_quit)
+window.show_all()
+Gtk.main()
