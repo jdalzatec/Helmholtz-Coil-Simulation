@@ -386,9 +386,6 @@
             <property name="position">5</property>
           </packing>
         </child>
-        <child>
-          <placeholder/>
-        </child>
       </object>
     </child>
   </object>

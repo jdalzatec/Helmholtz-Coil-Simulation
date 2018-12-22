@@ -24,14 +24,20 @@ class NumericEntry(Gtk.Entry):
             print("pailander")
 
     def do_insert_text(self, new_text, new_text_length, position):
-        text = ""
-        for c in new_text:
-            if c in self.chars:
-                if c not in ".,":
-                    text += c
-                else:
-                    if "." not in self.get_text() and "," not in self.get_text():
+        if hasattr(self, "chars"):
+            text = ""
+            for c in new_text:
+                if c in self.chars:
+                    if c not in ".,":
                         text += c
+                    else:
+                        if "." not in self.get_text() and "," not in self.get_text():
+                            text += c
 
-        self.get_buffer().insert_text(position, text, len(text))
-        return position + len(text)
+            self.get_buffer().insert_text(position, text, len(text))
+            return position + len(text)
+        else:
+            self.get_buffer().insert_text(position, new_text, len(new_text))
+            return position + len(new_text)
+
+

@@ -78,8 +78,8 @@ class InputWindow():
                 self.z_min = self.z_min - self.rho_max
                 self.z_max = self.z_max + self.rho_max
 
-            self.z_points = 100
-            self.rho_points = 100
+            self.z_points = 10
+            self.rho_points = 10
 
 
     def collect_coils_values(self):
@@ -99,30 +99,32 @@ class InputWindow():
             return
 
         self.compute_grid()
+        ready = True
         if not self.auto_grid:
-            self.insert_grid_manually()
+            ready = self.insert_grid_manually()
 
+        if ready:
+            print("lets go")
+            self.simulation = Simulation(self.coils,
+                self.z_min, self.z_max, self.z_points,
+                self.rho_min, self.rho_max, self.rho_points)
 
-
-        # if ready:
-        #     self.compute_grid()
-
-        #     self.simulation = Simulation(self.coils,
-        #         self.z_min, self.z_max, self.z_points,
-        #         self.rho_min, self.rho_max, self.rho_points)
+            self.simulation.run()
 
 
     def insert_grid_manually(self):
-        dialog = GridWindow(self.window)
+        initial_grid = {
+            "z_min": self.z_min,
+            "z_max": self.z_max,
+            "z_points": self.z_points,
+            "rho_min": self.rho_min,
+            "rho_max": self.rho_max,
+            "rho_points": self.rho_points,
+        }
 
-        dialog.txtMinZ.set_property("text", str(self.z_min))
-        dialog.txtMaxZ.set_property("text", str(self.z_max))
-        dialog.txtPointsZ.set_property("text", str(self.z_points))
-        dialog.txtMinRho.set_property("text", str(self.rho_min))
-        dialog.txtMaxRho.set_property("text", str(self.rho_max))
-        dialog.txtPointsRho.set_property("text", str(self.rho_points))
-
-        response = dialog.run()
+        dialog = GridWindow(self.window, "./interfaces/grid.glade", initial_grid)
+        
+        response = dialog.window.run()
 
         if response == Gtk.ResponseType.OK:
             self.z_min = float(dialog.txtMinZ.get_text())
@@ -131,29 +133,11 @@ class InputWindow():
             self.rho_min = float(dialog.txtMinRho.get_text())
             self.rho_max = float(dialog.txtMaxRho.get_text())
             self.rho_points = int(dialog.txtPointsRho.get_text())
+            dialog.window.destroy()
+            return True
 
-            dialog.destroy()
-
-        elif response == Gtk.ResponseType.HELP:
-            self.compute_grid()
-
-            dialog.txtMinZ.set_property("text", str(self.z_min))
-            dialog.txtMaxZ.set_property("text", str(self.z_max))
-            dialog.txtPointsZ.set_property("text", str(self.z_points))
-            dialog.txtMinRho.set_property("text", str(self.rho_min))
-            dialog.txtMaxRho.set_property("text", str(self.rho_max))
-            dialog.txtPointsRho.set_property("text", str(self.rho_points))
-
-
-            
-        else:
-            dialog.destroy()
-
-
-        print(response)
-
-        
-        # Gtk.main()
+        dialog.window.destroy()
+        return False
 
 window = InputWindow("./interfaces/input2.glade")
 print("hola")
