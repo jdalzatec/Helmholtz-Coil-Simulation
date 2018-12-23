@@ -1,6 +1,8 @@
 import gi
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk, Gdk
+from gi.repository import Gtk, Gdk, GObject, GLib
+
+from Results import Results
 
 
 from GridWindow import GridWindow
@@ -48,21 +50,14 @@ class InputWindow():
         self.window.show_all()
         Gtk.main()
 
+
     def on_auto_grid(self, check):
         self.auto_grid = check.get_active()
 
 
-    # def update_grid_info(self):
-    #     mode = "Auto" if self.auto_grid else "Manual"
-    #     text = "Grid (%s)" % mode
-    #     if mode == "Auto":
-    #         text += ": Z from %s to %s (%i points); ρ from %s to %s (%i points);" % (
-    #         self.z_min, self.z_max, self.z_points,
-    #         self.rho_min, self.rho_max, self.rho_points)
-    #     self.lblGridInfo.set_text(text)
-    
     def on_helmholtz_config(self, widget):
         self.listBox.update(HelmholtzCoilPreset())
+
 
     def compute_grid(self):
         if len(self.coils) > 0:
@@ -78,8 +73,8 @@ class InputWindow():
                 self.z_min = self.z_min - self.rho_max
                 self.z_max = self.z_max + self.rho_max
 
-            self.z_points = 10
-            self.rho_points = 10
+            self.z_points = 50
+            self.rho_points = 50
 
 
     def collect_coils_values(self):
@@ -90,6 +85,12 @@ class InputWindow():
                 coil = CreateCoil(**coil_row.get_values())
                 self.coils.append(coil)
 
+    def wait_for_the_simulation(self, thread):
+       if not thread.is_alive():
+           thread.join()
+           print("finish")
+       else:
+           GLib.timeout_add(10, self.wait_for_the_simulation, thread)
 
     def on_simulate(self, widget):
         self.collect_coils_values()
@@ -105,11 +106,12 @@ class InputWindow():
 
         if ready:
             print("lets go")
-            self.simulation = Simulation(self.coils,
+            self.simulation = Simulation(self, self.coils,
                 self.z_min, self.z_max, self.z_points,
                 self.rho_min, self.rho_max, self.rho_points)
 
-            self.simulation.run()
+            self.wait_for_the_simulation(self.simulation.thread)
+
 
 
     def insert_grid_manually(self):
@@ -139,19 +141,6 @@ class InputWindow():
         dialog.window.destroy()
         return False
 
+GObject.threads_init()
 window = InputWindow("./interfaces/input2.glade")
 print("hola")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
