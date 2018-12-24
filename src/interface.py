@@ -23,6 +23,7 @@ class InputWindow():
         self.scrListBox = self.builder.get_object("scrListBox")
         self.btnSimulate = self.builder.get_object("btnSimulate")
         self.chbAutoGrid = self.builder.get_object("chbAutoGrid")
+        self.menuColorMap = self.builder.get_object("menuColorMap")
         
         self.listBox = CoilsListBox()
         self.scrListBox.add_with_viewport(self.listBox)
@@ -70,8 +71,8 @@ class InputWindow():
                 self.z_min = self.z_min - self.rho_max
                 self.z_max = self.z_max + self.rho_max
 
-            self.z_points = 50
-            self.rho_points = 50
+            self.z_points = 10
+            self.rho_points = 10
 
 
     def collect_coils_values(self):
