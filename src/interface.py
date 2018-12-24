@@ -5,7 +5,7 @@ from gi.repository import Gtk, Gdk, GObject, GLib
 from GridWindow import GridWindow
 from CoilsListBox import CoilsListBox
 from CoilListRow import CoilListRow
-from Presets import HelmholtzCoilPreset
+from Presets import HelmholtzCoilPreset, RandomCoilPreset
 from coil import Coil, CreateCoil
 from Simulation import Simulation
 
@@ -20,10 +20,12 @@ class InputWindow():
         self.btnDeleteAll = self.builder.get_object("btnDeleteAll")
         self.btnAddCoil = self.builder.get_object("btnAddCoil")
         self.btnHelmholtzConfig = self.builder.get_object("btnHelmholtzConfig")
+        self.btnRandomConfig = self.builder.get_object("btnRandomConfig")
         self.scrListBox = self.builder.get_object("scrListBox")
         self.btnSimulate = self.builder.get_object("btnSimulate")
         self.chbAutoGrid = self.builder.get_object("chbAutoGrid")
         self.menuColorMap = self.builder.get_object("menuColorMap")
+        self.treeData = self.builder.get_object("treeData")
         
         self.listBox = CoilsListBox()
         self.scrListBox.add_with_viewport(self.listBox)
@@ -32,6 +34,7 @@ class InputWindow():
         self.btnAddCoil.connect("clicked", self.listBox.create_coil_row)
         self.btnDeleteAll.connect("clicked", self.listBox.remove_all_coils)
         self.btnHelmholtzConfig.connect("activate", self.on_helmholtz_config)
+        self.btnRandomConfig.connect("activate", self.on_random_config)
         self.btnSimulate.connect("clicked", self.on_simulate)
         self.chbAutoGrid.connect("activate", self.on_auto_grid)
 
@@ -55,6 +58,9 @@ class InputWindow():
 
     def on_helmholtz_config(self, widget):
         self.listBox.update(HelmholtzCoilPreset())
+
+    def on_random_config(self, widget):
+        self.listBox.update(RandomCoilPreset(20))
 
 
     def compute_grid(self):

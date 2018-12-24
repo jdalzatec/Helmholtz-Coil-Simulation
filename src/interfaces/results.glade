@@ -239,7 +239,6 @@
           <object class="GtkNotebook">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="scrollable">True</property>
             <child>
               <object class="GtkBox">
                 <property name="visible">True</property>
@@ -593,9 +592,8 @@
               <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Visualization</property>
-                <property name="width_chars">20</property>
-                <property name="track_visited_links">False</property>
+                <property name="label" translatable="yes">Visualizer</property>
+                <property name="width_chars">10</property>
                 <attributes>
                   <attribute name="font-desc" value="Sans Bold 10"/>
                 </attributes>
@@ -605,16 +603,354 @@
               </packing>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkScrolledWindow">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="shadow_type">in</property>
+                    <property name="min_content_width">600</property>
+                    <child>
+                      <object class="GtkTreeView" id="treeCoilsInfo">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="hover_selection">True</property>
+                        <property name="enable_grid_lines">both</property>
+                        <child internal-child="selection">
+                          <object class="GtkTreeSelection"/>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSeparator">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="padding">5</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Grid</property>
+                        <attributes>
+                          <attribute name="font-desc" value="Sans Bold 14"/>
+                        </attributes>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="padding">10</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">end</property>
+                                <property name="label" translatable="yes">Min. Z = </property>
+                                <property name="justify">right</property>
+                                <attributes>
+                                  <attribute name="font-desc" value="Sans Bold 10"/>
+                                </attributes>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">end</property>
+                                <property name="label" translatable="yes">Max. Z = </property>
+                                <attributes>
+                                  <attribute name="font-desc" value="Sans Bold 10"/>
+                                </attributes>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">end</property>
+                                <property name="label" translatable="yes">Z points = </property>
+                                <attributes>
+                                  <attribute name="font-desc" value="Sans Bold 10"/>
+                                </attributes>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">end</property>
+                                <property name="label" translatable="yes">Min. ρ = </property>
+                                <attributes>
+                                  <attribute name="font-desc" value="Sans Bold 10"/>
+                                </attributes>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">3</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">end</property>
+                                <property name="label" translatable="yes">Max. ρ = </property>
+                                <attributes>
+                                  <attribute name="font-desc" value="Sans Bold 10"/>
+                                </attributes>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">4</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">end</property>
+                                <property name="label" translatable="yes">ρ Points = </property>
+                                <attributes>
+                                  <attribute name="font-desc" value="Sans Bold 10"/>
+                                </attributes>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">5</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <object class="GtkLabel" id="lblMinZ">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes">lblMinZ</property>
+                                <attributes>
+                                  <attribute name="font-desc" value="Sans Bold 10"/>
+                                </attributes>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="lblMaxZ">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes">lblMaxZ</property>
+                                <attributes>
+                                  <attribute name="font-desc" value="Sans Bold 10"/>
+                                </attributes>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="lblPointsZ">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes">lblPointsZ</property>
+                                <attributes>
+                                  <attribute name="font-desc" value="Sans Bold 10"/>
+                                </attributes>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="lblMinRho">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes">lblMinRho</property>
+                                <attributes>
+                                  <attribute name="font-desc" value="Sans Bold 10"/>
+                                </attributes>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">3</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="lblMaxRho">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes">lblMaxRho</property>
+                                <attributes>
+                                  <attribute name="font-desc" value="Sans Bold 10"/>
+                                </attributes>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">4</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="lblPointsRho">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes">lblPointsRho</property>
+                                <attributes>
+                                  <attribute name="font-desc" value="Sans Bold 10"/>
+                                </attributes>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">5</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="position">1</property>
+              </packing>
             </child>
             <child type="tab">
-              <placeholder/>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Input parameters</property>
+                <property name="width_chars">10</property>
+                <attributes>
+                  <attribute name="font-desc" value="Sans Bold 10"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="position">1</property>
+                <property name="tab_fill">False</property>
+              </packing>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkScrolledWindow">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkTreeView" id="treeData">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection"/>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="position">2</property>
+              </packing>
             </child>
             <child type="tab">
-              <placeholder/>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Data</property>
+                <property name="width_chars">10</property>
+                <attributes>
+                  <attribute name="font-desc" value="Sans Bold 10"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="position">2</property>
+                <property name="tab_fill">False</property>
+              </packing>
             </child>
           </object>
           <packing>

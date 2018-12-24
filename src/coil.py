@@ -21,6 +21,7 @@ class CircularCoil(Coil):
     def __init__(self, radius, num_turns, I, pos_z, color="black"):
         Coil.__init__(self, num_turns, I, pos_z, color)
         self.radius = radius
+        self.shape = "Circular"
 
 
     def Brho(self, rho, z):

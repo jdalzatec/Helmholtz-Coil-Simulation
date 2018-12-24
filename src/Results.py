@@ -26,6 +26,9 @@ class Results():
         self.btnApplyLimits = self.builder.get_object("btnApplyLimits")
         self.statBar = self.builder.get_object("statBar")
         self.menuColorMap = self.builder.get_object("menuColorMap")
+        self.treeData = self.builder.get_object("treeData")
+        self.treeGridInfo = self.builder.get_object("treeGridInfo")
+        self.treeCoilsInfo = self.builder.get_object("treeCoilsInfo")
 
         self.copy_norm = self.parent.norm.copy()
 
@@ -88,6 +91,9 @@ class Results():
         self.pan_active = False
         self.zoom_active = False
 
+
+        self.populate_input_params_trees()
+
     def on_home(self, widget):
         while self.zoom_active:
             self.toolbar_buttons["Zoom"].emit("clicked")
@@ -114,7 +120,38 @@ class Results():
             self.pan_active = False
             self.zoom_active = True
 
+    def populate_input_params_trees(self):
+        coilsList = Gtk.ListStore(str, float, int, float, float)
+        for coil in self.parent.coils:
+            coilsList.append([coil.shape, coil.radius, coil.num_turns, coil.I, coil.pos_z])
 
+        self.treeCoilsInfo.set_model(coilsList)
+
+        for i, column_title in enumerate(["Shape", "Radius [m]", "Turns", "Current [A]", "Position [m]"]):
+            renderer = Gtk.CellRendererText()
+            column = Gtk.TreeViewColumn(column_title, renderer, text=i)
+            column.set_expand(True)
+            self.treeCoilsInfo.append_column(column)
+
+        # now for the grid
+        lblMinZ = self.builder.get_object("lblMinZ")
+        lblMaxZ = self.builder.get_object("lblMaxZ")
+        lblPointsZ = self.builder.get_object("lblPointsZ")
+        lblMinRho = self.builder.get_object("lblMinRho")
+        lblMaxRho = self.builder.get_object("lblMaxRho")
+        lblPointsRho = self.builder.get_object("lblPointsRho")
+
+
+        lblMinZ.set_label(str(self.parent.z_min))
+        lblMaxZ.set_label(str(self.parent.z_max))
+        lblPointsZ.set_label(str(self.parent.z_points))
+        lblMinRho.set_label(str(self.parent.rho_min))
+        lblMaxRho.set_label(str(self.parent.rho_max))
+        lblPointsRho.set_label(str(self.parent.rho_points))
+
+
+
+                
     def on_color_bar_menu(self, widget, name, first=False):
         self.colormap = name
         self.plot()

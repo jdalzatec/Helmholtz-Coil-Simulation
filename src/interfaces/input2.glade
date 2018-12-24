@@ -162,6 +162,15 @@
                         <property name="use_stock">False</property>
                       </object>
                     </child>
+                    <child>
+                      <object class="GtkImageMenuItem" id="btnRandomConfig">
+                        <property name="label" translatable="yes">_Random Configuration</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">False</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
