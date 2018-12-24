@@ -6,6 +6,7 @@ import timeit
 import datetime
 import threading
 
+from Results import Results
 
 from plot import plot_coils
 from matplotlib import pyplot
@@ -36,7 +37,7 @@ class Simulation(object):
 
         self.btnCancel.connect("clicked", self.on_cancel)
 
-        self.window.set_transient_for(parent.window)
+        self.window.set_transient_for(parent)
 
         self.progressBar.set_fraction(0.0)
         
@@ -70,7 +71,19 @@ class Simulation(object):
         self.thread = threading.Thread(target=self.run)
         self.thread.daemon = True
         self.thread.start()
+
+        self.wait_for_the_simulation()
         
+    def wait_for_the_simulation(self):
+        if not self.thread.is_alive():
+            self.thread.join()
+
+            if self.finish:
+                self.parent.hide()
+                print("finish")
+                results = Results()
+        else:
+            GLib.timeout_add(10, self.wait_for_the_simulation)
 
     def on_cancel(self, widget):
         self.stop = True

@@ -2,9 +2,6 @@ import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gdk, GObject, GLib
 
-from Results import Results
-
-
 from GridWindow import GridWindow
 from CoilsListBox import CoilsListBox
 from CoilListRow import CoilListRow
@@ -85,12 +82,6 @@ class InputWindow():
                 coil = CreateCoil(**coil_row.get_values())
                 self.coils.append(coil)
 
-    def wait_for_the_simulation(self, thread):
-       if not thread.is_alive():
-           thread.join()
-           print("finish")
-       else:
-           GLib.timeout_add(10, self.wait_for_the_simulation, thread)
 
     def on_simulate(self, widget):
         self.collect_coils_values()
@@ -106,11 +97,9 @@ class InputWindow():
 
         if ready:
             print("lets go")
-            self.simulation = Simulation(self, self.coils,
+            self.simulation = Simulation(self.window, self.coils,
                 self.z_min, self.z_max, self.z_points,
                 self.rho_min, self.rho_max, self.rho_points)
-
-            self.wait_for_the_simulation(self.simulation.thread)
 
 
 

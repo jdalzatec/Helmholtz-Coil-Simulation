@@ -8,4 +8,4 @@ class Results():
         self.window = Gtk.Window()
 
         self.window.connect("destroy", Gtk.main_quit)
-        # self.window.show_all()
+        self.window.show_all()

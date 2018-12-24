@@ -1,6 +1,8 @@
 import sys
 sys.path.append("../../src")
 
+import timeit
+
 from coil import CircularCoil
 from plot import plot_coils
 from matplotlib import pyplot
@@ -23,8 +25,8 @@ def main():
         CircularCoil(R, N, I, 0.5 * d, "crimson"),
     ]
 
-    z_arr = numpy.linspace(-0.5 * R, 0.5 * R, 21)
-    rho_arr = numpy.linspace(0, R, 20)
+    z_arr = numpy.linspace(-0.5 * R, 0.5 * R, 100)
+    rho_arr = numpy.linspace(0, R, 100)
 
     rho_arr[rho_arr == 0.0] = numpy.finfo(numpy.float32).eps
     for coil in coils:
@@ -71,6 +73,7 @@ def main():
     # cmap = pyplot.get_cmap('Paired')
     cmap = pyplot.get_cmap('jet')
 
+    start = timeit.default_timer()
     pyplot.figure()
     mesh = pyplot.pcolormesh(z_grid, rho_grid, norm,
         shading="gouraud", cmap=cmap)
@@ -107,6 +110,8 @@ def main():
     pyplot.tight_layout()
     pyplot.savefig("Bz_vs_z_several_r.pdf")
     pyplot.close()
+    stop = timeit.default_timer()
+    print(stop - start)
 
     plot_coils(coils)
     
