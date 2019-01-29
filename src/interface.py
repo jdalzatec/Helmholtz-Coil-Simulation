@@ -77,8 +77,8 @@ class InputWindow():
                 self.z_min = self.z_min - self.rho_max
                 self.z_max = self.z_max + self.rho_max
 
-            self.z_points = 10
-            self.rho_points = 10
+            self.z_points = 100
+            self.rho_points = 100
 
 
     def collect_coils_values(self):

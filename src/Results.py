@@ -223,6 +223,7 @@ class Results():
             self.plot()
         else:
             print("cómo chuchas")
+        print(self.underpass, self.surpass)
 
     def plot(self):
         self.fig.clf()
@@ -230,9 +231,9 @@ class Results():
         self.ax.grid(True)
         cmap = pyplot.get_cmap(self.colormap)
         mesh = self.ax.pcolormesh(self.parent.z_grid, self.parent.rho_grid, self.copy_norm,
-            shading="gouraud", cmap=cmap)
+            shading="gouraud", cmap=cmap, vmin=self.min_val, vmax=self.max_val)
         mesh = self.ax.pcolormesh(self.parent.z_grid, -self.parent.rho_grid, self.copy_norm,
-            shading="gouraud", cmap=cmap)
+            shading="gouraud", cmap=cmap, vmin=self.min_val, vmax=self.max_val)
 
         for coil in self.parent.coils:
             self.ax.plot([coil.pos_z, coil.pos_z], [-coil.radius, coil.radius],
@@ -262,7 +263,7 @@ class Results():
         self.ax.set_xlim(self.parent.z_min, self.parent.z_max)
         self.ax.set_ylim(-self.parent.rho_max, self.parent.rho_max)
 
-        self.fig.tight_layout()
+        # self.fig.tight_layout()
         self.fig.canvas.draw()
 
 
