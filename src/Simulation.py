@@ -82,7 +82,7 @@ class Simulation(object):
                 self.parent.hide()
                 print("finish")
                 self.norm = numpy.sqrt(self.Brho_grid**2 + self.Bz_grid**2)
-                results = Results(self)
+                results = Results(self.parent, self)
         else:
             GLib.timeout_add(10, self.wait_for_the_simulation)
 
