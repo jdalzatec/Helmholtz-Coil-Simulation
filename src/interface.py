@@ -77,8 +77,14 @@ class InputWindow():
                 self.z_min = self.z_min - self.rho_max
                 self.z_max = self.z_max + self.rho_max
 
-            self.z_points = 100
-            self.rho_points = 100
+            PMAX = 10
+            if abs(self.z_max - self.z_min) > abs(self.rho_max - self.rho_min):
+                self.z_points = PMAX
+                self.rho_points = int(abs(self.rho_max - self.rho_min) * PMAX / abs(self.z_max - self.z_min))
+            else:
+                self.rho_points = PMAX
+                self.z_points = int(abs(self.z_max - self.z_min) * PMAX / abs(self.rho_max - self.rho_min))
+
 
 
     def collect_coils_values(self):
