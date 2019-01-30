@@ -11,6 +11,7 @@ from matplotlib.backends.backend_gtk3 import NavigationToolbar2GTK3 as Navigatio
 import numpy
 from PlotWindow import PlotBox
 from ZoomWindow import ZoomWindow
+from HomogeneityWindow import HomogeneityWindow
 
 
 class Results():
@@ -23,6 +24,7 @@ class Results():
         self.boxPlot = self.builder.get_object("boxPlot")
         self.btnBack = self.builder.get_object("btnBack")
         self.btnZoom = self.builder.get_object("btnZoom")
+        self.btnHomogeneity = self.builder.get_object("btnHomogeneity")
         self.statBar = self.builder.get_object("statBar")
         self.menuColorMap = self.builder.get_object("menuColorMap")
         self.treeData = self.builder.get_object("treeData")
@@ -38,6 +40,7 @@ class Results():
         self.window.connect("destroy", self.quit)
         self.btnBack.connect("clicked", self.on_back)
         self.btnZoom.connect("clicked", self.on_zoom)
+        self.btnHomogeneity.connect("clicked", self.on_homogeneity)
 
         z_arr = [coil.pos_z for coil in self.simulation.coils]
         radius_arr = [coil.radius for coil in self.simulation.coils]
@@ -74,6 +77,9 @@ class Results():
 
     def on_zoom(self, widget):
         zoom = ZoomWindow(self.window, self.simulation, self.colormap)
+
+    def on_homogeneity(self, widget):
+        homogeneity = HomogeneityWindow(self.window, self.simulation, self.colormap)
 
     def populate_input_params_trees(self):
         coilsList = Gtk.ListStore(str, float, int, float, float)

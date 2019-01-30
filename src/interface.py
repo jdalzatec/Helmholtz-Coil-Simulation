@@ -93,9 +93,8 @@ class InputWindow():
         self.coils = []
         for row in list(self.listBox)[:-1]:
             coil_row, = row.get_children()
-            if coil_row.validate_values():
-                coil = CreateCoil(**coil_row.get_values())
-                self.coils.append(coil)
+            coil = CreateCoil(**coil_row.get_values())
+            self.coils.append(coil)
 
 
     def on_simulate(self, widget):

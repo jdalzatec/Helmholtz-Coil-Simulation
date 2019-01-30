@@ -63,9 +63,21 @@ def Bz_Brho(coils, rho_arr, z_arr, mu0):
             Brho_grid[i, j] = Brho(coils, rho, z, mu0)
     return Bz_grid, Brho_grid
 
-def uniformity(coils, norm, mu0):
-        B0 = Bz(coils, numpy.finfo(numpy.float32).eps, numpy.finfo(numpy.float32).eps, mu0)
-        return 1.0 - numpy.abs((norm - B0) / B0)
+def uniformity(coils, norm, mu0, center):
+    zmid, ymid = center
+    if ymid == 0.0:
+        ymid = numpy.finfo(numpy.float32).eps
+
+    Bz_mid = Bz(coils, numpy.abs(ymid), zmid, mu0)
+    Brho_mid = Brho(coils, numpy.abs(ymid), zmid, mu0)
+
+
+    norm_mid = numpy.sqrt(Bz_mid**2 + Brho_mid**2)
+    print(Brho_mid, Bz_mid, norm_mid)
+    
+    values = 1.0 - numpy.abs((norm - norm_mid) / norm_mid)
+    values[values <= 0.0] = 0.0
+    return values
 
 def homogeneity(uniformity_grid, z_arr, rho_arr, homo):
     # z, y = z_arr[0], -rho_arr[-1]

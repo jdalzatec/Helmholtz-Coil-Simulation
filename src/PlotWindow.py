@@ -51,6 +51,7 @@ class PlotBox():
             self.y_lims = y_lims
 
         self.txtZoomValue = txtZoomValue
+        self.initial_norm = self.simulation.norm.copy()
         
         self.on_initial_plot(None)
 
@@ -93,9 +94,6 @@ class PlotBox():
 
         ymin = mid_y - (0.5 * new_y)
         ymax = mid_y + (0.5 * new_y)
-        print(zmin, zmax, ymin, ymax)
-        print(self.simulation.z_min, self.simulation.z_max, self.simulation.y_min, self.simulation.y_max)
-        print(self.simulation.z_arr, self.simulation.y_arr)
 
         left = numpy.where(self.simulation.z_grid[:, 0] >= (zmin - numpy.finfo(numpy.float32).eps))[0][0]
         right = numpy.where(self.simulation.z_grid[:, 0] <= (zmax + numpy.finfo(numpy.float32).eps))[0][-1]
@@ -104,7 +102,7 @@ class PlotBox():
 
         self.z_grid = self.simulation.z_grid[left:(right + 1), down:(up + 1)]
         self.y_grid = self.simulation.y_grid[left:(right + 1), down:(up + 1)]
-        self.norm = self.simulation.norm[left:(right + 1), down:(up + 1)]
+        self.norm = self.initial_norm[left:(right + 1), down:(up + 1)]
 
         self.z_lims = (zmin, zmax)
         self.y_lims = (ymin, ymax)
@@ -114,7 +112,7 @@ class PlotBox():
     def on_initial_plot(self, widget):
         self.z_grid = self.simulation.z_grid.copy()
         self.y_grid = self.simulation.y_grid.copy()
-        self.norm = self.simulation.norm.copy()
+        self.norm = self.initial_norm.copy()
 
         self.z_lims = (self.simulation.z_min, self.simulation.z_max)
         self.y_lims = (self.simulation.y_min, self.simulation.y_max)
@@ -127,9 +125,9 @@ class PlotBox():
     def compute_color_limits(self):
         vmax = numpy.max(self.norm)
         vmin = numpy.min(self.norm)
-        if vmax > 50 * vmin:
+        if vmax > 3 * vmin and vmin != 0.0:
             self.min_val = vmin
-            self.max_val = vmin * 5
+            self.max_val = vmin * 3
         else:
             self.min_val = vmin
             self.max_val = vmax
@@ -158,8 +156,8 @@ class PlotBox():
 
         self.max_val = float(self.txtMaxLimit.get_property("text"))
         self.min_val = float(self.txtMinLimit.get_property("text"))
-
-        if self.max_val > self.min_val:
+        print(self.max_val, self.min_val)
+        if self.max_val >= self.min_val:
             # surpass is for set the >= symbol in case of norm >= max_val
             self.surpass = False
             if numpy.any(self.norm >= self.max_val):
