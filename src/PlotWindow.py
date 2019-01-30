@@ -204,16 +204,16 @@ class PlotBox():
 
         # in case of surpass is true, the last label is modified
         if self.surpass:
-            labels[-1] = r"$\geq$ " + labels[-1]
+            labels[-1] = "≥" + labels[-1]
 
         # in case of underpass is true, the first label is modified
         if self.underpass:
-            labels[0] = r"$\leq$ " + labels[0]
+            labels[0] = "≤" + labels[0]
 
         cbar.ax.set_yticklabels(labels)
 
-        self.ax.set_xlabel(r"$z \ \rm [m]$", fontsize=30)
-        self.ax.set_ylabel(r"$y \ \rm [m]$", fontsize=30)
+        self.ax.set_xlabel("z [m]", fontsize=30)
+        self.ax.set_ylabel("y [m]", fontsize=30)
         
         self.ax.set_xlim(self.z_lims)
         self.ax.set_ylim(self.y_lims)

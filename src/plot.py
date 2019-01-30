@@ -21,15 +21,15 @@ def plot_coils(coils, out="coils.pdf"):
 
     ax3.set_ylim(ax3.get_xlim())
     
-    ax1.set_xlabel(r"$x$", fontsize=30)
-    ax1.set_ylabel(r"$y$", fontsize=30)
-    ax1.set_zlabel(r"$z$", fontsize=30)
+    ax1.set_xlabel("x", fontsize=30)
+    ax1.set_ylabel("y", fontsize=30)
+    ax1.set_zlabel("z", fontsize=30)
 
-    ax2.set_xlabel(r"$x$", fontsize=30)
-    ax2.set_ylabel(r"$y$", fontsize=30)
+    ax2.set_xlabel("x", fontsize=30)
+    ax2.set_ylabel("y", fontsize=30)
 
-    ax3.set_xlabel(r"$x$", fontsize=30)
-    ax3.set_ylabel(r"$z$", fontsize=30)
+    ax3.set_xlabel("x", fontsize=30)
+    ax3.set_ylabel("z", fontsize=30)
 
     ax1.set_aspect("equal")
     ax2.set_aspect("equal")

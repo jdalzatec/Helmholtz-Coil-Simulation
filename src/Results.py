@@ -34,7 +34,6 @@ class Results():
         self.colormap = "jet"
 
         self.window.set_transient_for(self.parent)
-        self.window.maximize()
 
         self.window.connect("destroy", self.quit)
         self.btnBack.connect("clicked", self.on_back)
@@ -67,6 +66,9 @@ class Results():
                 self.menuColorMap.append(item)
 
         self.window.show_all()
+        self.window.maximize()
+        self.plot.update_plot()
+
         self.populate_input_params_trees()
 
         self.zooms = []
