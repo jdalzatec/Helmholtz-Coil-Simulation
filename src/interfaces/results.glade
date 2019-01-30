@@ -481,7 +481,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">end</property>
-                                <property name="label" translatable="yes">Min. ρ = </property>
+                                <property name="label" translatable="yes">Min. Y = </property>
                                 <attributes>
                                   <attribute name="font-desc" value="Sans Bold 10"/>
                                 </attributes>
@@ -497,7 +497,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">end</property>
-                                <property name="label" translatable="yes">Max. ρ = </property>
+                                <property name="label" translatable="yes">Max. Y = </property>
                                 <attributes>
                                   <attribute name="font-desc" value="Sans Bold 10"/>
                                 </attributes>
@@ -513,7 +513,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">end</property>
-                                <property name="label" translatable="yes">ρ Points = </property>
+                                <property name="label" translatable="yes">Y Points = </property>
                                 <attributes>
                                   <attribute name="font-desc" value="Sans Bold 10"/>
                                 </attributes>
@@ -585,11 +585,11 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="lblMinRho">
+                              <object class="GtkLabel" id="lblMinY">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
-                                <property name="label" translatable="yes">lblMinRho</property>
+                                <property name="label" translatable="yes">lblMinY</property>
                                 <attributes>
                                   <attribute name="font-desc" value="Sans Bold 10"/>
                                 </attributes>
@@ -601,11 +601,11 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="lblMaxRho">
+                              <object class="GtkLabel" id="lblMaxY">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
-                                <property name="label" translatable="yes">lblMaxRho</property>
+                                <property name="label" translatable="yes">lblMaxY</property>
                                 <attributes>
                                   <attribute name="font-desc" value="Sans Bold 10"/>
                                 </attributes>
@@ -617,11 +617,11 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="lblPointsRho">
+                              <object class="GtkLabel" id="lblPointsY">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
-                                <property name="label" translatable="yes">lblPointsRho</property>
+                                <property name="label" translatable="yes">lblPointsY</property>
                                 <attributes>
                                   <attribute name="font-desc" value="Sans Bold 10"/>
                                 </attributes>

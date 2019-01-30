@@ -45,9 +45,9 @@ class InputWindow():
         self.z_min = 0.0
         self.z_max = 0.0
         self.z_points = 0
-        self.rho_min = 0.0
-        self.rho_max = 0.0
-        self.rho_points = 0
+        self.y_min = 0.0
+        self.y_max = 0.0
+        self.y_points = 0
 
         self.window.show_all()
         self.window.maximize()
@@ -72,20 +72,20 @@ class InputWindow():
             self.z_max = max(z_arr)
 
             radius_arr = [coil.radius for coil in self.coils]
-            self.rho_min = 0.0
-            self.rho_max = max(radius_arr)
+            self.y_min = -max(radius_arr)
+            self.y_max = max(radius_arr)
 
             if self.z_min == self.z_max:
-                self.z_min = self.z_min - self.rho_max
-                self.z_max = self.z_max + self.rho_max
+                self.z_min = self.z_min - self.y_max
+                self.z_max = self.z_max + self.y_max
 
             PMAX = 50
-            if abs(self.z_max - self.z_min) > abs(self.rho_max - self.rho_min):
+            if abs(self.z_max - self.z_min) > abs(self.y_max - self.y_min):
                 self.z_points = PMAX
-                self.rho_points = int(abs(self.rho_max - self.rho_min) * PMAX / abs(self.z_max - self.z_min))
+                self.y_points = int(abs(self.y_max - self.y_min) * PMAX / abs(self.z_max - self.z_min))
             else:
-                self.rho_points = PMAX
-                self.z_points = int(abs(self.z_max - self.z_min) * PMAX / abs(self.rho_max - self.rho_min))
+                self.y_points = PMAX
+                self.z_points = int(abs(self.z_max - self.z_min) * PMAX / abs(self.y_max - self.y_min))
 
 
 
@@ -114,7 +114,7 @@ class InputWindow():
             print("lets go")
             self.simulation = Simulation(self.window, self.coils,
                 self.z_min, self.z_max, self.z_points,
-                self.rho_min, self.rho_max, self.rho_points)
+                self.y_min, self.y_max, self.y_points)
 
 
 
@@ -123,9 +123,9 @@ class InputWindow():
             "z_min": self.z_min,
             "z_max": self.z_max,
             "z_points": self.z_points,
-            "rho_min": self.rho_min,
-            "rho_max": self.rho_max,
-            "rho_points": self.rho_points,
+            "y_min": self.y_min,
+            "y_max": self.y_max,
+            "y_points": self.y_points,
         }
 
         dialog = GridWindow(self.window, "./interfaces/grid.glade", initial_grid)
@@ -136,9 +136,9 @@ class InputWindow():
             self.z_min = float(dialog.txtMinZ.get_text())
             self.z_max = float(dialog.txtMaxZ.get_text())
             self.z_points = int(dialog.txtPointsZ.get_text())
-            self.rho_min = float(dialog.txtMinRho.get_text())
-            self.rho_max = float(dialog.txtMaxRho.get_text())
-            self.rho_points = int(dialog.txtPointsRho.get_text())
+            self.y_min = float(dialog.txtMinY.get_text())
+            self.y_max = float(dialog.txtMaxY.get_text())
+            self.y_points = int(dialog.txtPointsY.get_text())
             dialog.window.destroy()
             return True
 

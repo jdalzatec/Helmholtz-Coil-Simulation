@@ -222,7 +222,7 @@
                   <object class="GtkLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">ρ Grid</property>
+                    <property name="label" translatable="yes">y Grid</property>
                     <attributes>
                       <attribute name="font-desc" value="Sans Bold 14"/>
                     </attributes>
@@ -243,7 +243,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
-                        <property name="label" translatable="yes">Min. ρ [m] =</property>
+                        <property name="label" translatable="yes">Min. y [m] =</property>
                       </object>
                       <packing>
                         <property name="expand">True</property>
@@ -253,7 +253,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry" id="txtMinRho">
+                      <object class="GtkEntry" id="txtMinY">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="width_chars">10</property>
@@ -280,7 +280,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
-                        <property name="label" translatable="yes">Max. ρ [m] =</property>
+                        <property name="label" translatable="yes">Max. y [m] =</property>
                       </object>
                       <packing>
                         <property name="expand">True</property>
@@ -290,7 +290,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry" id="txtMaxRho">
+                      <object class="GtkEntry" id="txtMaxY">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="width_chars">10</property>
@@ -327,7 +327,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry" id="txtPointsRho">
+                      <object class="GtkEntry" id="txtPointsY">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="width_chars">10</property>

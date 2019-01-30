@@ -47,7 +47,7 @@ class Results():
         ylims = (-max(radius_arr), max(radius_arr))
 
         self.plot = PlotBox(self.window, self.simulation,
-            self.colormap, self.statBar, xlims, ylims, True)
+            self.colormap, self.statBar, xlims, ylims)
         self.boxPlot.pack_start(self.plot.boxPlot, True, True, 0)
 
         # Get a list of the colormaps in matplotlib.  Ignore the ones that end with
@@ -91,17 +91,17 @@ class Results():
         lblMinZ = self.builder.get_object("lblMinZ")
         lblMaxZ = self.builder.get_object("lblMaxZ")
         lblPointsZ = self.builder.get_object("lblPointsZ")
-        lblMinRho = self.builder.get_object("lblMinRho")
-        lblMaxRho = self.builder.get_object("lblMaxRho")
-        lblPointsRho = self.builder.get_object("lblPointsRho")
+        lblMinY = self.builder.get_object("lblMinY")
+        lblMaxY = self.builder.get_object("lblMaxY")
+        lblPointsY = self.builder.get_object("lblPointsY")
 
 
         lblMinZ.set_label(str(self.simulation.z_min))
         lblMaxZ.set_label(str(self.simulation.z_max))
         lblPointsZ.set_label(str(self.simulation.z_points))
-        lblMinRho.set_label(str(self.simulation.rho_min))
-        lblMaxRho.set_label(str(self.simulation.rho_max))
-        lblPointsRho.set_label(str(self.simulation.rho_points))
+        lblMinY.set_label(str(self.simulation.y_min))
+        lblMaxY.set_label(str(self.simulation.y_max))
+        lblPointsY.set_label(str(self.simulation.y_points))
 
 
     def on_color_bar_menu(self, widget, name):

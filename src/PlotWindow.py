@@ -12,7 +12,7 @@ import numpy
 
 
 class PlotBox():
-    def __init__(self, parent, simulation, colormap, statBar, z_lims=None, rho_lims=None, mirror=False, txtZoomValue=None):
+    def __init__(self, parent, simulation, colormap, statBar, z_lims=None, y_lims=None, txtZoomValue=None):
         self.parent = parent
         self.simulation = simulation
         self.colormap = colormap
@@ -43,14 +43,12 @@ class PlotBox():
         self.btnSave.connect("clicked", self.on_save)
 
         self.z_lims = (self.simulation.z_min, self.simulation.z_max)
-        self.rho_lims = (self.simulation.rho_min, self.simulation.rho_max)
+        self.y_lims = (self.simulation.y_min, self.simulation.y_max)
         
         if z_lims:
             self.z_lims = z_lims
-        if rho_lims:
-            self.rho_lims = rho_lims
-
-        self.mirror = mirror
+        if y_lims:
+            self.y_lims = y_lims
 
         self.txtZoomValue = txtZoomValue
         
@@ -83,43 +81,43 @@ class PlotBox():
 
     def compute_zoom(self, zoom):
         z = self.simulation.z_max - self.simulation.z_min
-        rho = self.simulation.rho_max - self.simulation.rho_min
+        y = self.simulation.y_max - self.simulation.y_min
         mid_z = 0.5 * (self.simulation.z_max + self.simulation.z_min)
-        mid_rho = 0.5 * (self.simulation.rho_max + self.simulation.rho_min)
+        mid_y = 0.5 * (self.simulation.y_max + self.simulation.y_min)
 
         new_z = z * 100 / zoom
-        new_rho = rho * 100 / zoom
+        new_y = y * 100 / zoom
 
         zmin = mid_z - (0.5 * new_z)
         zmax = mid_z + (0.5 * new_z)
 
-        rhomin = mid_rho - (0.5 * new_rho)
-        rhomax = mid_rho + (0.5 * new_rho)
-        print(zmin, zmax, rhomin, rhomax)
-        print(self.simulation.z_min, self.simulation.z_max, self.simulation.rho_min, self.simulation.rho_max)
-        print(self.simulation.z_arr, self.simulation.rho_arr)
+        ymin = mid_y - (0.5 * new_y)
+        ymax = mid_y + (0.5 * new_y)
+        print(zmin, zmax, ymin, ymax)
+        print(self.simulation.z_min, self.simulation.z_max, self.simulation.y_min, self.simulation.y_max)
+        print(self.simulation.z_arr, self.simulation.y_arr)
 
-        left = numpy.where(self.simulation.z_grid[:, 0] >= zmin)[0][0]
-        right = numpy.where(self.simulation.z_grid[:, 0] <= zmax)[0][-1]
-        down = numpy.where(self.simulation.rho_grid[0, :] >= rhomin)[0][0]
-        up = numpy.where(self.simulation.rho_grid[0, :] <= rhomax)[0][-1]
+        left = numpy.where(self.simulation.z_grid[:, 0] >= (zmin - numpy.finfo(numpy.float32).eps))[0][0]
+        right = numpy.where(self.simulation.z_grid[:, 0] <= (zmax + numpy.finfo(numpy.float32).eps))[0][-1]
+        down = numpy.where(self.simulation.y_grid[0, :] >= (ymin - numpy.finfo(numpy.float32).eps))[0][0]
+        up = numpy.where(self.simulation.y_grid[0, :] <= (ymax + numpy.finfo(numpy.float32).eps))[0][-1]
 
         self.z_grid = self.simulation.z_grid[left:(right + 1), down:(up + 1)]
-        self.rho_grid = self.simulation.rho_grid[left:(right + 1), down:(up + 1)]
+        self.y_grid = self.simulation.y_grid[left:(right + 1), down:(up + 1)]
         self.norm = self.simulation.norm[left:(right + 1), down:(up + 1)]
 
         self.z_lims = (zmin, zmax)
-        self.rho_lims = (rhomin, rhomax)
+        self.y_lims = (ymin, ymax)
 
         self.compute_color_limits()
 
     def on_initial_plot(self, widget):
         self.z_grid = self.simulation.z_grid.copy()
-        self.rho_grid = self.simulation.rho_grid.copy()
+        self.y_grid = self.simulation.y_grid.copy()
         self.norm = self.simulation.norm.copy()
 
         self.z_lims = (self.simulation.z_min, self.simulation.z_max)
-        self.rho_lims = (self.simulation.rho_min, self.simulation.rho_max)
+        self.y_lims = (self.simulation.y_min, self.simulation.y_max)
 
         if self.txtZoomValue:
             self.txtZoomValue.set_text("100.0")
@@ -189,11 +187,8 @@ class PlotBox():
 
         self.ax.grid(True)
         cmap = pyplot.get_cmap(self.colormap)
-        mesh = self.ax.pcolormesh(self.z_grid, self.rho_grid, self.norm,
+        mesh = self.ax.pcolormesh(self.z_grid, self.y_grid, self.norm,
             shading="gouraud", cmap=cmap, vmin=self.min_val, vmax=self.max_val)
-        if self.mirror:
-            mesh = self.ax.pcolormesh(self.z_grid, -self.rho_grid, self.norm,
-                shading="gouraud", cmap=cmap, vmin=self.min_val, vmax=self.max_val)
 
         for coil in self.simulation.coils:
             self.ax.plot([coil.pos_z, coil.pos_z], [-coil.radius, coil.radius],
@@ -221,7 +216,7 @@ class PlotBox():
         self.ax.set_ylabel(r"$y \ \rm [m]$", fontsize=30)
         
         self.ax.set_xlim(self.z_lims)
-        self.ax.set_ylim(self.rho_lims)
+        self.ax.set_ylim(self.y_lims)
 
         self.ax.set_aspect("equal")
 
