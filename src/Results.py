@@ -67,7 +67,6 @@ class Results():
 
         self.window.show_all()
         self.window.maximize()
-        self.plot.update_plot()
 
         self.populate_input_params_trees()
 
