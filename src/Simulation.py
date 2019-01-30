@@ -50,6 +50,10 @@ class Simulation(object):
         for coil in self.coils:
             self.z_arr[self.z_arr == coil.pos_z] = coil.pos_z - numpy.finfo(numpy.float32).eps
         
+        self.z_min = min(self.z_arr)
+        self.z_max = max(self.z_arr)
+        self.rho_min = min(self.rho_arr)
+        self.rho_max = max(self.rho_arr)
         
         self.z_grid, self.rho_grid = numpy.meshgrid(self.z_arr, self.rho_arr)
         self.z_grid = self.z_grid.T

@@ -39,6 +39,7 @@ class InputWindow():
         self.chbAutoGrid.connect("activate", self.on_auto_grid)
 
 
+
         self.auto_grid = self.chbAutoGrid.get_active()
         self.coils = []
         self.z_min = 0.0
@@ -49,6 +50,7 @@ class InputWindow():
         self.rho_points = 0
 
         self.window.show_all()
+        self.window.maximize()
         Gtk.main()
 
 
@@ -77,7 +79,7 @@ class InputWindow():
                 self.z_min = self.z_min - self.rho_max
                 self.z_max = self.z_max + self.rho_max
 
-            PMAX = 10
+            PMAX = 50
             if abs(self.z_max - self.z_min) > abs(self.rho_max - self.rho_min):
                 self.z_points = PMAX
                 self.rho_points = int(abs(self.rho_max - self.rho_min) * PMAX / abs(self.z_max - self.z_min))

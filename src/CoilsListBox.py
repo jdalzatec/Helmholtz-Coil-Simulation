@@ -11,7 +11,7 @@ class CoilsListBox(Gtk.ListBox):
         self.set_property("selection-mode", Gtk.SelectionMode(0))
 
 
-        self.btnAddInList = Gtk.Button.new_from_icon_name("add", Gtk.IconSize(2))
+        self.btnAddInList = Gtk.Button.new_from_icon_name("list-add", Gtk.IconSize(2))
         self.btnAddInList.connect("clicked", self.create_coil_row)
 
         row = Gtk.Box()

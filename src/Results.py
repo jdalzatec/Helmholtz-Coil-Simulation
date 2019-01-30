@@ -10,6 +10,7 @@ from matplotlib.backends.backend_gtk3 import NavigationToolbar2GTK3 as Navigatio
 
 import numpy
 from PlotWindow import PlotBox
+from ZoomWindow import ZoomWindow
 
 
 class Results():
@@ -39,7 +40,14 @@ class Results():
         self.btnBack.connect("clicked", self.on_back)
         self.btnZoom.connect("clicked", self.on_zoom)
 
-        self.plot = PlotBox(self.window, self.simulation, self.colormap)
+        z_arr = [coil.pos_z for coil in self.simulation.coils]
+        radius_arr = [coil.radius for coil in self.simulation.coils]
+        
+        xlims = (min(z_arr), max(z_arr))
+        ylims = (-max(radius_arr), max(radius_arr))
+
+        self.plot = PlotBox(self.window, self.simulation,
+            self.colormap, self.statBar, xlims, ylims, True)
         self.boxPlot.pack_start(self.plot.boxPlot, True, True, 0)
 
         # Get a list of the colormaps in matplotlib.  Ignore the ones that end with
@@ -61,9 +69,10 @@ class Results():
         self.window.show_all()
         self.populate_input_params_trees()
 
+        self.zooms = []
 
     def on_zoom(self, widget):
-        print("hola")
+        zoom = ZoomWindow(self.window, self.simulation, self.colormap)
 
     def populate_input_params_trees(self):
         coilsList = Gtk.ListStore(str, float, int, float, float)
@@ -95,82 +104,9 @@ class Results():
         lblPointsRho.set_label(str(self.simulation.rho_points))
 
 
-    def on_color_bar_menu(self, widget, name, first=False):
+    def on_color_bar_menu(self, widget, name):
         self.colormap = name
         self.plot.update_plot(name)
-
-    # def plot_point(self, event):
-    #     if event.button != 1:
-    #         return
-
-    #     if (event.xdata is None):
-    #         return
-
-    #     if self.pan_active or self.zoom_active:
-    #         return
-
-    #     x, y = event.xdata, event.ydata
-    #     self.ax.scatter(x, y, s=10, c="black")
-    #     self.statBar.push(1, ("Coordinates: x = " + str(round(x, 3)) + "; y = " + str(round(y, 3))))
-        
-
-    def update_cursor_position(self, event):
-        if event.button != 1:
-            return
-
-        if (event.xdata is None):
-            return
-
-        if self.pan_active or self.zoom_active:
-            return
-            
-        if event.inaxes:
-            x = event.xdata
-            y = event.ydata
-            self.ax.scatter(x, y, s=10, c="black")
-            self.statBar.push(1, ("Coordinates: x = " + str(round(x, 3)) + "; y = " + str(round(y, 3))))
-
-    def on_revert_limits(self, widget):
-        # size = numpy.max(self.simulation.norm) - numpy.min(self.simulation.norm)
-        # mid = 0.5 * (numpy.max(self.simulation.norm) + numpy.min(self.simulation.norm))
-        # self.min_val = mid - 0.5 * size
-        # self.max_val = mid + 0.5 * size
-
-        self.min_val = numpy.min(self.simulation.norm)
-        self.max_val = self.min_val * 5
-        
-        self.txtMaxVal.set_property("text", self.format % self.max_val)
-        self.txtMinVal.set_property("text", self.format % self.min_val)
-        
-        self.on_apply_limits(None)
-
-
-    # def on_apply_limits(self, widget):
-    #     self.copy_norm = self.simulation.norm.copy()
-
-    #     self.txtMaxVal.set_property("text", self.format % eval(self.txtMaxVal.get_property("text")))
-    #     self.txtMinVal.set_property("text", self.format % eval(self.txtMinVal.get_property("text")))
-
-    #     self.max_val = float(self.txtMaxVal.get_property("text"))
-    #     self.min_val = float(self.txtMinVal.get_property("text"))
-
-    #     if self.max_val > self.min_val:
-    #         # surpass is for set the >= symbol in case of norm >= max_val
-    #         self.surpass = False
-    #         if numpy.any(self.simulation.norm >= self.max_val):
-    #             self.surpass = True
-    #             self.copy_norm[self.simulation.norm >= self.max_val] = self.max_val
-
-    #         # underpass is for set the <= symbol in case of norm <= max_val
-    #         self.underpass = False
-    #         if numpy.any(self.simulation.norm <= self.min_val):
-    #             self.underpass = True
-    #             self.copy_norm[self.simulation.norm <= self.min_val] = self.min_val
-
-    #         self.plot()
-    #     else:
-    #         print("cómo chuchas")
-    #     print(self.underpass, self.surpass)
 
 
     def quit(self, widget):
