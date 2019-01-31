@@ -39,7 +39,7 @@ class HomogeneityWindow():
         self.btnApplyZoom.connect("clicked", self.on_apply_zoom)
         self.btnApplyHomo.connect("clicked", self.on_apply_homo)
 
-        self.plot = PlotBox(self.window, self.simulation, self.colormap, self.statBar, txtZoomValue=self.txtZoomValue)
+        self.plot = PlotBox(self.window, self.simulation, self.colormap, self.statBar, txtZoomValue=self.txtZoomValue, binary_colors=True)
         self.boxPlot.pack_start(self.plot.boxPlot, True, True, 0)
 
         # Get a list of the colormaps in matplotlib.  Ignore the ones that end with
@@ -75,18 +75,19 @@ class HomogeneityWindow():
         homo = float(self.txtHomoValue.get_text())
         self.txtZoomValue.set_text("100.0")
         zoom = float(self.txtZoomValue.get_text())
-        uniformity_grid = self.compute_uniformity()
+        center, uniformity_grid = self.compute_uniformity()
         homo_grid = numpy.where(uniformity_grid >= (homo / 100), 1, 0)
 
         self.plot.initial_norm = homo_grid.copy()
         self.plot.compute_zoom(zoom)
+        self.plot.draw_point(center)
 
 
     def compute_uniformity(self):
         zmid = (self.simulation.z_max + self.simulation.z_min) * 0.5
         ymid = (self.simulation.y_max + self.simulation.y_min) * 0.5
         center = (zmid, ymid)
-        return uniformity(
+        return center, uniformity(
             self.simulation.coils, self.simulation.norm, self.simulation.mu0, center)
 
     def on_color_bar_menu(self, widget, name):

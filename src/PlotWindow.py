@@ -12,7 +12,7 @@ import numpy
 
 
 class PlotBox():
-    def __init__(self, parent, simulation, colormap, statBar, z_lims=None, y_lims=None, txtZoomValue=None):
+    def __init__(self, parent, simulation, colormap, statBar, z_lims=None, y_lims=None, txtZoomValue=None, binary_colors=False):
         self.parent = parent
         self.simulation = simulation
         self.colormap = colormap
@@ -52,6 +52,8 @@ class PlotBox():
 
         self.txtZoomValue = txtZoomValue
         self.initial_norm = self.simulation.norm.copy()
+
+        self.binary_colors = binary_colors
         
         self.on_initial_plot(None)
 
@@ -123,8 +125,17 @@ class PlotBox():
         self.compute_color_limits()
 
     def compute_color_limits(self):
-        vmax = numpy.max(self.norm)
-        vmin = numpy.min(self.norm)
+        if self.binary_colors:
+            vmin = 0
+        else:
+            vmin = numpy.min(self.norm)
+
+        
+        if self.binary_colors:
+            vmax = 1
+        else:
+            vmax = numpy.max(self.norm)
+        
         if vmax > 3 * vmin and vmin != 0.0:
             self.min_val = vmin
             self.max_val = vmin * 3
@@ -145,7 +156,10 @@ class PlotBox():
             return
 
         x, y = event.xdata, event.ydata
-        print(x, y)
+        self.draw_point((x, y))
+
+    def draw_point(self, point):
+        x, y = point
         self.points.set_data([x], [y])
         self.fig.canvas.draw()
         self.statBar.push(1, ("Coordinates: x = " + str(round(x, 3)) + "; y = " + str(round(y, 3))))
@@ -192,23 +206,24 @@ class PlotBox():
             self.ax.plot([coil.pos_z, coil.pos_z], [-coil.radius, coil.radius],
                 lw=coil.num_turns / 10, color=coil.color)
 
-        cbar = self.fig.colorbar(mesh, format=self.format)
+        if not self.binary_colors:
+            cbar = self.fig.colorbar(mesh, format=self.format)
 
-        # set the ticks and ticks labels for the color bar
-        labels = numpy.linspace(self.min_val, self.max_val, 5)
-        cbar.set_ticks(labels)
-        labels = ['%.2e' % s for s in labels]
+            # set the ticks and ticks labels for the color bar
+            labels = numpy.linspace(self.min_val, self.max_val, 5)
+            cbar.set_ticks(labels)
+            labels = ['%.2e' % s for s in labels]
 
 
-        # in case of surpass is true, the last label is modified
-        if self.surpass:
-            labels[-1] = "≥" + labels[-1]
+            # in case of surpass is true, the last label is modified
+            if self.surpass:
+                labels[-1] = "≥" + labels[-1]
 
-        # in case of underpass is true, the first label is modified
-        if self.underpass:
-            labels[0] = "≤" + labels[0]
+            # in case of underpass is true, the first label is modified
+            if self.underpass:
+                labels[0] = "≤" + labels[0]
 
-        cbar.ax.set_yticklabels(labels)
+            cbar.ax.set_yticklabels(labels)
 
         self.ax.set_xlabel("z [m]", fontsize=30)
         self.ax.set_ylabel("y [m]", fontsize=30)
