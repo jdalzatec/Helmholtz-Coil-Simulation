@@ -87,6 +87,15 @@ class Simulation(object):
                 print("finish")
                 self.norm = numpy.sqrt(self.Brho_grid**2 + self.Bz_grid**2)
                 results = Results(self.parent, self)
+
+
+
+                from matplotlib import pyplot
+                flatten = self.norm.flatten()
+                flatten[flatten > 1] = 0
+                pyplot.figure()
+                pyplot.hist(flatten, 50)
+                pyplot.show()
         else:
             GLib.timeout_add(10, self.wait_for_the_simulation)
 
