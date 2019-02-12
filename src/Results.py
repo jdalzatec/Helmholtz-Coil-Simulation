@@ -28,6 +28,7 @@ class Results():
         self.statBar = self.builder.get_object("statBar")
         self.menuColorMap = self.builder.get_object("menuColorMap")
         self.txtInputParameters = self.builder.get_object("txtInputParameters")
+        self.btnSaveAs = self.builder.get_object("btnSaveAs")
 
         self.simulation = simulation
 
@@ -39,6 +40,7 @@ class Results():
         self.btnBack.connect("clicked", self.on_back)
         self.btnZoom.connect("clicked", self.on_zoom)
         self.btnHomogeneity.connect("clicked", self.on_homogeneity)
+        self.btnSaveAs.connect("activate", self.on_export)
 
         z_arr = [coil.pos_z for coil in self.simulation.coils]
         radius_arr = [coil.radius for coil in self.simulation.coils]
@@ -117,3 +119,83 @@ class Results():
     def on_back(self, widget):
         self.parent.show()
         self.window.close()
+
+
+    def on_export(self, widget):
+        dialog = Gtk.FileChooserDialog("Please choose a file", self.window,
+            Gtk.FileChooserAction.SAVE,
+            (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+             Gtk.STOCK_SAVE, Gtk.ResponseType.OK))
+
+        filters = Gtk.FileFilter()
+        filters.set_name("Excel files")
+        filters.add_pattern("*.*.csv")
+        filters.add_pattern("*.xls")
+        filters.add_pattern("*.xlsx")
+        dialog.add_filter(filters)
+
+        response = dialog.run()
+        
+        if response == Gtk.ResponseType.OK:
+            filename = dialog.get_filename()
+            print("Open clicked")
+            print("File selected: " + filename)
+
+            import xlwt
+
+            wb = xlwt.Workbook()
+            wInput = wb.add_sheet('input')
+            wCoils = wb.add_sheet('coils')
+            wBy = wb.add_sheet('B y')
+            wBz = wb.add_sheet('B z')
+            wBnorm = wb.add_sheet('B norm')
+            title_style = xlwt.easyxf('font: bold 1') 
+
+            wInput.write(0 , 0, "Min Z", title_style)
+            wInput.write(0 , 1, self.simulation.z_min)
+            wInput.write(1 , 0, "Max Z", title_style)
+            wInput.write(1 , 1, self.simulation.z_max)
+            wInput.write(2 , 0, "Points Z", title_style)
+            wInput.write(2 , 1, self.simulation.z_points)
+            wInput.write(3 , 0, "Min Y", title_style)
+            wInput.write(3 , 1, self.simulation.y_min)
+            wInput.write(4 , 0, "Max Y", title_style)
+            wInput.write(4 , 1, self.simulation.y_max)
+            wInput.write(5 , 0, "Points Y", title_style)
+            wInput.write(5 , 1, self.simulation.y_points)
+
+            wCoils.write(0 , 0, "Radius [m]", title_style)
+            wCoils.write(0 , 1, "Num. turns", title_style)
+            wCoils.write(0 , 2, "Current [A]", title_style)
+            wCoils.write(0 , 3, "Pos. Z [m]", title_style)
+
+            for i, coil in enumerate(self.simulation.coils):
+                wCoils.write(i + 1, 0, coil.radius)
+                wCoils.write(i + 1, 1, coil.num_turns)
+                wCoils.write(i + 1, 2, coil.I)
+                wCoils.write(i + 1, 3, coil.pos_z)
+
+            for i, val in enumerate(self.simulation.z_arr):
+                wBz.write(0, i + 1, val, title_style)
+                wBy.write(0, i + 1, val, title_style)
+                wBnorm.write(0, i + 1, val, title_style)
+
+            for i, val in enumerate(self.simulation.y_arr):
+                wBz.write(i + 1, 0, val, title_style)
+                wBy.write(i + 1, 0, val, title_style)
+                wBnorm.write(i + 1, 0, val, title_style)
+
+            for i, _ in enumerate(self.simulation.z_arr):
+                for j, _ in enumerate(self.simulation.y_arr):
+                    wBz.write(j + 1, i + 1, self.simulation.Bz_grid[i, j])
+                    wBy.write(j + 1, i + 1, self.simulation.Brho_grid[i, j])
+                    wBnorm.write(j + 1, i + 1, self.simulation.norm[i, j])
+
+
+            wb.save(filename)
+
+        elif response == Gtk.ResponseType.CANCEL:
+            print("Cancel clicked")
+
+        dialog.destroy()
+

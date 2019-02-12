@@ -23,10 +23,10 @@ class Simulation(object):
         self.coils = coils
         self.z_min = z_min
         self.z_max = z_max
-        self.z_points = z_points
+        self.z_points = z_points + 1
         self.y_min = y_min
         self.y_max = y_max
-        self.y_points = y_points
+        self.y_points = y_points + 1
 
         self.builder = Gtk.Builder()
         self.builder.add_from_file("./interfaces/running.glade")
@@ -45,15 +45,10 @@ class Simulation(object):
         self.z_arr = numpy.linspace(self.z_min, self.z_max, self.z_points)
         self.y_arr = numpy.linspace(self.y_min, self.y_max, self.y_points)
 
-        self.y_arr[self.y_arr == 0.0] = numpy.finfo(numpy.float32).eps
+        # self.y_arr[self.y_arr == 0.0] = numpy.finfo(numpy.float32).eps
 
-        for coil in self.coils:
-            self.z_arr[self.z_arr == coil.pos_z] = coil.pos_z - numpy.finfo(numpy.float32).eps
-        
-        # self.z_min = min(self.z_arr)
-        # self.z_max = max(self.z_arr)
-        # self.y_min = min(self.y_arr)
-        # self.y_max = max(self.y_arr)
+        # for coil in self.coils:
+        #     self.z_arr[self.z_arr == coil.pos_z] = coil.pos_z - numpy.finfo(numpy.float32).eps
         
         self.z_grid, self.y_grid = numpy.meshgrid(self.z_arr, self.y_arr)
         self.z_grid = self.z_grid.T
