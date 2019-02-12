@@ -60,28 +60,42 @@ class HomogeneityWindow():
 
 
         self.window.show_all()
+        self.zoom = 100.0
+        self.homo = 50.0
 
-        self.txtZoomValue.set_text("100.0")
-        self.txtHomoValue.set_text("50.0")
+        self.txtZoomValue.set_text(str(self.zoom))
+        self.txtHomoValue.set_text(str(self.homo))
         self.btnApplyHomo.emit("clicked")
 
 
     def on_apply_zoom(self, widget):
-        zoom = float(self.txtZoomValue.get_text())
-        print(zoom)
-        zmin, zmax, ymin, ymax = self.plot.compute_zoom(zoom)
-        self.parent.plot.draw_rectangle(zmin, zmax, ymin, ymax)
+        self.zoom = float(self.txtZoomValue.get_text())
+        print(self.zoom)
+        zmin, zmax, ymin, ymax = self.plot.compute_zoom(self.zoom)
+        self.plot.lblLabelInfo.set_text("Zoom = %s; Homogeneity = %s" % (self.zoom, self.homo))
+        
+        text = "Zoom = %s" % self.zoom
+        if self.zoom <= 100:
+            text = ""
+        self.parent.plot.draw_rectangle(zmin, zmax, ymin, ymax, text)
 
     def on_apply_homo(self, widget):
-        homo = float(self.txtHomoValue.get_text())
+        self.homo = float(self.txtHomoValue.get_text())
         self.txtZoomValue.set_text("100.0")
-        zoom = float(self.txtZoomValue.get_text())
+        self.zoom = float(self.txtZoomValue.get_text())
         center, uniformity_grid = self.compute_uniformity()
-        homo_grid = numpy.where(uniformity_grid >= (homo / 100), 1, 0)
+        homo_grid = numpy.where(uniformity_grid >= (self.homo / 100), 1, 0)
 
         self.plot.initial_norm = homo_grid.copy()
-        self.plot.compute_zoom(zoom)
+        zmin, zmax, ymin, ymax = self.plot.compute_zoom(self.zoom)
         self.plot.draw_point(center)
+        self.plot.lblLabelInfo.set_text("Zoom = %s; Homogeneity = %s" % (self.zoom, self.homo))
+
+        text = "Zoom = %s" % self.zoom
+        if self.zoom <= 100:
+            text = ""
+        self.parent.plot.draw_rectangle(zmin, zmax, ymin, ymax, text)
+
 
 
     def compute_uniformity(self):

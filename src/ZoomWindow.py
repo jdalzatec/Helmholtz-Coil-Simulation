@@ -55,15 +55,24 @@ class ZoomWindow():
 
         self.window.show_all()
 
-        self.txtZoomValue.set_text("100.0")
+        self.zoom = 100.0
+        self.txtZoomValue.set_text(str(self.zoom))
+        self.btnApplyZoom.emit("clicked")
 
 
 
     def on_apply_zoom(self, widget):
-        zoom = float(self.txtZoomValue.get_text())
-        print(zoom)
-        zmin, zmax, ymin, ymax = self.plot.compute_zoom(zoom)
-        self.parent.plot.draw_rectangle(zmin, zmax, ymin, ymax)
+        self.zoom = float(self.txtZoomValue.get_text())
+        print(self.zoom)
+        zmin, zmax, ymin, ymax = self.plot.compute_zoom(self.zoom)
+        self.plot.lblLabelInfo.set_text("Zoom = %s" % self.zoom)
+        
+        text = "Zoom = %s" % self.zoom
+        if self.zoom <= 100:
+            text = ""
+        self.parent.plot.draw_rectangle(zmin, zmax, ymin, ymax, text)
+
+
 
     def on_color_bar_menu(self, widget, name):
         self.colormap = name

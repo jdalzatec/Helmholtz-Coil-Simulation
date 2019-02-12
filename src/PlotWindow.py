@@ -33,10 +33,14 @@ class PlotBox():
         self.btnSave = self.builder.get_object("btnSave")
 
         self.boxPlot = Gtk.Box(spacing=6, orientation=Gtk.Orientation.VERTICAL)
+
+        self.lblLabelInfo = Gtk.Label()
+
         self.fig = Figure(figsize=(10, 10), dpi=80)
         self.canvas = FigureCanvas(self.fig)
         self.fig.canvas.mpl_connect("button_press_event", self.on_click)
         
+        self.boxPlot.pack_start(self.lblLabelInfo, False, False, 0)
         self.boxPlot.pack_start(self.canvas, True, True, 0)
         self.boxPlot.pack_start(self.toolbar, False, True, 0)
 
@@ -131,6 +135,7 @@ class PlotBox():
         if hasattr(self.parent, "on_apply_zoom"):
             self.parent.parent.plot.clear_rectangle()
 
+        self.lblLabelInfo.set_text("")
         self.compute_color_limits()
 
     def compute_color_limits(self):
@@ -259,7 +264,7 @@ class PlotBox():
         if self.pan_active or zoom_active:
             return
 
-    def draw_rectangle(self, xmin, xmax, ymin, ymax):
+    def draw_rectangle(self, xmin, xmax, ymin, ymax, text):
         if self.rect:
             self.rect.remove()
         
@@ -268,9 +273,12 @@ class PlotBox():
         self.ax.add_patch(self.rect)
         self.fig.canvas.draw()
 
+        self.lblLabelInfo.set_text(text)
+
 
     def clear_rectangle(self):
         if self.rect:
             self.rect.remove()
             self.rect = None
             self.fig.canvas.draw()
+            self.lblLabelInfo.set_text("")
