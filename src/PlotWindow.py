@@ -9,6 +9,7 @@ from matplotlib.backends.backend_gtk3agg import FigureCanvasGTK3Agg as FigureCan
 from matplotlib.backends.backend_gtk3 import NavigationToolbar2GTK3 as NavigationToolbar
 
 import numpy
+from functions import *
 
 
 class PlotBox():
@@ -16,7 +17,7 @@ class PlotBox():
         self.parent = parent
         self.simulation = simulation
         self.colormap = colormap
-        self.format = '%.2e'
+        self.format = '%.2E'
         self.statBar = statBar
 
         self.builder = Gtk.Builder()
@@ -54,6 +55,7 @@ class PlotBox():
         self.initial_norm = self.simulation.norm.copy()
 
         self.binary_colors = binary_colors
+        self.selected_point = [[], []]
         
         self.on_initial_plot(None)
 
@@ -157,10 +159,15 @@ class PlotBox():
 
 
     def draw_point(self, point):
-        x, y = point
-        self.points.set_data([x], [y])
+        z, y = point
+        self.points.set_data([], [])
+        self.selected_point = [[z], [y]]
+        self.points.set_data(*self.selected_point)
         self.fig.canvas.draw()
-        self.statBar.push(1, ("Coordinates: x = " + str(round(x, 3)) + "; y = " + str(round(y, 3))))
+        val = norm(self.simulation.coils, abs(y), z, self.simulation.mu0)
+        print(val)
+        self.statBar.push(1, ("Coordinates: z = {:.3f}; y = {:.3f}; B = {:.2E}".format(
+            z, y, val)))
 
 
     def on_apply_limits(self, widget):
@@ -194,7 +201,7 @@ class PlotBox():
         self.fig.clf()
         self.ax = self.fig.add_subplot(111)
         
-        self.points, = self.ax.plot([], [], "x", c="black", ms=10)
+        self.points, = self.ax.plot(*self.selected_point, "x", c="black", ms=10)
 
         self.ax.grid(True)
         cmap = pyplot.get_cmap(self.colormap)
