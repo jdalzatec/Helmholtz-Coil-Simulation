@@ -12,8 +12,8 @@ class HelmholtzCoilPreset(list):
         coil_row_1 = CoilListRow()
         coil_row_2 = CoilListRow()
         
-        coil_row_1.set_values(shape="Circular", radius=0.5, turns=100, current=1.0, position=0.25)
-        coil_row_2.set_values(shape="Circular", radius=0.5, turns=100, current=1.0, position=-0.25)
+        coil_row_1.set_values(radius=0.5, turns=100, current=1.0, position=0.25)
+        coil_row_2.set_values(radius=0.5, turns=100, current=1.0, position=-0.25)
 
         self.append(coil_row_1)
         self.append(coil_row_2)
@@ -29,5 +29,5 @@ class RandomCoilPreset(list):
             position = numpy.random.uniform(-1.0, 1.0)
 
             coil_row = CoilListRow()
-            coil_row.set_values(shape="Circular", radius=radius, turns=turns, current=current, position=position)
+            coil_row.set_values(radius=radius, turns=turns, current=current, position=position)
             self.append(coil_row)

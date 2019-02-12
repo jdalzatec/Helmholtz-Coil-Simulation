@@ -8,13 +8,6 @@ from NumericEntry import NumericEntry
 class CoilListRow(Gtk.Box):
     def __init__(self):
         Gtk.Box.__init__(self)
-        self.possibleShapes = ("Circular", "Squared", "Triangular")
-
-        self.shapeComboBox = Gtk.ComboBoxText()
-        self.shapeComboBox.set_entry_text_column(0)
-        self.shapeComboBox.set_size_request(120, 10)
-        for s in self.possibleShapes:
-            self.shapeComboBox.append_text(s)
 
         self.btnRemove = Gtk.Button.new_from_icon_name("list-remove", Gtk.IconSize(2))
         self.btnRemove.set_size_request(80, 10)
@@ -32,7 +25,6 @@ class CoilListRow(Gtk.Box):
         self.txtCurrent.set_property("width-chars", 5)
         self.txtPosition.set_property("width-chars", 5)
         
-        self.shapeComboBox.set_active(0)
         self.txtRadius.set_property("placeholder-text", "R = ")
         self.txtTurns.set_property("placeholder-text", "N = ")
         self.txtCurrent.set_property("placeholder-text", "I = ")
@@ -41,7 +33,6 @@ class CoilListRow(Gtk.Box):
         self.txtRadius.set_property("input-purpose", Gtk.InputPurpose.NUMBER)
 
         self.pack_start(self.btnRemove, False, False, 0)
-        self.pack_start(self.shapeComboBox, False, False, 0)
         self.pack_start(self.txtRadius, True, True, 0)
         self.pack_start(self.txtTurns, True, True, 0)
         self.pack_start(self.txtCurrent, True, True, 0)
@@ -53,8 +44,7 @@ class CoilListRow(Gtk.Box):
         self.get_parent().get_parent().remove(self.get_parent())
     
     
-    def set_values(self, shape, radius, turns, current, position):
-        self.shapeComboBox.set_active(self.possibleShapes.index(shape))
+    def set_values(self, radius, turns, current, position):
         self.txtRadius.set_property("text", str(radius))
         self.txtTurns.set_property("text", str(turns))
         self.txtCurrent.set_property("text", str(current))
@@ -63,7 +53,7 @@ class CoilListRow(Gtk.Box):
 
     def get_values(self):
         params = {
-            "shape": self.shapeComboBox.get_active_text(),
+            "shape": "Circular",
             "radius": float(self.txtRadius.get_text()),
             "turns": int(self.txtTurns.get_text()),
             "current": float(self.txtCurrent.get_text()),
