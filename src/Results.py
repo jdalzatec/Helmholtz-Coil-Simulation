@@ -27,9 +27,7 @@ class Results():
         self.btnHomogeneity = self.builder.get_object("btnHomogeneity")
         self.statBar = self.builder.get_object("statBar")
         self.menuColorMap = self.builder.get_object("menuColorMap")
-        self.treeData = self.builder.get_object("treeData")
-        self.treeGridInfo = self.builder.get_object("treeGridInfo")
-        self.treeCoilsInfo = self.builder.get_object("treeCoilsInfo")
+        self.txtInputParameters = self.builder.get_object("txtInputParameters")
 
         self.simulation = simulation
 
@@ -71,7 +69,7 @@ class Results():
         self.window.show_all()
         self.window.maximize()
 
-        self.populate_input_params_trees()
+        self.populate_input_parameters()
 
         self.zooms = []
 
@@ -81,34 +79,26 @@ class Results():
     def on_homogeneity(self, widget):
         homogeneity = HomogeneityWindow(self.window, self.simulation, self.colormap)
 
-    def populate_input_params_trees(self):
-        coilsList = Gtk.ListStore(str, float, int, float, float)
+    def populate_input_parameters(self):
+        text = ""
+        text += "{:12} =\t\t {}\n".format("Min Z", str(self.simulation.z_min))
+        text += "{:12} =\t\t {}\n".format("Max Z", str(self.simulation.z_max))
+        text += "{:12} =\t\t {}\n".format("Points Z", str(self.simulation.z_points))
+        text += "{:12} =\t\t {}\n".format("Min Y", str(self.simulation.y_min))
+        text += "{:12} =\t\t {}\n".format("Max Y", str(self.simulation.y_max))
+        text += "{:12} =\t\t {}\n".format("Points Y", str(self.simulation.y_points))
+
+        text += "\n"
+
+        text += "{:15}{:15}{:15}{:15}\n".format(
+            "Radius [m]", "Turns", "Current [A]", "Position [m]")
+
         for coil in self.simulation.coils:
-            coilsList.append([coil.shape, coil.radius, coil.num_turns, coil.I, coil.pos_z])
+            text += "{:<20f}{:<20d}{:<20f}{:<20f}\n".format(
+                coil.radius, coil.num_turns, coil.I, coil.pos_z)
 
-        self.treeCoilsInfo.set_model(coilsList)
+        self.txtInputParameters.get_buffer().set_text(text)
 
-        for i, column_title in enumerate(["Shape", "Radius [m]", "Turns", "Current [A]", "Position [m]"]):
-            renderer = Gtk.CellRendererText()
-            column = Gtk.TreeViewColumn(column_title, renderer, text=i)
-            column.set_expand(True)
-            self.treeCoilsInfo.append_column(column)
-
-        # now for the grid
-        lblMinZ = self.builder.get_object("lblMinZ")
-        lblMaxZ = self.builder.get_object("lblMaxZ")
-        lblPointsZ = self.builder.get_object("lblPointsZ")
-        lblMinY = self.builder.get_object("lblMinY")
-        lblMaxY = self.builder.get_object("lblMaxY")
-        lblPointsY = self.builder.get_object("lblPointsY")
-
-
-        lblMinZ.set_label(str(self.simulation.z_min))
-        lblMaxZ.set_label(str(self.simulation.z_max))
-        lblPointsZ.set_label(str(self.simulation.z_points))
-        lblMinY.set_label(str(self.simulation.y_min))
-        lblMaxY.set_label(str(self.simulation.y_max))
-        lblPointsY.set_label(str(self.simulation.y_points))
 
 
     def on_color_bar_menu(self, widget, name):
