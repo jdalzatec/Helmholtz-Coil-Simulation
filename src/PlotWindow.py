@@ -7,6 +7,7 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_gtk3agg import FigureCanvasGTK3Agg as FigureCanvas
 # from matplotlib.backends.backend_gtk3cairo import FigureCanvasGTK3Cairo as FigureCanvas
 from matplotlib.backends.backend_gtk3 import NavigationToolbar2GTK3 as NavigationToolbar
+import matplotlib.patches as patches
 
 import numpy
 from functions import *
@@ -56,11 +57,12 @@ class PlotBox():
 
         self.binary_colors = binary_colors
         self.selected_point = [[], []]
+        self.rect = None
         
         self.on_initial_plot(None)
 
     def on_save(self, widget):
-        dialog = Gtk.FileChooserDialog("Please choose a file", self.parent,
+        dialog = Gtk.FileChooserDialog("Please choose a file", self.parent.window,
             Gtk.FileChooserAction.SAVE,
             (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
              Gtk.STOCK_SAVE, Gtk.ResponseType.OK))
@@ -112,6 +114,7 @@ class PlotBox():
         self.y_lims = (ymin, ymax)
 
         self.compute_color_limits()
+        return zmin, zmax, ymin, ymax
 
     def on_initial_plot(self, widget):
         self.z_grid = self.simulation.z_grid.copy()
@@ -123,6 +126,10 @@ class PlotBox():
 
         if self.txtZoomValue:
             self.txtZoomValue.set_text("100.0")
+
+        print(self.parent, hasattr(self.parent, "on_apply_zoom"))
+        if hasattr(self.parent, "on_apply_zoom"):
+            self.parent.parent.plot.clear_rectangle()
 
         self.compute_color_limits()
 
@@ -251,3 +258,19 @@ class PlotBox():
 
         if self.pan_active or zoom_active:
             return
+
+    def draw_rectangle(self, xmin, xmax, ymin, ymax):
+        if self.rect:
+            self.rect.remove()
+        
+        self.rect = patches.Rectangle((xmin, ymin), (xmax - xmin), (ymax - ymin), 
+            linewidth=2, edgecolor='black', facecolor='none')
+        self.ax.add_patch(self.rect)
+        self.fig.canvas.draw()
+
+
+    def clear_rectangle(self):
+        if self.rect:
+            self.rect.remove()
+            self.rect = None
+            self.fig.canvas.draw()

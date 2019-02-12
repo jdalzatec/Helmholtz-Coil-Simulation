@@ -33,13 +33,13 @@ class HomogeneityWindow():
         self.menuColorMap = self.builder.get_object("menuColorMap")
 
 
-        self.window.set_transient_for(self.parent)
+        self.window.set_transient_for(self.parent.window)
 
 
         self.btnApplyZoom.connect("clicked", self.on_apply_zoom)
         self.btnApplyHomo.connect("clicked", self.on_apply_homo)
 
-        self.plot = PlotBox(self.window, self.simulation, self.colormap, self.statBar, txtZoomValue=self.txtZoomValue, binary_colors=True)
+        self.plot = PlotBox(self, self.simulation, self.colormap, self.statBar, txtZoomValue=self.txtZoomValue, binary_colors=True)
         self.boxPlot.pack_start(self.plot.boxPlot, True, True, 0)
 
         # Get a list of the colormaps in matplotlib.  Ignore the ones that end with
@@ -69,7 +69,8 @@ class HomogeneityWindow():
     def on_apply_zoom(self, widget):
         zoom = float(self.txtZoomValue.get_text())
         print(zoom)
-        self.plot.compute_zoom(zoom)
+        zmin, zmax, ymin, ymax = self.plot.compute_zoom(zoom)
+        self.parent.plot.draw_rectangle(zmin, zmax, ymin, ymax)
 
     def on_apply_homo(self, widget):
         homo = float(self.txtHomoValue.get_text())

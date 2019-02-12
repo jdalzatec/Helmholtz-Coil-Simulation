@@ -46,7 +46,7 @@ class Results():
         xlims = (min(z_arr), max(z_arr))
         ylims = (-max(radius_arr), max(radius_arr))
 
-        self.plot = PlotBox(self.window, self.simulation,
+        self.plot = PlotBox(self, self.simulation,
             self.colormap, self.statBar, xlims, ylims)
         self.boxPlot.pack_start(self.plot.boxPlot, True, True, 0)
 
@@ -74,10 +74,11 @@ class Results():
         self.zooms = []
 
     def on_zoom(self, widget):
-        zoom = ZoomWindow(self.window, self.simulation, self.colormap)
+        self.plot.clear_rectangle()
+        zoom = ZoomWindow(self, self.simulation, self.colormap)
 
     def on_homogeneity(self, widget):
-        homogeneity = HomogeneityWindow(self.window, self.simulation, self.colormap)
+        homogeneity = HomogeneityWindow(self, self.simulation, self.colormap)
 
     def populate_input_parameters(self):
         text = ""
