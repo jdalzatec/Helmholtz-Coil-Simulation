@@ -128,25 +128,22 @@ class PlotBox():
         if self.binary_colors:
             vmin = 0
         else:
-            vmin = numpy.min(self.norm)
+            vmin = self.simulation.norm_center * 0.9
 
         
         if self.binary_colors:
             vmax = 1
         else:
-            vmax = numpy.max(self.norm)
+            vmax = self.simulation.norm_center * 1.1
         
-        if vmax > 3 * vmin and vmin != 0.0:
-            self.min_val = vmin
-            self.max_val = vmin * 3
-        else:
-            self.min_val = vmin
-            self.max_val = vmax
+        self.min_val = vmin
+        self.max_val = vmax
 
         self.txtMinLimit.set_property("text", self.format % self.min_val)
         self.txtMaxLimit.set_property("text", self.format % self.max_val)
         
         self.on_apply_limits(None)
+
 
     def on_click(self, event):
         if event.button != 1:
@@ -158,11 +155,13 @@ class PlotBox():
         x, y = event.xdata, event.ydata
         self.draw_point((x, y))
 
+
     def draw_point(self, point):
         x, y = point
         self.points.set_data([x], [y])
         self.fig.canvas.draw()
         self.statBar.push(1, ("Coordinates: x = " + str(round(x, 3)) + "; y = " + str(round(y, 3))))
+
 
     def on_apply_limits(self, widget):
         self.txtMaxLimit.set_property("text", self.format % eval(self.txtMaxLimit.get_property("text")))

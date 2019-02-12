@@ -86,6 +86,14 @@ class Simulation(object):
                 self.parent.hide()
                 print("finish")
                 self.norm = numpy.sqrt(self.Brho_grid**2 + self.Bz_grid**2)
+                zmid = (self.z_min + self.z_max) * 0.5
+                ymid = (self.y_min + self.y_max) * 0.5
+                self.norm_center = numpy.sqrt(
+                    Bz(self.coils, abs(ymid), zmid, self.mu0)**2 + \
+                    Brho(self.coils, abs(ymid), zmid, self.mu0)**2)
+
+                print(zmid, ymid, self.norm_center)
+                
                 results = Results(self.parent, self)
 
 

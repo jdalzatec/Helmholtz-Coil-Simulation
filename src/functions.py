@@ -7,11 +7,24 @@ import numpy
 
 @dispatch((tuple, list, numpy.ndarray), Number, Number, Number)
 def Bz(coils, rho, z, mu0):
+    if rho == 0.0:
+        rho = numpy.finfo(numpy.float32).eps
+    for coil in coils:
+        if z == coil.pos_z:
+            z = coil.pos_z - numpy.finfo(numpy.float32).eps
+
     return numpy.sum([mu0 * coil.Bz(rho, z) for coil in coils])
 
 
 @dispatch((tuple, list, numpy.ndarray), Number, Number, Number)
 def Brho(coils, rho, z, mu0):
+    if rho == 0.0:
+        rho = numpy.finfo(numpy.float32).eps
+
+    for coil in coils:
+        if z == coil.pos_z:
+            z = coil.pos_z - numpy.finfo(numpy.float32).eps
+
     return numpy.sum([mu0 * coil.Brho(rho, z) for coil in coils])
 
 
