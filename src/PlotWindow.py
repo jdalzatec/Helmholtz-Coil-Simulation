@@ -145,9 +145,10 @@ class PlotBox():
                 self.lblLabelInfo.set_text("Zoom = %s" % self.parent.zoom)
 
             
-
+        self.statBar.push(1, (""))
         self.compute_color_limits()
         self.points.set_data([], [])
+        self.selected_point = [[], []]
         self.fig.canvas.draw()
 
     def compute_color_limits(self):
