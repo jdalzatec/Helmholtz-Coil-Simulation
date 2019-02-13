@@ -25,6 +25,7 @@ class PlotBox():
         self.builder.add_from_file("./interfaces/toolbar.glade")
         wnd = self.builder.get_object("wndToolBar")
         self.toolbar = self.builder.get_object("boxToolBar")
+        self.boxLimits = self.builder.get_object("boxLimits")
         wnd.remove(self.toolbar)
         self.btnApplyLimits = self.builder.get_object("btnApplyLimits")
         self.txtMinLimit = self.builder.get_object("txtMinLimit")
@@ -63,6 +64,7 @@ class PlotBox():
         self.rect = None
         
         self.on_initial_plot(None)
+
 
     def on_save(self, widget):
         dialog = Gtk.FileChooserDialog("Please choose a file", self.parent.window,

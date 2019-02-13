@@ -70,6 +70,8 @@ class HomogeneityWindow():
         self.txtHomoValue.set_text(str(self.homo))
         self.btnApplyHomo.emit("clicked")
 
+        self.plot.boxLimits.hide()
+
 
     def on_apply_zoom(self, widget):
         self.zoom = float(self.txtZoomValue.get_text())
