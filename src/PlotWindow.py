@@ -176,7 +176,7 @@ class PlotBox():
         self.selected_point = [[z], [y]]
         self.points.set_data(*self.selected_point)
         self.fig.canvas.draw()
-        val = norm(self.simulation.coils, abs(y), z, self.simulation.mu0)
+        val = compute_norm(self.simulation.coils, abs(y), z, self.simulation.mu0)
         print(val)
         self.statBar.push(1, ("Coordinates: z = {:.3f}; y = {:.3f}; B = {:.2E}".format(
             z, y, val)))

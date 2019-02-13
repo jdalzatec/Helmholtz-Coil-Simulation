@@ -31,6 +31,7 @@ class HomogeneityWindow():
         self.txtHomoValue = self.builder.get_object("txtHomoValue")
         self.boxPlot = self.builder.get_object("boxPlot")
         self.menuColorMap = self.builder.get_object("menuColorMap")
+        self.btnQuit = self.builder.get_object("btnQuit")
 
 
         self.window.set_transient_for(self.parent.window)
@@ -38,6 +39,7 @@ class HomogeneityWindow():
 
         self.btnApplyZoom.connect("clicked", self.on_apply_zoom)
         self.btnApplyHomo.connect("clicked", self.on_apply_homo)
+        self.btnQuit.connect("activate", Gtk.main_quit)
 
         self.plot = PlotBox(self, self.simulation, self.colormap, self.statBar, txtZoomValue=self.txtZoomValue, binary_colors=True)
         self.boxPlot.pack_start(self.plot.boxPlot, True, True, 0)

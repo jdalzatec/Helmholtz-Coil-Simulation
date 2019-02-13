@@ -26,6 +26,9 @@ class InputWindow():
         self.chbAutoGrid = self.builder.get_object("chbAutoGrid")
         self.menuColorMap = self.builder.get_object("menuColorMap")
         self.treeData = self.builder.get_object("treeData")
+        self.btnOpen = self.builder.get_object("btnOpen")
+        self.btnNew = self.builder.get_object("btnNew")
+        self.btnQuit = self.builder.get_object("btnQuit")
         
         self.listBox = CoilsListBox()
         self.scrListBox.add_with_viewport(self.listBox)
@@ -37,6 +40,9 @@ class InputWindow():
         self.btnRandomConfig.connect("activate", self.on_random_config)
         self.btnSimulate.connect("clicked", self.on_simulate)
         self.chbAutoGrid.connect("activate", self.on_auto_grid)
+        self.btnOpen.connect("activate", self.on_import)
+        self.btnQuit.connect("activate", Gtk.main_quit)
+        self.btnNew.connect("activate", self.listBox.remove_all_coils)
 
 
 
@@ -111,7 +117,7 @@ class InputWindow():
 
         if ready:
             print("lets go")
-            self.simulation = Simulation(self.window, self.coils,
+            self.simulation = Simulation(self, self.coils,
                 self.z_min, self.z_max, self.z_points,
                 self.y_min, self.y_max, self.y_points)
 
@@ -143,6 +149,60 @@ class InputWindow():
 
         dialog.window.destroy()
         return False
+
+    def on_import(self, widget):
+        dialog = Gtk.FileChooserDialog("Please choose a file", self.window,
+            Gtk.FileChooserAction.OPEN,
+            (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+             Gtk.STOCK_SAVE, Gtk.ResponseType.OK))
+
+        filters = Gtk.FileFilter()
+        filters.set_name("Excel files")
+        filters.add_pattern("*.*.csv")
+        filters.add_pattern("*.xls")
+        filters.add_pattern("*.xlsx")
+        dialog.add_filter(filters)
+
+        response = dialog.run()
+        
+        if response == Gtk.ResponseType.OK:
+            filename = dialog.get_filename()
+
+            import xlrd
+
+            wb = xlrd.open_workbook(filename)
+            wInput = wb.sheet_by_name("input")
+            wCoils = wb.sheet_by_name('coils')
+
+            self.z_min = wInput.cell_value(0, 1)
+            self.z_max = wInput.cell_value(1, 1)
+            self.z_points = int(wInput.cell_value(2, 1))
+            self.y_min = wInput.cell_value(3, 1)
+            self.y_max = wInput.cell_value(4, 1)
+            self.y_points = int(wInput.cell_value(5, 1))
+
+            coils = []
+            for i in range(wCoils.nrows - 1):
+                radius = wCoils.cell_value(i + 1, 0)
+                turns = int(wCoils.cell_value(i + 1, 1))
+                current = wCoils.cell_value(i + 1, 2)
+                position = wCoils.cell_value(i + 1, 3)
+                coils.append(CreateCoil("Circular", radius, turns, current, position))
+
+            coil_rows = []
+            for coil in coils:
+                coil_row = CoilListRow()
+                coil_row.set_values(
+                    radius=coil.radius,
+                    turns=coil.num_turns,
+                    current=coil.I, position=coil.pos_z)
+                coil_rows.append(coil_row)
+            self.listBox.update(coil_rows)
+
+        elif response == Gtk.ResponseType.CANCEL:
+            print("Cancel clicked")
+
+        dialog.destroy()
 
 GObject.threads_init()
 window = InputWindow("./interfaces/input2.glade")

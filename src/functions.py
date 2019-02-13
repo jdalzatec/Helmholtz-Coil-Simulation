@@ -4,7 +4,7 @@ from multipledispatch import dispatch
 from functools import reduce
 import numpy
 
-def norm(coils, rho, z, mu0):
+def compute_norm(coils, rho, z, mu0):
     return numpy.sqrt(Bz(coils, rho, z, mu0)**2 + Brho(coils, rho, z, mu0)**2)
 
 

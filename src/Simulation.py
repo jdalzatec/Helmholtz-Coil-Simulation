@@ -20,14 +20,6 @@ from functions import *
 class Simulation(object):
     def __init__(self, parent, coils, z_min, z_max, z_points, y_min, y_max, y_points):
         self.parent = parent
-        self.coils = coils
-        self.z_min = z_min
-        self.z_max = z_max
-        self.z_points = z_points + 1
-        self.y_min = y_min
-        self.y_max = y_max
-        self.y_points = y_points + 1
-
         self.builder = Gtk.Builder()
         self.builder.add_from_file("./interfaces/running.glade")
         self.window = self.builder.get_object("wndRunning")
@@ -36,26 +28,12 @@ class Simulation(object):
         self.btnCancel = self.builder.get_object("btnCancel")
 
         self.btnCancel.connect("clicked", self.on_cancel)
-
-        self.window.set_transient_for(parent)
-
+        self.window.set_transient_for(parent.window)
         self.progressBar.set_fraction(0.0)
         
         self.mu0 = 4 * numpy.pi * 1e-7
-        self.z_arr = numpy.linspace(self.z_min, self.z_max, self.z_points)
-        self.y_arr = numpy.linspace(self.y_min, self.y_max, self.y_points)
-
-        # self.y_arr[self.y_arr == 0.0] = numpy.finfo(numpy.float32).eps
-
-        # for coil in self.coils:
-        #     self.z_arr[self.z_arr == coil.pos_z] = coil.pos_z - numpy.finfo(numpy.float32).eps
-        
-        self.z_grid, self.y_grid = numpy.meshgrid(self.z_arr, self.y_arr)
-        self.z_grid = self.z_grid.T
-        self.y_grid = self.y_grid.T
-
-        self.Bz_grid = numpy.zeros(shape=(len(self.z_arr), len(self.y_arr)))
-        self.Brho_grid = numpy.zeros(shape=(len(self.z_arr), len(self.y_arr)))
+    
+        self.build_data(coils, z_min, z_max, z_points, y_min, y_max, y_points)
 
         self.pair_values = product(self.z_arr, self.y_arr)
         self.pair_indexes = product(range(self.z_points), range(self.y_points))
@@ -72,18 +50,65 @@ class Simulation(object):
         self.thread.start()
 
         self.wait_for_the_simulation()
+
+    def build_data(self, coils, z_min, z_max, z_points, y_min, y_max, y_points):
+        self.coils = coils
+        self.z_min = z_min
+        self.z_max = z_max
+        self.z_points = z_points + 1
+        self.y_min = y_min
+        self.y_max = y_max
+        self.y_points = y_points + 1
+
+        self.z_arr = numpy.linspace(self.z_min, self.z_max, self.z_points)
+        self.y_arr = numpy.linspace(self.y_min, self.y_max, self.y_points)
+
+        self.z_grid, self.y_grid = numpy.meshgrid(self.z_arr, self.y_arr)
+        self.z_grid = self.z_grid.T
+        self.y_grid = self.y_grid.T
+
+        self.Bz_grid = numpy.zeros(shape=(len(self.z_arr), len(self.y_arr)))
+
+        self.Brho_grid = numpy.zeros(shape=(len(self.z_arr), len(self.y_arr)))
+
+        zmid = (self.z_min + self.z_max) * 0.5
+        ymid = (self.y_min + self.y_max) * 0.5
+        self.norm_center = compute_norm(self.coils, abs(ymid), zmid, self.mu0)
+
+    def set_data(self, coils, z_min, z_max, z_points, y_min, y_max, y_points,
+                 z_arr, y_arr, Bz_grid, Brho_grid, norm):
+        self.coils = coils
+        self.z_min = z_min
+        self.z_max = z_max
+        self.z_points = z_points + 1
+        self.y_min = y_min
+        self.y_max = y_max
+        self.y_points = y_points + 1
+
+        self.z_arr = z_arr
+        self.y_arr = y_arr
+
+        self.z_grid, self.y_grid = numpy.meshgrid(self.z_arr, self.y_arr)
+        self.z_grid = self.z_grid.T
+        self.y_grid = self.y_grid.T
+
+        self.Bz_grid = Bz_grid
+        self.Brho_grid = Brho_grid
+
+        zmid = (self.z_min + self.z_max) * 0.5
+        ymid = (self.y_min + self.y_max) * 0.5
+        self.norm_center = compute_norm(self.coils, abs(ymid), zmid, self.mu0)
+
+        self.norm = norm
         
     def wait_for_the_simulation(self):
         if not self.thread.is_alive():
             self.thread.join()
 
             if self.finish:
-                self.parent.hide()
                 print("finish")
+                self.parent.window.hide()
                 self.norm = numpy.sqrt(self.Brho_grid**2 + self.Bz_grid**2)
-                zmid = (self.z_min + self.z_max) * 0.5
-                ymid = (self.y_min + self.y_max) * 0.5
-                self.norm_center = norm(self.coils, abs(ymid), zmid, self.mu0)
                 results = Results(self.parent, self)
 
                 # from matplotlib import pyplot

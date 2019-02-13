@@ -26,12 +26,14 @@ class ZoomWindow():
         self.txtZoomValue = self.builder.get_object("txtZoomValue")
         self.boxPlot = self.builder.get_object("boxPlot")
         self.menuColorMap = self.builder.get_object("menuColorMap")
+        self.btnQuit = self.builder.get_object("btnQuit")
 
 
         self.window.set_transient_for(self.parent.window)
 
 
         self.btnApplyZoom.connect("clicked", self.on_apply_zoom)
+        self.btnQuit.connect("activate", Gtk.main_quit)
 
         self.plot = PlotBox(self, self.simulation, self.colormap, self.statBar, txtZoomValue=self.txtZoomValue)
         self.boxPlot.pack_start(self.plot.boxPlot, True, True, 0)
