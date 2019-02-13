@@ -12,6 +12,8 @@ from PlotWindow import PlotBox
 
 class ZoomWindow():
     def __init__(self, parent, simulation, colormap, zoom_value=0):
+        self.zoom = 100.0
+        
         self.parent = parent
         self.simulation = simulation
         self.colormap = colormap
@@ -57,8 +59,6 @@ class ZoomWindow():
 
         self.window.show_all()
 
-        self.zoom = 100.0
-        self.txtZoomValue.set_text(str(self.zoom))
         self.btnApplyZoom.emit("clicked")
 
 

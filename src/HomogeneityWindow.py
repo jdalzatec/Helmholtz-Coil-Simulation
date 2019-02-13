@@ -14,6 +14,9 @@ import numpy
 
 class HomogeneityWindow():
     def __init__(self, parent, simulation, colormap, zoom_value=0, homogeneity=0.0):
+        self.zoom = 100.0
+        self.homo = 50.0
+        
         self.parent = parent
         self.simulation = simulation
         self.colormap = colormap
@@ -62,8 +65,6 @@ class HomogeneityWindow():
 
 
         self.window.show_all()
-        self.zoom = 100.0
-        self.homo = 50.0
 
         self.txtZoomValue.set_text(str(self.zoom))
         self.txtHomoValue.set_text(str(self.homo))

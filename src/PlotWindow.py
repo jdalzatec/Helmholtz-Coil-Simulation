@@ -14,7 +14,7 @@ from functions import *
 
 
 class PlotBox():
-    def __init__(self, parent, simulation, colormap, statBar, z_lims=None, y_lims=None, txtZoomValue=None, binary_colors=False):
+    def __init__(self, parent, simulation, colormap, statBar, z_lims=None, y_lims=None, binary_colors=False):
         self.parent = parent
         self.simulation = simulation
         self.colormap = colormap
@@ -56,7 +56,6 @@ class PlotBox():
         if y_lims:
             self.y_lims = y_lims
 
-        self.txtZoomValue = txtZoomValue
         self.initial_norm = self.simulation.norm.copy()
 
         self.binary_colors = binary_colors
@@ -121,6 +120,7 @@ class PlotBox():
         return zmin, zmax, ymin, ymax
 
     def on_initial_plot(self, widget):
+
         self.z_grid = self.simulation.z_grid.copy()
         self.y_grid = self.simulation.y_grid.copy()
         self.norm = self.initial_norm.copy()
@@ -128,15 +128,25 @@ class PlotBox():
         self.z_lims = (self.simulation.z_min, self.simulation.z_max)
         self.y_lims = (self.simulation.y_min, self.simulation.y_max)
 
-        if self.txtZoomValue:
-            self.txtZoomValue.set_text("100.0")
+        self.lblLabelInfo.set_text("")
 
         print(self.parent, hasattr(self.parent, "on_apply_zoom"))
         if hasattr(self.parent, "on_apply_zoom"):
             self.parent.parent.plot.clear_rectangle()
 
-        self.lblLabelInfo.set_text("")
+            self.parent.zoom = 100.0
+            self.parent.txtZoomValue.set_text("100.0")
+            if hasattr(self.parent, "on_apply_homo"):
+                self.lblLabelInfo.set_text(
+                    "Zoom = %s; Homogeneity = %s" % (self.parent.zoom, self.parent.homo))
+            else:
+                self.lblLabelInfo.set_text("Zoom = %s" % self.parent.zoom)
+
+            
+
         self.compute_color_limits()
+        self.points.set_data([], [])
+        self.fig.canvas.draw()
 
     def compute_color_limits(self):
         if self.binary_colors:
