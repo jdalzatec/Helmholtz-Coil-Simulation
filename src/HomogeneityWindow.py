@@ -16,7 +16,7 @@ class HomogeneityWindow():
     def __init__(self, parent, simulation, colormap, zoom_value=0, homogeneity=0.0):
         self.zoom = 100.0
         self.homo = 50.0
-        
+
         self.parent = parent
         self.simulation = simulation
         self.colormap = colormap
@@ -44,7 +44,7 @@ class HomogeneityWindow():
         self.btnApplyHomo.connect("clicked", self.on_apply_homo)
         self.btnQuit.connect("activate", Gtk.main_quit)
 
-        self.plot = PlotBox(self, self.simulation, self.colormap, self.statBar, txtZoomValue=self.txtZoomValue, binary_colors=True)
+        self.plot = PlotBox(self, self.simulation, self.colormap, self.statBar, binary_colors=True)
         self.boxPlot.pack_start(self.plot.boxPlot, True, True, 0)
 
         # Get a list of the colormaps in matplotlib.  Ignore the ones that end with
@@ -91,7 +91,6 @@ class HomogeneityWindow():
 
         self.plot.initial_norm = homo_grid.copy()
         zmin, zmax, ymin, ymax = self.plot.compute_zoom(self.zoom)
-        self.plot.draw_point(center)
         self.plot.lblLabelInfo.set_text("Zoom = %s; Homogeneity = %s" % (self.zoom, self.homo))
 
         text = "Zoom = %s" % self.zoom

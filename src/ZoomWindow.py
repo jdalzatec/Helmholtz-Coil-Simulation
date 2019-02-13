@@ -13,7 +13,7 @@ from PlotWindow import PlotBox
 class ZoomWindow():
     def __init__(self, parent, simulation, colormap, zoom_value=0):
         self.zoom = 100.0
-        
+
         self.parent = parent
         self.simulation = simulation
         self.colormap = colormap
@@ -37,7 +37,7 @@ class ZoomWindow():
         self.btnApplyZoom.connect("clicked", self.on_apply_zoom)
         self.btnQuit.connect("activate", Gtk.main_quit)
 
-        self.plot = PlotBox(self, self.simulation, self.colormap, self.statBar, txtZoomValue=self.txtZoomValue)
+        self.plot = PlotBox(self, self.simulation, self.colormap, self.statBar)
         self.boxPlot.pack_start(self.plot.boxPlot, True, True, 0)
 
         # Get a list of the colormaps in matplotlib.  Ignore the ones that end with
