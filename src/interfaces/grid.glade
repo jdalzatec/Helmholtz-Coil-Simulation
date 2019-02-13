@@ -23,7 +23,7 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="btnRevert">
-                <property name="label" translatable="yes">_Revert</property>
+                <property name="label" translatable="yes">Rever_t</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
