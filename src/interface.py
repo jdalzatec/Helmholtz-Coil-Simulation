@@ -205,5 +205,5 @@ class InputWindow():
         dialog.destroy()
 
 GObject.threads_init()
-window = InputWindow("./interfaces/input2.glade")
+window = InputWindow("./interfaces/input.glade")
 print("hola")
