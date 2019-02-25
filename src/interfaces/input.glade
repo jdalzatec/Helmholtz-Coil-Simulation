@@ -206,6 +206,7 @@
                 <property name="width_request">100</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">Radius of the coil</property>
                 <property name="label" translatable="yes">Radius [m]</property>
                 <property name="justify">center</property>
               </object>
@@ -220,6 +221,7 @@
                 <property name="width_request">100</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">Number of turns of the coil</property>
                 <property name="label" translatable="yes">Turns</property>
                 <property name="justify">center</property>
               </object>
@@ -234,6 +236,7 @@
                 <property name="width_request">100</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">Electric current through the coil</property>
                 <property name="label" translatable="yes">Current [A]</property>
                 <property name="justify">center</property>
               </object>
@@ -248,6 +251,7 @@
                 <property name="width_request">100</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">Position of the coil along the z axis (symmetric axis)</property>
                 <property name="label" translatable="yes">Position [m]</property>
                 <property name="justify">center</property>
               </object>
