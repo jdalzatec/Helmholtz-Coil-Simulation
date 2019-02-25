@@ -1,6 +1,6 @@
 import gi
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk
+from gi.repository import Gtk, Gdk
 
 from matplotlib import pyplot
 from matplotlib.figure import Figure
@@ -30,12 +30,12 @@ class ZoomWindow():
         self.menuColorMap = self.builder.get_object("menuColorMap")
         self.btnQuit = self.builder.get_object("btnQuit")
 
-
         self.window.set_transient_for(self.parent.window)
-
 
         self.btnApplyZoom.connect("clicked", self.on_apply_zoom)
         self.btnQuit.connect("activate", Gtk.main_quit)
+
+        self.txtZoomValue.connect("key-press-event", self.on_key_press_event)
 
         self.plot = PlotBox(self, self.simulation, self.colormap, self.statBar)
         self.boxPlot.pack_start(self.plot.boxPlot, True, True, 0)
@@ -60,6 +60,20 @@ class ZoomWindow():
         self.window.show_all()
 
         self.btnApplyZoom.emit("clicked")
+
+    def on_key_press_event(self, widget, event):
+
+        print("Key press on widget: ", widget)
+        print("          Modifiers: ", event.state)
+        print("      Key val, name: ", event.keyval, Gdk.keyval_name(event.keyval))
+
+        # check the event modifiers (can also use SHIFTMASK, etc)
+        ctrl = (event.state & Gdk.ModifierType.CONTROL_MASK)
+
+        # see if we recognise a keypress
+        if Gdk.keyval_name(event.keyval) == 'Return':
+            print("Enter")
+            self.on_apply_zoom(None)
 
 
 

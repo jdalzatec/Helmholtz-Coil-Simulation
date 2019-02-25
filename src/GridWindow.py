@@ -31,7 +31,29 @@ class GridWindow():
 
         self.btnRevert.connect("clicked", self.on_revert)
 
+        self.txtMinZ.connect("key-press-event", self.on_key_press_event)
+        self.txtMaxZ.connect("key-press-event", self.on_key_press_event)
+        self.txtPointsZ.connect("key-press-event", self.on_key_press_event)
+        self.txtMinY.connect("key-press-event", self.on_key_press_event)
+        self.txtMaxY.connect("key-press-event", self.on_key_press_event)
+        self.txtPointsY.connect("key-press-event", self.on_key_press_event)
+
         self.window.show_all()
+
+    def on_key_press_event(self, widget, event):
+
+        print("Key press on widget: ", widget)
+        print("          Modifiers: ", event.state)
+        print("      Key val, name: ", event.keyval, Gdk.keyval_name(event.keyval))
+
+        # check the event modifiers (can also use SHIFTMASK, etc)
+        ctrl = (event.state & Gdk.ModifierType.CONTROL_MASK)
+
+        # see if we recognise a keypress
+        if Gdk.keyval_name(event.keyval) == 'Return':
+            print("Enter")
+            self.on_apply_zoom(None)
+
 
 
     def on_revert(self, widget):

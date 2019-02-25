@@ -1,6 +1,6 @@
 import gi
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk
+from gi.repository import Gtk, Gdk
 
 from matplotlib import pyplot
 from matplotlib.figure import Figure
@@ -39,6 +39,9 @@ class HomogeneityWindow():
 
         self.window.set_transient_for(self.parent.window)
 
+        self.txtZoomValue.connect("key-press-event", self.on_key_press_event_zoom)
+        self.txtHomoValue.connect("key-press-event", self.on_key_press_event_homo)
+
 
         self.btnApplyZoom.connect("clicked", self.on_apply_zoom)
         self.btnApplyHomo.connect("clicked", self.on_apply_homo)
@@ -71,6 +74,34 @@ class HomogeneityWindow():
         self.btnApplyHomo.emit("clicked")
 
         self.plot.boxLimits.hide()
+
+    def on_key_press_event_zoom(self, widget, event):
+
+        print("Key press on widget: ", widget)
+        print("          Modifiers: ", event.state)
+        print("      Key val, name: ", event.keyval, Gdk.keyval_name(event.keyval))
+
+        # check the event modifiers (can also use SHIFTMASK, etc)
+        ctrl = (event.state & Gdk.ModifierType.CONTROL_MASK)
+
+        # see if we recognise a keypress
+        if Gdk.keyval_name(event.keyval) == 'Return':
+            print("Enter")
+            self.on_apply_zoom(None)
+
+    def on_key_press_event_homo(self, widget, event):
+
+        print("Key press on widget: ", widget)
+        print("          Modifiers: ", event.state)
+        print("      Key val, name: ", event.keyval, Gdk.keyval_name(event.keyval))
+
+        # check the event modifiers (can also use SHIFTMASK, etc)
+        ctrl = (event.state & Gdk.ModifierType.CONTROL_MASK)
+
+        # see if we recognise a keypress
+        if Gdk.keyval_name(event.keyval) == 'Return':
+            print("Enter")
+            self.on_apply_homo(None)
 
 
     def on_apply_zoom(self, widget):
