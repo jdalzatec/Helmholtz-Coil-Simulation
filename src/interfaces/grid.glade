@@ -4,7 +4,7 @@
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkDialog" id="wndGrid">
     <property name="can_focus">False</property>
-    <property name="title" translatable="yes">Grid</property>
+    <property name="title" translatable="yes">Simulation region</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
@@ -84,7 +84,7 @@
                   <object class="GtkLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Z Grid</property>
+                    <property name="label" translatable="yes">z limits</property>
                     <attributes>
                       <attribute name="font-desc" value="Sans Bold 14"/>
                     </attributes>
@@ -104,8 +104,9 @@
                       <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Minimum limit of the simulation region along the z axis (symmetric axis)</property>
                         <property name="halign">end</property>
-                        <property name="label" translatable="yes">Min. Z [m] =</property>
+                        <property name="label" translatable="yes">Min. z [m] =</property>
                       </object>
                       <packing>
                         <property name="expand">True</property>
@@ -141,8 +142,9 @@
                       <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Maximum limit of the simulation region along the z axis (symmetric axis)</property>
                         <property name="halign">end</property>
-                        <property name="label" translatable="yes">Max. Z [m] =</property>
+                        <property name="label" translatable="yes">Max. z [m] =</property>
                       </object>
                       <packing>
                         <property name="expand">True</property>
@@ -178,6 +180,7 @@
                       <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Number of simulation points along the z axis (symmetric axis)</property>
                         <property name="halign">end</property>
                         <property name="label" translatable="yes">Points =</property>
                       </object>
@@ -224,7 +227,7 @@
                   <object class="GtkLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">y Grid</property>
+                    <property name="label" translatable="yes">y limits</property>
                     <attributes>
                       <attribute name="font-desc" value="Sans Bold 14"/>
                     </attributes>
@@ -244,6 +247,7 @@
                       <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Minimum limit of the simulation region along the y axis</property>
                         <property name="halign">end</property>
                         <property name="label" translatable="yes">Min. y [m] =</property>
                       </object>
@@ -281,6 +285,7 @@
                       <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Maximum limit of the simulation region along the y axis</property>
                         <property name="halign">end</property>
                         <property name="label" translatable="yes">Max. y [m] =</property>
                       </object>
@@ -318,6 +323,7 @@
                       <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Number of simulation points along the y axis</property>
                         <property name="halign">end</property>
                         <property name="label" translatable="yes">Points =</property>
                       </object>
