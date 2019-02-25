@@ -31,7 +31,7 @@ class Simulation(object):
         self.window.set_transient_for(parent.window)
         self.progressBar.set_fraction(0.0)
         
-        self.mu0 = 4 * numpy.pi * 1e-7
+        self.mu0 = 4 * numpy.pi * 1e-7 * 1000
     
         self.build_data(coils, z_min, z_max, z_points, y_min, y_max, y_points)
 

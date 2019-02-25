@@ -38,6 +38,7 @@ class PlotBox():
         self.lblLabelInfo = Gtk.Label()
 
         self.fig = Figure(figsize=(10, 10), dpi=80)
+        self.fig.patch.set_facecolor((242 / 255, 241 / 255, 240 / 255))
         self.canvas = FigureCanvas(self.fig)
         self.fig.canvas.mpl_connect("button_press_event", self.on_click)
         
@@ -144,7 +145,7 @@ class PlotBox():
             else:
                 self.lblLabelInfo.set_text("Zoom = %s" % self.parent.zoom)
 
-            
+        self.rect = None
         self.statBar.push(1, (""))
         self.compute_color_limits()
         self.points.set_data([], [])
@@ -191,7 +192,7 @@ class PlotBox():
         self.fig.canvas.draw()
         val = compute_norm(self.simulation.coils, abs(y), z, self.simulation.mu0)
         print(val)
-        self.statBar.push(1, ("Coordinates: z = {:.3f}; y = {:.3f}; B = {:.2E}".format(
+        self.statBar.push(1, ("Coordinates: z = {:.3f}; y = {:.3f}; B = {:.2E} mT".format(
             z, y, val)))
 
 
@@ -233,12 +234,14 @@ class PlotBox():
         mesh = self.ax.pcolormesh(self.z_grid, self.y_grid, self.norm,
             shading="gouraud", cmap=cmap, vmin=self.min_val, vmax=self.max_val)
 
+
         for coil in self.simulation.coils:
             self.ax.plot([coil.pos_z, coil.pos_z], [-coil.radius, coil.radius],
                 lw=coil.num_turns / 10, color=coil.color)
 
         if not self.binary_colors:
             cbar = self.fig.colorbar(mesh, format=self.format)
+            cbar.set_label("B [mT]", fontsize=30)
 
             # set the ticks and ticks labels for the color bar
             labels = numpy.linspace(self.min_val, self.max_val, 5)

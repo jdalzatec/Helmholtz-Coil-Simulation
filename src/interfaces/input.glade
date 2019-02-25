@@ -78,7 +78,43 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkImageMenuItem" id="btnHelmholtzConfig">
-                        <property name="label" translatable="yes">_Helmholtz Coil</property>
+                        <property name="label" translatable="yes">_Helmholtz coil</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">False</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImageMenuItem" id="btnMaxwellConfig">
+                        <property name="label" translatable="yes">_Maxwell coil</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">False</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImageMenuItem" id="btnWangConfig">
+                        <property name="label" translatable="yes">_Wang coil</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">False</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImageMenuItem" id="btnTetracoilConfig">
+                        <property name="label" translatable="yes">_Tetracoil</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">False</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImageMenuItem" id="btnLeeConfig">
+                        <property name="label" translatable="yes">_Lee-Whiting coil</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -87,7 +123,7 @@
                     </child>
                     <child>
                       <object class="GtkImageMenuItem" id="btnRandomConfig">
-                        <property name="label" translatable="yes">_Random Configuration</property>
+                        <property name="label" translatable="yes">_Random</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -155,6 +191,7 @@
                 <property name="width_request">80</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">me cago en roño</property>
                 <property name="label" translatable="yes">Remove</property>
                 <property name="justify">center</property>
               </object>

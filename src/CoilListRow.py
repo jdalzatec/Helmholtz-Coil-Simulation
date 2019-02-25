@@ -2,8 +2,6 @@ import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gdk
 
-from NumericEntry import NumericEntry
-
 
 class CoilListRow(Gtk.Box):
     def __init__(self):
@@ -15,10 +13,10 @@ class CoilListRow(Gtk.Box):
         self.btnRemove.set_can_focus(False)
 
 
-        self.txtRadius = NumericEntry(float, "positive")
-        self.txtTurns = NumericEntry(int, "positive")
-        self.txtCurrent = NumericEntry(float, "both")
-        self.txtPosition = NumericEntry(float, "both")
+        self.txtRadius = Gtk.Entry()
+        self.txtTurns = Gtk.Entry()
+        self.txtCurrent = Gtk.Entry()
+        self.txtPosition = Gtk.Entry()
         
         self.txtRadius.set_property("width-chars", 5)
         self.txtTurns.set_property("width-chars", 5)

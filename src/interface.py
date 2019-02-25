@@ -5,9 +5,15 @@ from gi.repository import Gtk, Gdk, GObject, GLib
 from GridWindow import GridWindow
 from CoilsListBox import CoilsListBox
 from CoilListRow import CoilListRow
-from Presets import HelmholtzCoilPreset, RandomCoilPreset
+from Presets import HelmholtzCoilPreset
+from Presets import MaxwellCoilPreset
+from Presets import WangCoilPreset
+from Presets import TetraCoilPreset
+from Presets import LeeWhitingCoilPreset
+from Presets import RandomCoilPreset
 from coil import Coil, CreateCoil
 from Simulation import Simulation
+import random
 
 
 class InputWindow():
@@ -19,8 +25,14 @@ class InputWindow():
         self.window = self.builder.get_object("wndInput")
         self.btnDeleteAll = self.builder.get_object("btnDeleteAll")
         self.btnAddCoil = self.builder.get_object("btnAddCoil")
+        
         self.btnHelmholtzConfig = self.builder.get_object("btnHelmholtzConfig")
+        self.btnMaxwellConfig = self.builder.get_object("btnMaxwellConfig")
+        self.btnWangConfig = self.builder.get_object("btnWangConfig")
+        self.btnTetracoilConfig = self.builder.get_object("btnTetracoilConfig")
+        self.btnLeeConfig = self.builder.get_object("btnLeeConfig")
         self.btnRandomConfig = self.builder.get_object("btnRandomConfig")
+        
         self.scrListBox = self.builder.get_object("scrListBox")
         self.btnSimulate = self.builder.get_object("btnSimulate")
         self.chbAutoGrid = self.builder.get_object("chbAutoGrid")
@@ -36,8 +48,14 @@ class InputWindow():
         self.window.connect("destroy", Gtk.main_quit)
         self.btnAddCoil.connect("clicked", self.listBox.create_coil_row)
         self.btnDeleteAll.connect("clicked", self.listBox.remove_all_coils)
+
         self.btnHelmholtzConfig.connect("activate", self.on_helmholtz_config)
+        self.btnMaxwellConfig.connect("activate", self.on_maxwell_config)
+        self.btnWangConfig.connect("activate", self.on_wang_config)
+        self.btnTetracoilConfig.connect("activate", self.on_tetracoil_config)
+        self.btnLeeConfig.connect("activate", self.on_lee_config)
         self.btnRandomConfig.connect("activate", self.on_random_config)
+
         self.btnSimulate.connect("clicked", self.on_simulate)
         self.chbAutoGrid.connect("activate", self.on_auto_grid)
         self.btnOpen.connect("activate", self.on_import)
@@ -60,16 +78,27 @@ class InputWindow():
         Gtk.main()
 
 
-    def on_auto_grid(self, check):
-        self.auto_grid = check.get_active()
-
-
     def on_helmholtz_config(self, widget):
         self.listBox.update(HelmholtzCoilPreset())
 
-    def on_random_config(self, widget):
-        self.listBox.update(RandomCoilPreset(20))
+    def on_maxwell_config(self, widget):
+        self.listBox.update(MaxwellCoilPreset())
 
+    def on_wang_config(self, widget):
+        self.listBox.update(WangCoilPreset())
+
+    def on_tetracoil_config(self, widget):
+        self.listBox.update(TetraCoilPreset())
+
+    def on_lee_config(self, widget):
+        self.listBox.update(LeeWhitingCoilPreset())
+
+    def on_random_config(self, widget):
+        self.listBox.update(RandomCoilPreset(random.randint(2, 10)))
+
+
+    def on_auto_grid(self, check):
+        self.auto_grid = check.get_active()
 
     def compute_grid(self):
         if len(self.coils) > 0:
