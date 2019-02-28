@@ -23,8 +23,12 @@
       <object class="GtkBox" id="boxToolBar">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">10</property>
+        <property name="margin_right">10</property>
         <child>
           <object class="GtkButton" id="btnSave">
+            <property name="width_request">40</property>
+            <property name="height_request">40</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
@@ -41,6 +45,8 @@
         </child>
         <child>
           <object class="GtkButton" id="btnRestore">
+            <property name="width_request">40</property>
+            <property name="height_request">40</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
@@ -111,12 +117,23 @@
             </child>
             <child>
               <object class="GtkButton" id="btnApplyLimits">
-                <property name="label" translatable="yes">Apply</property>
+                <property name="width_request">135</property>
+                <property name="height_request">40</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Set color bar limits</property>
+                <property name="tooltip_text" translatable="yes">Apply color bar limits</property>
                 <property name="halign">end</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Apply</property>
+                    <attributes>
+                      <attribute name="font-desc" value="Sans 12"/>
+                    </attributes>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -129,7 +146,6 @@
           <packing>
             <property name="expand">True</property>
             <property name="fill">True</property>
-            <property name="padding">20</property>
             <property name="position">2</property>
           </packing>
         </child>

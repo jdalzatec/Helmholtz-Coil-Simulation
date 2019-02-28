@@ -140,10 +140,10 @@
               <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="halign">center</property>
                 <property name="label" translatable="yes">Custom configuration</property>
                 <attributes>
                   <attribute name="font-desc" value="Sans Bold 18"/>
-                  <attribute name="weight" value="ultrabold"/>
                 </attributes>
               </object>
               <packing>
@@ -174,17 +174,28 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">center</property>
-                    <property name="margin_top">10</property>
+                    <property name="margin_top">30</property>
                     <property name="spacing">35</property>
                     <property name="homogeneous">True</property>
                     <child>
                       <object class="GtkButton" id="btnZoom">
-                        <property name="label" translatable="yes">_Zoom</property>
+                        <property name="width_request">135</property>
+                        <property name="height_request">40</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="valign">center</property>
                         <property name="use_underline">True</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">Zoom</property>
+                            <attributes>
+                              <attribute name="font-desc" value="Sans 12"/>
+                            </attributes>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -194,12 +205,23 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="btnHomogeneity">
-                        <property name="label" translatable="yes">Homo_geneity</property>
+                        <property name="width_request">135</property>
+                        <property name="height_request">40</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="valign">center</property>
                         <property name="use_underline">True</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">Homogeneity</property>
+                            <attributes>
+                              <attribute name="font-desc" value="Sans 12"/>
+                            </attributes>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -212,7 +234,6 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="padding">5</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -263,10 +284,10 @@
               <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Visualizer</property>
-                <property name="width_chars">10</property>
+                <property name="label" translatable="yes">Vizualizer</property>
                 <attributes>
-                  <attribute name="font-desc" value="Sans Bold 10"/>
+                  <attribute name="font-desc" value="Sans 12"/>
+                  <attribute name="weight" value="bold"/>
                 </attributes>
               </object>
               <packing>
@@ -288,9 +309,9 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Input parameters</property>
-                <property name="width_chars">10</property>
                 <attributes>
-                  <attribute name="font-desc" value="Sans Bold 10"/>
+                  <attribute name="font-desc" value="Sans 12"/>
+                  <attribute name="weight" value="bold"/>
                 </attributes>
               </object>
               <packing>
@@ -299,10 +320,28 @@
               </packing>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkTextView">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+              </object>
+              <packing>
+                <property name="position">2</property>
+              </packing>
             </child>
             <child type="tab">
-              <placeholder/>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Electric parameters</property>
+                <attributes>
+                  <attribute name="font-desc" value="Sans 12"/>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="position">2</property>
+                <property name="tab_fill">False</property>
+              </packing>
             </child>
           </object>
           <packing>

@@ -95,6 +95,7 @@
               <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="margin_top">30</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">5</property>
                 <child>
@@ -106,6 +107,7 @@
                     <child>
                       <object class="GtkButton" id="btnApplyHomo">
                         <property name="width_request">135</property>
+                        <property name="height_request">40</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -117,7 +119,7 @@
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes">Homogeneity</property>
                             <attributes>
-                              <attribute name="font-desc" value="Sans Bold 12"/>
+                              <attribute name="font-desc" value="Sans 12"/>
                             </attributes>
                           </object>
                         </child>
@@ -157,6 +159,7 @@
                     <child>
                       <object class="GtkButton" id="btnApplyZoom">
                         <property name="width_request">135</property>
+                        <property name="height_request">40</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -168,7 +171,7 @@
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes">Zoom</property>
                             <attributes>
-                              <attribute name="font-desc" value="Sans Bold 12"/>
+                              <attribute name="font-desc" value="Sans 12"/>
                             </attributes>
                           </object>
                         </child>
