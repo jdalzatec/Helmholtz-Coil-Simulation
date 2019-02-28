@@ -46,8 +46,6 @@ class InputWindow():
         self.scrListBox.add_with_viewport(self.listBox)
 
         self.window.connect("destroy", Gtk.main_quit)
-        self.btnAddCoil.connect("clicked", self.listBox.create_coil_row)
-        self.btnDeleteAll.connect("clicked", self.listBox.remove_all_coils)
 
         self.btnHelmholtzConfig.connect("activate", self.on_helmholtz_config)
         self.btnMaxwellConfig.connect("activate", self.on_maxwell_config)
@@ -57,7 +55,7 @@ class InputWindow():
         self.btnRandomConfig.connect("activate", self.on_random_config)
 
         self.btnSimulate.connect("clicked", self.on_simulate)
-        self.chbAutoGrid.connect("activate", self.on_auto_grid)
+        self.chbAutoGrid.connect("toggled", self.on_auto_grid)
         self.btnOpen.connect("activate", self.on_import)
         self.btnQuit.connect("activate", Gtk.main_quit)
         self.btnNew.connect("activate", self.listBox.remove_all_coils)
@@ -99,6 +97,7 @@ class InputWindow():
 
     def on_auto_grid(self, check):
         self.auto_grid = check.get_active()
+        print(self.auto_grid)
 
     def compute_grid(self):
         if len(self.coils) > 0:
