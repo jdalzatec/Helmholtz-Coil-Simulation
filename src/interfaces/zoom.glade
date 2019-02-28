@@ -99,12 +99,21 @@
                 <property name="homogeneous">True</property>
                 <child>
                   <object class="GtkButton" id="btnApplyZoom">
-                    <property name="label" translatable="yes">Zoom</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="halign">end</property>
                     <property name="use_underline">True</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Zoom</property>
+                        <attributes>
+                          <attribute name="font-desc" value="Sans Bold 12"/>
+                        </attributes>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">True</property>
