@@ -283,6 +283,8 @@
             <property name="margin_bottom">6</property>
             <child>
               <object class="GtkButton" id="btnSimulate">
+                <property name="width_request">135</property>
+                <property name="height_request">40</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
