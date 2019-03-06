@@ -166,12 +166,14 @@ class Results():
             filename = dialog.get_filename()
             print("Open clicked")
             print("File selected: " + filename)
+            if "." not in filename:
+                filename += ".xls"
 
             import xlwt
 
             wb = xlwt.Workbook()
-            wInput = wb.add_sheet('input')
-            wCoils = wb.add_sheet('coils')
+            wInput = wb.add_sheet('Simulation parameters')
+            wCoils = wb.add_sheet('Input parameters')
             wBy = wb.add_sheet('B y')
             wBz = wb.add_sheet('B z')
             wBnorm = wb.add_sheet('B norm')
@@ -248,8 +250,8 @@ class Results():
             import xlrd
 
             wb = xlrd.open_workbook(filename)
-            wInput = wb.sheet_by_name("input")
-            wCoils = wb.sheet_by_name('coils')
+            wInput = wb.sheet_by_name("Simulation parameters")
+            wCoils = wb.sheet_by_name('Input parameters')
             wBy = wb.sheet_by_name('B y')
             wBz = wb.sheet_by_name('B z')
             wBnorm = wb.sheet_by_name('B norm')

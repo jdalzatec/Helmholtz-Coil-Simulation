@@ -120,3 +120,5 @@ Pipfile.lock
 
 *.xls
 *.xlsx
+
+!icon.png

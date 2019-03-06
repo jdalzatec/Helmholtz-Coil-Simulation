@@ -23,8 +23,6 @@ class InputWindow():
         self.builder.add_from_file(glade_file)
         
         self.window = self.builder.get_object("wndInput")
-        self.btnDeleteAll = self.builder.get_object("btnDeleteAll")
-        self.btnAddCoil = self.builder.get_object("btnAddCoil")
         
         self.btnHelmholtzConfig = self.builder.get_object("btnHelmholtzConfig")
         self.btnMaxwellConfig = self.builder.get_object("btnMaxwellConfig")
@@ -73,7 +71,10 @@ class InputWindow():
 
         self.window.show_all()
         self.window.maximize()
+        self.listBox.create_coil_row(None)
+        
         Gtk.main()
+
 
 
     def on_helmholtz_config(self, widget):
@@ -199,8 +200,8 @@ class InputWindow():
             import xlrd
 
             wb = xlrd.open_workbook(filename)
-            wInput = wb.sheet_by_name("input")
-            wCoils = wb.sheet_by_name('coils')
+            wInput = wb.sheet_by_name("Simulation parameters")
+            wCoils = wb.sheet_by_name('Input parameters')
 
             self.z_min = wInput.cell_value(0, 1)
             self.z_max = wInput.cell_value(1, 1)

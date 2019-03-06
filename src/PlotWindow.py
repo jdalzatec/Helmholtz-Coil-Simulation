@@ -69,6 +69,7 @@ class PlotBox():
         self.rect = None
         
         self.on_initial_plot(None)
+        self.on_initial_plot(None)
 
     def on_key_press_event(self, widget, event):
 
@@ -94,7 +95,6 @@ class PlotBox():
         filters = Gtk.FileFilter()
         filters.set_name("Images files")
         filters.add_pattern("*.png")
-        filters.add_pattern("*.jpg")
         filters.add_pattern("*.pdf")
         dialog.add_filter(filters)
 
@@ -103,6 +103,8 @@ class PlotBox():
             filename = dialog.get_filename()
             print("Open clicked")
             print("File selected: " + filename)
+            if "." not in filename:
+                filename += ".pdf"
 
             self.fig.savefig(filename)
         elif response == Gtk.ResponseType.CANCEL:
