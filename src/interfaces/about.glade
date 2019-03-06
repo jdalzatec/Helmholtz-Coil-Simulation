@@ -22,8 +22,8 @@
             <property name="homogeneous">True</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="btnCancel">
-                <property name="label" translatable="yes">_Cancel</property>
+              <object class="GtkButton" id="btnClose">
+                <property name="label" translatable="yes">_Close</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -169,7 +169,7 @@ link_to_&lt;a href=\"http://www.pornhub.com"&gt;Magnetic Field Visualizer&lt;/a&
       </object>
     </child>
     <action-widgets>
-      <action-widget response="-6">btnCancel</action-widget>
+      <action-widget response="-7">btnClose</action-widget>
     </action-widgets>
   </object>
 </interface>

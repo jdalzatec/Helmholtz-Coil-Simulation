@@ -9,6 +9,7 @@ from matplotlib.backends.backend_gtk3agg import FigureCanvasGTK3Agg as FigureCan
 from matplotlib.backends.backend_gtk3 import NavigationToolbar2GTK3 as NavigationToolbar
 
 from PlotWindow import PlotBox
+from About import AboutWindow
 
 class ZoomWindow():
     def __init__(self, parent, simulation, colormap, zoom_value=0):
@@ -29,6 +30,7 @@ class ZoomWindow():
         self.boxPlot = self.builder.get_object("boxPlot")
         self.menuColorMap = self.builder.get_object("menuColorMap")
         self.btnQuit = self.builder.get_object("btnQuit")
+        self.btnAbout = self.builder.get_object("btnAbout")
 
         self.window.set_transient_for(self.parent.window)
 
@@ -39,6 +41,8 @@ class ZoomWindow():
 
         self.plot = PlotBox(self, self.simulation, self.colormap, self.statBar)
         self.boxPlot.pack_start(self.plot.boxPlot, True, True, 0)
+
+        self.btnAbout.connect("activate", lambda _: AboutWindow(self.window))
 
         # Get a list of the colormaps in matplotlib.  Ignore the ones that end with
         # '_r' because these are simply reversed versions of ones that don't end

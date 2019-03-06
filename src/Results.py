@@ -14,6 +14,7 @@ from ZoomWindow import ZoomWindow
 from HomogeneityWindow import HomogeneityWindow
 from coil import Coil, CreateCoil
 from CoilListRow import CoilListRow
+from About import AboutWindow
 
 
 class Results():
@@ -34,6 +35,7 @@ class Results():
         self.btnSaveAs = self.builder.get_object("btnSaveAs")
         self.btnOpen = self.builder.get_object("btnOpen")
         self.btnQuit = self.builder.get_object("btnQuit")
+        self.btnAbout = self.builder.get_object("btnAbout")
 
         self.simulation = simulation
 
@@ -48,6 +50,7 @@ class Results():
         self.btnSaveAs.connect("activate", self.on_export)
         self.btnOpen.connect("activate", self.on_import)
         self.btnQuit.connect("activate", Gtk.main_quit)
+        self.btnAbout.connect("activate", lambda _: AboutWindow(self.window))
 
 
         # Get a list of the colormaps in matplotlib.  Ignore the ones that end with

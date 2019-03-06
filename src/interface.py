@@ -3,6 +3,7 @@ gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gdk, GObject, GLib
 
 from GridWindow import GridWindow
+from About import AboutWindow
 from CoilsListBox import CoilsListBox
 from CoilListRow import CoilListRow
 from Presets import HelmholtzCoilPreset
@@ -58,6 +59,7 @@ class InputWindow():
         self.btnOpen.connect("activate", self.on_import)
         self.btnQuit.connect("activate", Gtk.main_quit)
         self.btnNew.connect("activate", self.listBox.remove_all_coils)
+        self.btnAbout.connect("activate", lambda _: AboutWindow(self.window))
 
 
 

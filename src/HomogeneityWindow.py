@@ -10,6 +10,7 @@ from matplotlib.backends.backend_gtk3 import NavigationToolbar2GTK3 as Navigatio
 
 from PlotWindow import PlotBox
 from functions import uniformity
+from About import AboutWindow
 import numpy
 
 class HomogeneityWindow():
@@ -35,6 +36,7 @@ class HomogeneityWindow():
         self.boxPlot = self.builder.get_object("boxPlot")
         self.menuColorMap = self.builder.get_object("menuColorMap")
         self.btnQuit = self.builder.get_object("btnQuit")
+        self.btnAbout = self.builder.get_object("btnAbout")
 
 
         self.window.set_transient_for(self.parent.window)
@@ -46,6 +48,7 @@ class HomogeneityWindow():
         self.btnApplyZoom.connect("clicked", self.on_apply_zoom)
         self.btnApplyHomo.connect("clicked", self.on_apply_homo)
         self.btnQuit.connect("activate", lambda _: self.window.close())
+        self.btnAbout.connect("activate", lambda _: AboutWindow(self.window))
 
         self.plot = PlotBox(self, self.simulation, self.colormap, self.statBar, binary_colors=True)
         self.boxPlot.pack_start(self.plot.boxPlot, True, True, 0)
