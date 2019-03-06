@@ -172,7 +172,7 @@ class InputWindow():
             return
 
         if len(self.coils) == 0:
-            ErrorMessage(self.window, "Invalid input parameters", "At least a coil must be added to simulate.")
+            ErrorMessage(self.window, "Invalid input parameters", "At least one coil must be added.")
             return
 
         self.compute_grid()

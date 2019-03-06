@@ -101,6 +101,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">center</property>
                     <property name="margin_top">30</property>
+                    <property name="margin_bottom">20</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">5</property>
                     <child>
@@ -283,7 +284,7 @@
               <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Homogeneity parameters</property>
+                <property name="label" translatable="yes">Practical experimentation region</property>
                 <attributes>
                   <attribute name="font-desc" value="Sans 12"/>
                   <attribute name="weight" value="bold"/>
