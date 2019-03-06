@@ -17,7 +17,7 @@ import numpy
 class HomogeneityWindow():
     def __init__(self, parent, simulation, colormap, zoom_value=0, homogeneity=0.0):
         self.zoom = 100.0
-        self.homo = 50.0
+        self.homo = 97.0
 
         self.parent = parent
         self.simulation = simulation
