@@ -33,7 +33,7 @@ class ZoomWindow():
         self.window.set_transient_for(self.parent.window)
 
         self.btnApplyZoom.connect("clicked", self.on_apply_zoom)
-        self.btnQuit.connect("activate", Gtk.main_quit)
+        self.btnQuit.connect("activate", lambda _: self.window.close())
 
         self.txtZoomValue.connect("key-press-event", self.on_key_press_event)
 
@@ -81,12 +81,8 @@ class ZoomWindow():
         self.zoom = float(self.txtZoomValue.get_text())
         print(self.zoom)
         zmin, zmax, ymin, ymax = self.plot.compute_zoom(self.zoom)
-        self.plot.lblLabelInfo.set_text("Zoom = %s" % self.zoom)
         
-        text = "Zoom = %s" % self.zoom
-        if self.zoom <= 100:
-            text = ""
-        self.parent.plot.draw_rectangle(zmin, zmax, ymin, ymax, text)
+        self.parent.plot.draw_rectangle(zmin, zmax, ymin, ymax)
 
 
 

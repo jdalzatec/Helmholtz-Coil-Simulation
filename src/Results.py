@@ -30,6 +30,7 @@ class Results():
         self.statBar = self.builder.get_object("statBar")
         self.menuColorMap = self.builder.get_object("menuColorMap")
         self.txtInputParameters = self.builder.get_object("txtInputParameters")
+        self.txtElectircalParameters = self.builder.get_object("txtElectircalParameters")
         self.btnSaveAs = self.builder.get_object("btnSaveAs")
         self.btnOpen = self.builder.get_object("btnOpen")
         self.btnQuit = self.builder.get_object("btnQuit")
@@ -86,6 +87,7 @@ class Results():
             self.colormap, self.statBar, xlims, ylims)
         self.boxPlot.pack_start(self.plot.boxPlot, True, True, 0)
         self.populate_input_parameters()
+        self.populate_electrical_parameters()
 
         self.window.show_all()
 
@@ -100,24 +102,48 @@ class Results():
         homogeneity = HomogeneityWindow(self, self.simulation, self.colormap)
 
     def populate_input_parameters(self):
-        text = ""
-        text += "{:12} =\t\t {}\n".format("Min Z", str(self.simulation.z_min))
-        text += "{:12} =\t\t {}\n".format("Max Z", str(self.simulation.z_max))
-        text += "{:12} =\t\t {}\n".format("Points Z", str(self.simulation.z_points))
-        text += "{:12} =\t\t {}\n".format("Min Y", str(self.simulation.y_min))
-        text += "{:12} =\t\t {}\n".format("Max Y", str(self.simulation.y_max))
-        text += "{:12} =\t\t {}\n".format("Points Y", str(self.simulation.y_points))
+        text = "\n"
+        text += "\t{}\t\t=\t\t{}\n".format("Min Z", str(self.simulation.z_min))
+        text += "\t{}\t\t=\t\t{}\n".format("Max Z", str(self.simulation.z_max))
+        text += "\t{}\t\t=\t\t{}\n".format("Points Z", str(self.simulation.z_points))
+        text += "\t{}\t\t=\t\t{}\n".format("Min Y", str(self.simulation.y_min))
+        text += "\t{}\t\t=\t\t{}\n".format("Max Y", str(self.simulation.y_max))
+        text += "\t{}\t\t=\t\t{}\n".format("Points Y", str(self.simulation.y_points))
 
         text += "\n"
 
-        text += "{:15}{:15}{:15}{:15}\n".format(
+        text += "\t{}\t\t{}\t\t{}\t\t{}\n".format(
             "Radius [m]", "Turns", "Current [A]", "Position [m]")
 
         for coil in self.simulation.coils:
-            text += "{:<20f}{:<20d}{:<20f}{:<20f}\n".format(
+            text += "\t{:.5f}\t\t\t{:d}\t\t\t{:.5f}\t\t\t{:.5f}\n".format(
                 coil.radius, coil.num_turns, coil.I, coil.pos_z)
 
         self.txtInputParameters.get_buffer().set_text(text)
+
+
+    def populate_electrical_parameters(self):
+        gauge, diameter, section, resist, Inominal = numpy.loadtxt("awg.dat", unpack=True)
+        Imax = max([coil.I for coil in self.simulation.coils])
+        index = numpy.argmin(Inominal > Imax) - 1
+        gauge = gauge[index]
+        diameter = diameter[index]
+        section = section[index]
+        resist = resist[index]
+        Inominal = Inominal[index]
+
+        length = sum([2*numpy.pi*coil.radius*coil.num_turns for coil in self.simulation.coils]) * 1.05
+        
+        text = "\n"
+        text += "\t{}\t\t\t\t\t=\t\t{:d}\n".format("AWG Gauge", int(gauge))
+        text += "\t{}\t\t\t=\t\t{:.5f}\n".format("Wire diameter [mm]", diameter)
+        text += "\t{}\t\t=\t\t{:.5f}\n".format("Wire sectional area [mm2]", section)
+        text += "\t{}\t\t\t=\t\t{:.5f}\n".format("Nominal current [A]", Inominal)
+        text += "\t{}\t\t\t=\t\t{:.5f}\n".format("Maximum current [A]", Inominal * 1.1)
+        text += "\t{}\t\t\t=\t\t{:.5f}\n".format("Total wire length [m]", length)
+        text += "\t{}\t\t=\t\t{:.5f}\n".format("Wire resistance [Ohm]", resist * length / 1000)
+
+        self.txtElectircalParameters.get_buffer().set_text(text)
 
 
 

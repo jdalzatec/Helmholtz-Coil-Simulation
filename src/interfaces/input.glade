@@ -174,7 +174,7 @@
                 <property name="width_request">80</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">me cago en roño</property>
+                <property name="tooltip_text" translatable="yes">Remove coil</property>
                 <property name="label" translatable="yes">Remove</property>
                 <property name="justify">center</property>
               </object>

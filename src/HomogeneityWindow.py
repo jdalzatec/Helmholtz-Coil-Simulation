@@ -45,7 +45,7 @@ class HomogeneityWindow():
 
         self.btnApplyZoom.connect("clicked", self.on_apply_zoom)
         self.btnApplyHomo.connect("clicked", self.on_apply_homo)
-        self.btnQuit.connect("activate", Gtk.main_quit)
+        self.btnQuit.connect("activate", lambda _: self.window.close())
 
         self.plot = PlotBox(self, self.simulation, self.colormap, self.statBar, binary_colors=True)
         self.boxPlot.pack_start(self.plot.boxPlot, True, True, 0)
@@ -108,12 +108,8 @@ class HomogeneityWindow():
         self.zoom = float(self.txtZoomValue.get_text())
         print(self.zoom)
         zmin, zmax, ymin, ymax = self.plot.compute_zoom(self.zoom)
-        self.plot.lblLabelInfo.set_text("Zoom = %s; Homogeneity = %s" % (self.zoom, self.homo))
-        
-        text = "Zoom = %s" % self.zoom
-        if self.zoom <= 100:
-            text = ""
-        self.parent.plot.draw_rectangle(zmin, zmax, ymin, ymax, text)
+
+        self.parent.plot.draw_rectangle(zmin, zmax, ymin, ymax)
 
     def on_apply_homo(self, widget):
         self.homo = float(self.txtHomoValue.get_text())
@@ -124,12 +120,9 @@ class HomogeneityWindow():
 
         self.plot.initial_norm = homo_grid.copy()
         zmin, zmax, ymin, ymax = self.plot.compute_zoom(self.zoom)
-        self.plot.lblLabelInfo.set_text("Zoom = %s; Homogeneity = %s" % (self.zoom, self.homo))
 
-        text = "Zoom = %s" % self.zoom
-        if self.zoom <= 100:
-            text = ""
-        self.parent.plot.draw_rectangle(zmin, zmax, ymin, ymax, text)
+
+        self.parent.plot.draw_rectangle(zmin, zmax, ymin, ymax)
 
 
 

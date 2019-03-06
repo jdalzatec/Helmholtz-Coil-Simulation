@@ -39,14 +39,11 @@ class PlotBox():
 
         self.boxPlot = Gtk.Box(spacing=6, orientation=Gtk.Orientation.VERTICAL)
 
-        self.lblLabelInfo = Gtk.Label()
-
         self.fig = Figure(figsize=(10, 10), dpi=80)
         self.fig.patch.set_facecolor((242 / 255, 241 / 255, 240 / 255))
         self.canvas = FigureCanvas(self.fig)
         self.fig.canvas.mpl_connect("button_press_event", self.on_click)
         
-        self.boxPlot.pack_start(self.lblLabelInfo, False, False, 0)
         self.boxPlot.pack_start(self.canvas, True, True, 0)
         self.boxPlot.pack_start(self.toolbar, False, True, 0)
 
@@ -68,7 +65,6 @@ class PlotBox():
         self.selected_point = [[], []]
         self.rect = None
         
-        self.on_initial_plot(None)
         self.on_initial_plot(None)
 
     def on_key_press_event(self, widget, event):
@@ -151,7 +147,6 @@ class PlotBox():
         self.z_lims = (self.simulation.z_min, self.simulation.z_max)
         self.y_lims = (self.simulation.y_min, self.simulation.y_max)
 
-        self.lblLabelInfo.set_text("")
 
         print(self.parent, hasattr(self.parent, "on_apply_zoom"))
         if hasattr(self.parent, "on_apply_zoom"):
@@ -159,11 +154,6 @@ class PlotBox():
 
             self.parent.zoom = 100.0
             self.parent.txtZoomValue.set_text("100.0")
-            if hasattr(self.parent, "on_apply_homo"):
-                self.lblLabelInfo.set_text(
-                    "Zoom = %s; Homogeneity = %s" % (self.parent.zoom, self.parent.homo))
-            else:
-                self.lblLabelInfo.set_text("Zoom = %s" % self.parent.zoom)
 
         self.rect = None
         self.statBar.push(1, (""))
@@ -300,7 +290,7 @@ class PlotBox():
         if self.pan_active or zoom_active:
             return
 
-    def draw_rectangle(self, xmin, xmax, ymin, ymax, text):
+    def draw_rectangle(self, xmin, xmax, ymin, ymax):
         if self.rect:
             self.rect.remove()
         
@@ -309,7 +299,6 @@ class PlotBox():
         self.ax.add_patch(self.rect)
         self.fig.canvas.draw()
 
-        self.lblLabelInfo.set_text(text)
 
 
     def clear_rectangle(self):
@@ -317,4 +306,3 @@ class PlotBox():
             self.rect.remove()
             self.rect = None
             self.fig.canvas.draw()
-            self.lblLabelInfo.set_text("")
