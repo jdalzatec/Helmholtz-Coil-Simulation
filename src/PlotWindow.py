@@ -11,6 +11,7 @@ import matplotlib.patches as patches
 
 import numpy
 from functions import *
+from ErrorMessage import ErrorMessage
 
 
 class PlotBox():
@@ -205,15 +206,32 @@ class PlotBox():
         self.statBar.push(1, ("Coordinates: z = {:.3f}; y = {:.3f}; B = {:.2E} mT".format(
             z, y, val)))
 
+    def isNumeric(self, val, func=float):
+        try:
+            func(self.format % eval(val))
+            return True
+        except Exception as e:
+            return False
 
     def on_apply_limits(self, widget):
-        self.txtMaxLimit.set_property("text", self.format % eval(self.txtMaxLimit.get_property("text")))
-        self.txtMinLimit.set_property("text", self.format % eval(self.txtMinLimit.get_property("text")))
+        if not self.isNumeric(self.txtMaxLimit.get_property("text")):
+            ErrorMessage(self.parent.window, "Invalid input parameters", "Colorbar limits must be real numbers.")
+            return
 
-        self.max_val = float(self.txtMaxLimit.get_property("text"))
-        self.min_val = float(self.txtMinLimit.get_property("text"))
-        print(self.max_val, self.min_val)
-        if self.max_val >= self.min_val:
+        if not self.isNumeric(self.txtMinLimit.get_property("text")):
+            ErrorMessage(self.parent.window, "Invalid input parameters", "Colorbar limits must be real numbers.")
+            return
+        
+        self.max_val = float(self.format % eval(self.txtMaxLimit.get_property("text")))
+        self.min_val = float(self.format % eval(self.txtMinLimit.get_property("text")))
+
+
+            
+
+        
+        if self.max_val > self.min_val:
+            self.txtMaxLimit.set_property("text", self.format % self.max_val)
+            self.txtMinLimit.set_property("text", self.format % self.min_val)
             # surpass is for set the >= symbol in case of norm >= max_val
             self.surpass = False
             if numpy.any(self.norm >= self.max_val):
@@ -226,8 +244,7 @@ class PlotBox():
 
             self.update_plot()
         else:
-            print("cómo chuchas")
-        print(self.underpass, self.surpass)
+            ErrorMessage(self.parent.window, "Invalid input parameters", "Min. value must be lower than Max. value")
         
 
     def update_plot(self, colormap=None):

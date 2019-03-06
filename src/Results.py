@@ -127,7 +127,7 @@ class Results():
 
     def populate_electrical_parameters(self):
         gauge, diameter, section, resist, Inominal = numpy.loadtxt("awg.dat", unpack=True)
-        Imax = max([coil.I for coil in self.simulation.coils])
+        Imax = max([abs(coil.I) for coil in self.simulation.coils])
         index = numpy.argmin(Inominal > Imax) - 1
         gauge = gauge[index]
         diameter = diameter[index]

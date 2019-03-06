@@ -14,6 +14,7 @@ from Presets import LeeWhitingCoilPreset
 from Presets import RandomCoilPreset
 from coil import Coil, CreateCoil
 from Simulation import Simulation
+from ErrorMessage import ErrorMessage
 import random
 
 
@@ -126,20 +127,52 @@ class InputWindow():
                 self.z_points = int(abs(self.z_max - self.z_min) * PMAX / abs(self.y_max - self.y_min))
 
 
+    def validate_values(self, coil_row):
+        values = coil_row.get_values()
+        radius = values["radius"]
+        turns = values["turns"]
+        current = values["current"]
+        position = values["position"]
+        print(radius, turns, current, position)
+        
+        if not (radius and radius > 0.0):
+            ErrorMessage(self.window, "Invalid input parameters", "Radius must be a positive real.")
+            return False
+
+        if not (turns and turns > 0):
+            ErrorMessage(self.window, "Invalid input parameters", "Number of turns must be a positive integer.")
+            return False
+
+        if not (current and abs(current) < 150):
+            ErrorMessage(self.window, "Invalid input parameters", "Electric current must be a real between -150 and 150.")
+            return False
+
+        if not (position):
+            ErrorMessage(self.window, "Invalid input parameters", "Position must be a real number.")
+            return False
+
+        return True
 
     def collect_coils_values(self):
         self.coils = []
         for row in list(self.listBox)[:-1]:
             coil_row, = row.get_children()
+            val = self.validate_values(coil_row)
+            if not val:
+                return False
+            
             coil = CreateCoil(**coil_row.get_values())
             self.coils.append(coil)
+        return True
 
 
     def on_simulate(self, widget):
-        self.collect_coils_values()
+        flag = self.collect_coils_values()
+        if not flag:
+            return
 
         if len(self.coils) == 0:
-            print("No hay bobinas")
+            ErrorMessage(self.window, "Invalid input parameters", "At least a coil must be added to simulate.")
             return
 
         self.compute_grid()
@@ -154,6 +187,12 @@ class InputWindow():
                 self.y_min, self.y_max, self.y_points)
 
 
+    def isNumeric(self, val, func=float):
+        try:
+            func(val)
+            return True
+        except Exception as e:
+            return False
 
     def insert_grid_manually(self):
         initial_grid = {
@@ -170,13 +209,27 @@ class InputWindow():
         response = dialog.window.run()
 
         if response == Gtk.ResponseType.OK:
-            self.z_min = float(dialog.txtMinZ.get_text())
-            self.z_max = float(dialog.txtMaxZ.get_text())
-            self.z_points = int(dialog.txtPointsZ.get_text())
-            self.y_min = float(dialog.txtMinY.get_text())
-            self.y_max = float(dialog.txtMaxY.get_text())
-            self.y_points = int(dialog.txtPointsY.get_text())
+            self.z_min = float(dialog.txtMinZ.get_text()) if self.isNumeric(dialog.txtMinZ.get_text()) else False
+            self.z_max = float(dialog.txtMaxZ.get_text()) if self.isNumeric(dialog.txtMaxZ.get_text()) else False
+            self.z_points = int(dialog.txtPointsZ.get_text()) if self.isNumeric(dialog.txtPointsZ.get_text(), int) else False
+            self.y_min = float(dialog.txtMinY.get_text()) if self.isNumeric(dialog.txtMinY.get_text()) else False
+            self.y_max = float(dialog.txtMaxY.get_text()) if self.isNumeric(dialog.txtMaxY.get_text()) else False
+            self.y_points = int(dialog.txtPointsY.get_text()) if self.isNumeric(dialog.txtPointsY.get_text(), int) else False
             dialog.window.destroy()
+
+
+            if not (self.z_min and self.z_max and self.y_min and self.y_max):
+                ErrorMessage(self.window, "Invalid input parameters", "Simulation limits must be real numbers.")
+                return False
+
+            if not (self.z_min < self.z_max and self.y_min < self.y_max):
+                ErrorMessage(self.window, "Invalid input parameters", "Min. value must be lower than Max. value.")
+                return False
+
+            if not (self.z_points and self.y_points and self.z_points > 0 and self.y_points > 0):
+                ErrorMessage(self.window, "Invalid input parameters", "Number of simulation points must be greater than 0.")
+                return False
+
             return True
 
         dialog.window.destroy()

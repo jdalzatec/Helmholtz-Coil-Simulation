@@ -11,6 +11,7 @@ from matplotlib.backends.backend_gtk3 import NavigationToolbar2GTK3 as Navigatio
 from PlotWindow import PlotBox
 from functions import uniformity
 from About import AboutWindow
+from ErrorMessage import ErrorMessage
 import numpy
 
 class HomogeneityWindow():
@@ -106,18 +107,43 @@ class HomogeneityWindow():
             print("Enter")
             self.on_apply_homo(None)
 
+    def isNumeric(self, val, func=float):
+        try:
+            func(val)
+            return True
+        except Exception as e:
+            return False
 
     def on_apply_zoom(self, widget):
-        self.zoom = float(self.txtZoomValue.get_text())
+        self.zoom = float(self.txtZoomValue.get_text()) if self.isNumeric(self.txtZoomValue.get_text()) else False
+
+        if not (self.zoom and self.zoom > 0):
+            ErrorMessage(self.window, "Invalid input parameters", "Zoom value must be a positive real.")
+            return
+
         print(self.zoom)
         zmin, zmax, ymin, ymax = self.plot.compute_zoom(self.zoom)
 
         self.parent.plot.draw_rectangle(zmin, zmax, ymin, ymax)
 
+
     def on_apply_homo(self, widget):
-        self.homo = float(self.txtHomoValue.get_text())
+        self.homo = float(self.txtHomoValue.get_text()) if self.isNumeric(self.txtHomoValue.get_text()) else False
+
+        if not (self.homo and self.homo > 0 and self.homo <= 100):
+            ErrorMessage(self.window, "Invalid input parameters", "Homogeneity value must be a positive real lower than 100.")
+            return
+
+
         self.txtZoomValue.set_text("100.0")
-        self.zoom = float(self.txtZoomValue.get_text())
+        
+
+        self.zoom = float(self.txtZoomValue.get_text()) if self.isNumeric(self.txtZoomValue.get_text()) else False
+
+        if not (self.zoom and self.zoom > 0):
+            ErrorMessage(self.window, "Invalid input parameters", "Zoom value must be a positive real.")
+            return
+
         center, uniformity_grid = self.compute_uniformity()
         homo_grid = numpy.where(uniformity_grid >= (self.homo / 100), 1, 0)
 

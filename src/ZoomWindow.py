@@ -10,6 +10,7 @@ from matplotlib.backends.backend_gtk3 import NavigationToolbar2GTK3 as Navigatio
 
 from PlotWindow import PlotBox
 from About import AboutWindow
+from ErrorMessage import ErrorMessage
 
 class ZoomWindow():
     def __init__(self, parent, simulation, colormap, zoom_value=0):
@@ -80,10 +81,20 @@ class ZoomWindow():
             self.on_apply_zoom(None)
 
 
+    def isNumeric(self, val, func=float):
+        try:
+            func(val)
+            return True
+        except Exception as e:
+            return False
 
     def on_apply_zoom(self, widget):
-        self.zoom = float(self.txtZoomValue.get_text())
-        print(self.zoom)
+        self.zoom = float(self.txtZoomValue.get_text()) if self.isNumeric(self.txtZoomValue.get_text()) else False
+
+        if not (self.zoom and self.zoom > 0):
+            ErrorMessage(self.window, "Invalid input parameters", "Zoom value must be a positive real.")
+            return
+
         zmin, zmax, ymin, ymax = self.plot.compute_zoom(self.zoom)
         
         self.parent.plot.draw_rectangle(zmin, zmax, ymin, ymax)

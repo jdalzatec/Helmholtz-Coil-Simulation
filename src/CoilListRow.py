@@ -48,14 +48,20 @@ class CoilListRow(Gtk.Box):
         self.txtCurrent.set_property("text", str(current))
         self.txtPosition.set_property("text", str(position))
 
+    def isNumeric(self, val, func=float):
+        try:
+            func(val)
+            return True
+        except Exception as e:
+            return False
 
     def get_values(self):
         params = {
             "shape": "Circular",
-            "radius": float(self.txtRadius.get_text()),
-            "turns": int(self.txtTurns.get_text()),
-            "current": float(self.txtCurrent.get_text()),
-            "position": float(self.txtPosition.get_text()),
+            "radius": float(self.txtRadius.get_text()) if self.isNumeric(self.txtRadius.get_text()) else False,
+            "turns": int(self.txtTurns.get_text()) if self.isNumeric(self.txtTurns.get_text(), int) else False,
+            "current": float(self.txtCurrent.get_text()) if self.isNumeric(self.txtCurrent.get_text()) else False,
+            "position": float(self.txtPosition.get_text()) if self.isNumeric(self.txtPosition.get_text()) else False
         }
         return params
 
