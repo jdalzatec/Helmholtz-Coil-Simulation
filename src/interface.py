@@ -39,6 +39,7 @@ class InputWindow():
         self.btnOpen = self.builder.get_object("btnOpen")
         self.btnNew = self.builder.get_object("btnNew")
         self.btnQuit = self.builder.get_object("btnQuit")
+        self.btnAbout = self.builder.get_object("btnAbout")
         
         self.listBox = CoilsListBox()
         self.scrListBox.add_with_viewport(self.listBox)
