@@ -3,7 +3,6 @@ gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gdk
 
 import matplotlib
-matplotlib.rcParams['patch.linewidth'] = 2
 from matplotlib import pyplot
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_gtk3agg import FigureCanvasGTK3Agg as FigureCanvas
@@ -35,6 +34,8 @@ class PlotBox():
         self.txtMaxLimit = self.builder.get_object("txtMaxLimit")
         self.btnRestore = self.builder.get_object("btnRestore")
         self.btnSave = self.builder.get_object("btnSave")
+        self.btnHideShowCoils = self.builder.get_object("btnHideShowCoils")
+        self.lblHideShowCoils = self.builder.get_object("lblHideShowCoils")
 
         self.txtMaxLimit.connect("key-press-event", self.on_key_press_event)
         self.txtMinLimit.connect("key-press-event", self.on_key_press_event)
@@ -53,6 +54,7 @@ class PlotBox():
         self.btnRestore.connect("clicked", self.on_initial_plot)
         self.btnApplyLimits.connect("clicked", self.on_apply_limits)
         self.btnSave.connect("clicked", self.on_save)
+        self.btnHideShowCoils.connect("clicked", self.on_hide_show_coils)
 
         self.z_lims = (self.simulation.z_min, self.simulation.z_max)
         self.y_lims = (self.simulation.y_min, self.simulation.y_max)
@@ -68,6 +70,8 @@ class PlotBox():
         self.selected_point = [[], []]
         self.rect = None
         
+        self.plot_coils = False
+
         self.on_initial_plot(None)
 
     def on_key_press_event(self, widget, event):
@@ -263,9 +267,9 @@ class PlotBox():
         mesh = self.ax.pcolormesh(self.z_grid, self.y_grid, self.norm,
             shading="gouraud", cmap=cmap, vmin=self.min_val, vmax=self.max_val, zorder=-1)
 
-
-        for coil in self.simulation.coils:
-            self.draw_coil(coil)
+        if self.plot_coils:
+            for coil in self.simulation.coils:
+                self.draw_coil(coil)
 
         if not self.binary_colors:
             cbar = self.fig.colorbar(mesh, format=self.format)
@@ -298,6 +302,19 @@ class PlotBox():
         self.fig.tight_layout()
         self.fig.canvas.draw()
 
+
+    def on_hide_show_coils(self, widget):
+        self.plot_coils = not self.plot_coils
+
+        if not self.plot_coils:
+            self.lblHideShowCoils.set_text("Show coils")
+        else:
+            self.lblHideShowCoils.set_text("Hide coils")
+
+        self.update_plot()
+
+
+
     def draw_coil(self, coil):
         gauge, diameter, section, resist, Inominal = numpy.loadtxt("awg.dat", unpack=True)
         Imax = abs(coil.I)
@@ -309,7 +326,7 @@ class PlotBox():
         rect = patches.Rectangle(
             (coil.pos_z - width * 0.5, - coil.radius - width / 2),
             width, 2 * coil.radius + width,
-            linewidth=1, facecolor="darkorange", edgecolor="black", hatch=r"||", )
+            linewidth=0, facecolor="darkorange", edgecolor="black", hatch=r"|||||", )
         self.ax.add_patch(rect)
 
 
@@ -323,6 +340,7 @@ class PlotBox():
         if self.pan_active or zoom_active:
             return
 
+
     def draw_rectangle(self, xmin, xmax, ymin, ymax):
         if self.rect:
             self.rect.remove()
@@ -331,7 +349,6 @@ class PlotBox():
             linewidth=2, edgecolor='black', facecolor='none')
         self.ax.add_patch(self.rect)
         self.fig.canvas.draw()
-
 
 
     def clear_rectangle(self):
