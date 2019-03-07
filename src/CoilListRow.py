@@ -30,6 +30,11 @@ class CoilListRow(Gtk.Box):
 
         self.txtRadius.set_property("input-purpose", Gtk.InputPurpose.NUMBER)
 
+        self.txtRadius.connect("key-press-event", self.on_key_press_event)
+        self.txtTurns.connect("key-press-event", self.on_key_press_event)
+        self.txtCurrent.connect("key-press-event", self.on_key_press_event)
+        self.txtPosition.connect("key-press-event", self.on_key_press_event)
+
         self.pack_start(self.btnRemove, False, False, 0)
         self.pack_start(self.txtRadius, True, True, 0)
         self.pack_start(self.txtTurns, True, True, 0)
@@ -37,6 +42,22 @@ class CoilListRow(Gtk.Box):
         self.pack_start(self.txtPosition, True, True, 0)
 
         self.btnRemove.connect("clicked", self.remove_from_parent)
+
+
+    def on_key_press_event(self, widget, event):
+
+        print("Key press on widget: ", widget)
+        print("          Modifiers: ", event.state)
+        print("      Key val, name: ", event.keyval, Gdk.keyval_name(event.keyval))
+
+        # check the event modifiers (can also use SHIFTMASK, etc)
+        ctrl = (event.state & Gdk.ModifierType.CONTROL_MASK)
+
+        # see if we recognise a keypress
+        if Gdk.keyval_name(event.keyval) == 'Return':
+            print("Enter")
+            print(self.get_parent().get_parent().btnSimulate.emit("clicked"))
+
 
     def remove_from_parent(self, widget):
         self.get_parent().get_parent().remove(self.get_parent())

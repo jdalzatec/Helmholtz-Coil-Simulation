@@ -16,6 +16,8 @@ from coil import Coil, CreateCoil
 from CoilListRow import CoilListRow
 from About import AboutWindow
 
+import openpyxl
+
 
 class Results():
     def __init__(self, parent, simulation):
@@ -137,14 +139,25 @@ class Results():
 
         length = sum([2*numpy.pi*coil.radius*coil.num_turns for coil in self.simulation.coils]) * 1.05
         
+        self.electrical_values = {
+            "AWG Gauge": int(gauge),
+            "Wire diameter [mm]": diameter,
+            "Wire cross sectional area [mm2]": section,
+            "Nominal current [A]": Inominal,
+            "Maximum current [A]": Inominal * 1.1,
+            "Total wire length [m]": length,
+            "Wire resistance [Ohm]": resist * length / 1000,
+            }
+
+
         text = "\n"
-        text += "\t{}\t\t\t\t\t\t=\t\t{:d}\n".format("AWG Gauge", int(gauge))
-        text += "\t{}\t\t\t\t=\t\t{:.5f}\n".format("Wire diameter [mm]", diameter)
-        text += "\t{}\t=\t\t{:.5f}\n".format("Wire cross sectional area [mm2]", section)
-        text += "\t{}\t\t\t\t=\t\t{:.5f}\n".format("Nominal current [A]", Inominal)
-        text += "\t{}\t\t\t\t=\t\t{:.5f}\n".format("Maximum current [A]", Inominal * 1.1)
-        text += "\t{}\t\t\t\t=\t\t{:.5f}\n".format("Total wire length [m]", length)
-        text += "\t{}\t\t\t=\t\t{:.5f}\n".format("Wire resistance [Ohm]", resist * length / 1000)
+        text += "\t{}\t\t\t\t\t\t=\t\t{:d}\n".format("AWG Gauge", self.electrical_values["AWG Gauge"])
+        text += "\t{}\t\t\t\t=\t\t{:.5f}\n".format("Wire diameter [mm]", self.electrical_values["Wire diameter [mm]"])
+        text += "\t{}\t=\t\t{:.5f}\n".format("Wire cross sectional area [mm2]", self.electrical_values["Wire cross sectional area [mm2]"])
+        text += "\t{}\t\t\t\t=\t\t{:.5f}\n".format("Nominal current [A]", self.electrical_values["Nominal current [A]"])
+        text += "\t{}\t\t\t\t=\t\t{:.5f}\n".format("Maximum current [A]", self.electrical_values["Maximum current [A]"])
+        text += "\t{}\t\t\t\t=\t\t{:.5f}\n".format("Total wire length [m]", self.electrical_values["Total wire length [m]"])
+        text += "\t{}\t\t\t=\t\t{:.5f}\n".format("Wire resistance [Ohm]", self.electrical_values["Wire resistance [Ohm]"])
 
         self.txtElectircalParameters.get_buffer().set_text(text)
 
@@ -185,8 +198,9 @@ class Results():
         filters = Gtk.FileFilter()
         filters.set_name("Excel files")
         filters.add_pattern("*.*.csv")
-        filters.add_pattern("*.xls")
+        filters.add_pattern("*.*.CSV")
         filters.add_pattern("*.xlsx")
+        filters.add_pattern("*.XLSX")
         dialog.add_filter(filters)
 
         response = dialog.run()
@@ -196,57 +210,112 @@ class Results():
             print("Open clicked")
             print("File selected: " + filename)
             if "." not in filename:
-                filename += ".xls"
+                filename += ".xlsx"
 
-            import xlwt
 
-            wb = xlwt.Workbook()
-            wInput = wb.add_sheet('Simulation parameters')
-            wCoils = wb.add_sheet('Input parameters')
-            wBy = wb.add_sheet('B y')
-            wBz = wb.add_sheet('B z')
-            wBnorm = wb.add_sheet('B norm')
-            title_style = xlwt.easyxf('font: bold 1') 
+            wb = openpyxl.Workbook()
+            wb.remove_sheet(wb.active)
 
-            wInput.write(0, 0, "Min Z", title_style)
-            wInput.write(0, 1, self.simulation.z_min)
-            wInput.write(1, 0, "Max Z", title_style)
-            wInput.write(1, 1, self.simulation.z_max)
-            wInput.write(2, 0, "Points Z", title_style)
-            wInput.write(2, 1, self.simulation.z_points - 1)
-            wInput.write(3, 0, "Min Y", title_style)
-            wInput.write(3, 1, self.simulation.y_min)
-            wInput.write(4, 0, "Max Y", title_style)
-            wInput.write(4, 1, self.simulation.y_max)
-            wInput.write(5, 0, "Points Y", title_style)
-            wInput.write(5, 1, self.simulation.y_points - 1)
+            wInput = wb.create_sheet('Simulation parameters')
+            wCoils = wb.create_sheet('Input parameters')
+            wElectrical = wb.create_sheet('Electrical parameters')
+            wBy = wb.create_sheet('B y')
+            wBz = wb.create_sheet('B z')
+            wBnorm = wb.create_sheet('B norm')
+            title_style = openpyxl.styles.Font(bold=True) 
 
-            wCoils.write(0, 0, "Radius [m]", title_style)
-            wCoils.write(0, 1, "Num. turns", title_style)
-            wCoils.write(0, 2, "Current [A]", title_style)
-            wCoils.write(0, 3, "Pos. Z [m]", title_style)
+            wInput.cell(row=1 + 0, column=1 + 0).value = "Min Z"
+            wInput.cell(row=1 + 0, column=1 + 0).font = title_style
+            wInput.cell(row=1 + 0, column=1 + 1).value = self.simulation.z_min
+            
+            wInput.cell(row=1 + 1, column=1 + 0).value = "Max Z"
+            wInput.cell(row=1 + 1, column=1 + 0).font = title_style
+            wInput.cell(row=1 + 1, column=1 + 1).value = self.simulation.z_max
+            
+            wInput.cell(row=1 + 2, column=1 + 0).value = "Points Z"
+            wInput.cell(row=1 + 2, column=1 + 0).font = title_style
+            wInput.cell(row=1 + 2, column=1 + 1).value = self.simulation.z_points - 1
+
+            wInput.cell(row=1 + 3, column=1 + 0).value = "Min Y"
+            wInput.cell(row=1 + 3, column=1 + 0).font = title_style
+            wInput.cell(row=1 + 3, column=1 + 1).value = self.simulation.y_min
+
+            wInput.cell(row=1 + 4, column=1 + 0).value = "Max Y"
+            wInput.cell(row=1 + 4, column=1 + 0).font = title_style
+            wInput.cell(row=1 + 4, column=1 + 1).value = self.simulation.y_max
+
+            wInput.cell(row=1 + 5, column=1 + 0).value = "Points Y"
+            wInput.cell(row=1 + 5, column=1 + 0).font = title_style
+            wInput.cell(row=1 + 5, column=1 + 1).value = self.simulation.y_points - 1
+
+            wCoils.cell(row=1 + 0, column=1 + 0).value = "Radius [m]"
+            wCoils.cell(row=1 + 0, column=1 + 0).font = title_style
+
+            wCoils.cell(row=1 + 0, column=1 + 1).value = "Num. turns"
+            wCoils.cell(row=1 + 0, column=1 + 1).font = title_style
+
+            wCoils.cell(row=1 + 0, column=1 + 2).value = "Current [A]"
+            wCoils.cell(row=1 + 0, column=1 + 2).font = title_style
+
+            wCoils.cell(row=1 + 0, column=1 + 3).value = "Pos. Z [m]"
+            wCoils.cell(row=1 + 0, column=1 + 3).font = title_style
+
+
+            wElectrical.cell(row=1 + 0, column=1 + 0).value = "AWG Gauge"
+            wElectrical.cell(row=1 + 0, column=1 + 0).font = title_style
+            wElectrical.cell(row=1 + 0, column=1 + 1).value = self.electrical_values["AWG Gauge"]
+            wElectrical.cell(row=1 + 1, column=1 + 0).value = "Wire diameter [mm]"
+            wElectrical.cell(row=1 + 1, column=1 + 0).font = title_style
+            wElectrical.cell(row=1 + 1, column=1 + 1).value = self.electrical_values["Wire diameter [mm]"]
+            wElectrical.cell(row=1 + 2, column=1 + 0).value = "Wire cross sectional area [mm2]"
+            wElectrical.cell(row=1 + 2, column=1 + 0).font = title_style
+            wElectrical.cell(row=1 + 2, column=1 + 1).value = self.electrical_values["Wire cross sectional area [mm2]"]
+            wElectrical.cell(row=1 + 3, column=1 + 0).value = "Nominal current [A]"
+            wElectrical.cell(row=1 + 3, column=1 + 0).font = title_style
+            wElectrical.cell(row=1 + 3, column=1 + 1).value = self.electrical_values["Nominal current [A]"]
+            wElectrical.cell(row=1 + 4, column=1 + 0).value = "Maximum current [A]"
+            wElectrical.cell(row=1 + 4, column=1 + 0).font = title_style
+            wElectrical.cell(row=1 + 4, column=1 + 1).value = self.electrical_values["Maximum current [A]"]
+            wElectrical.cell(row=1 + 5, column=1 + 0).value = "Total wire length [m]"
+            wElectrical.cell(row=1 + 5, column=1 + 0).font = title_style
+            wElectrical.cell(row=1 + 5, column=1 + 1).value = self.electrical_values["Total wire length [m]"]
+            wElectrical.cell(row=1 + 6, column=1 + 0).value = "Wire resistance [Ohm]"
+            wElectrical.cell(row=1 + 6, column=1 + 0).font = title_style
+            wElectrical.cell(row=1 + 6, column=1 + 1).value = self.electrical_values["Wire resistance [Ohm]"]
 
             for i, coil in enumerate(self.simulation.coils):
-                wCoils.write(i + 1, 0, coil.radius)
-                wCoils.write(i + 1, 1, coil.num_turns)
-                wCoils.write(i + 1, 2, coil.I)
-                wCoils.write(i + 1, 3, coil.pos_z)
+                wCoils.cell(row=1 + i + 1, column=1 + 0).value = coil.radius
+                wCoils.cell(row=1 + i + 1, column=1 + 1).value = coil.num_turns
+                wCoils.cell(row=1 + i + 1, column=1 + 2).value = coil.I
+                wCoils.cell(row=1 + i + 1, column=1 + 3).value = coil.pos_z
 
             for i, val in enumerate(self.simulation.z_arr):
-                wBz.write(0, i + 1, val, title_style)
-                wBy.write(0, i + 1, val, title_style)
-                wBnorm.write(0, i + 1, val, title_style)
+                wBz.cell(row=1 + 0, column=1 + i + 1).value = val
+                wBz.cell(row=1 + 0, column=1 + i + 1).font=title_style
+
+                wBy.cell(row=1 + 0, column=1 + i + 1).value = val
+                wBy.cell(row=1 + 0, column=1 + i + 1).font=title_style
+
+                wBnorm.cell(row=1 + 0, column=1 + i + 1).value = val
+                wBnorm.cell(row=1 + 0, column=1 + i + 1).font=title_style
+
 
             for i, val in enumerate(self.simulation.y_arr):
-                wBz.write(i + 1, 0, val, title_style)
-                wBy.write(i + 1, 0, val, title_style)
-                wBnorm.write(i + 1, 0, val, title_style)
+                wBz.cell(row=1 + i + 1, column=1 + 0).value = val
+                wBz.cell(row=1 + i + 1, column=1 + 0).font = title_style
+
+                wBy.cell(row=1 + i + 1, column=1 + 0).value = val
+                wBy.cell(row=1 + i + 1, column=1 + 0).font = title_style
+
+                wBnorm.cell(row=1 + i + 1, column=1 + 0).value = val
+                wBnorm.cell(row=1 + i + 1, column=1 + 0).font = title_style
+
 
             for i, _ in enumerate(self.simulation.z_arr):
                 for j, _ in enumerate(self.simulation.y_arr):
-                    wBz.write(j + 1, i + 1, self.simulation.Bz_grid[i, j])
-                    wBy.write(j + 1, i + 1, self.simulation.Brho_grid[i, j])
-                    wBnorm.write(j + 1, i + 1, self.simulation.norm[i, j])
+                    wBz.cell(row=1 + j + 1, column=1 + i + 1).value = self.simulation.Bz_grid[i, j]
+                    wBy.cell(row=1 + j + 1, column=1 + i + 1).value = self.simulation.Brho_grid[i, j]
+                    wBnorm.cell(row=1 + j + 1, column=1 + i + 1).value = self.simulation.norm[i, j]
 
 
             wb.save(filename)
@@ -262,13 +331,13 @@ class Results():
         dialog = Gtk.FileChooserDialog("Please choose a file", self.window,
             Gtk.FileChooserAction.OPEN,
             (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
-             Gtk.STOCK_SAVE, Gtk.ResponseType.OK))
+             Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
 
         filters = Gtk.FileFilter()
         filters.set_name("Excel files")
         filters.add_pattern("*.*.csv")
-        filters.add_pattern("*.xls")
         filters.add_pattern("*.xlsx")
+        filters.add_pattern("*.XLSX")
         dialog.add_filter(filters)
 
         response = dialog.run()
@@ -276,46 +345,45 @@ class Results():
         if response == Gtk.ResponseType.OK:
             filename = dialog.get_filename()
 
-            import xlrd
 
-            wb = xlrd.open_workbook(filename)
-            wInput = wb.sheet_by_name("Simulation parameters")
-            wCoils = wb.sheet_by_name('Input parameters')
-            wBy = wb.sheet_by_name('B y')
-            wBz = wb.sheet_by_name('B z')
-            wBnorm = wb.sheet_by_name('B norm')
+            wb = openpyxl.load_workbook(filename)
+            wInput = wb["Simulation parameters"]
+            wCoils = wb['Input parameters']
+            wBy = wb['B y']
+            wBz = wb['B z']
+            wBnorm = wb['B norm']
 
-            z_min = wInput.cell_value(0, 1)
-            z_max = wInput.cell_value(1, 1)
-            z_points = int(wInput.cell_value(2, 1))
-            y_min = wInput.cell_value(3, 1)
-            y_max = wInput.cell_value(4, 1)
-            y_points = int(wInput.cell_value(5, 1))
+            z_min = wInput.cell(row=1 +0, column=1 + 1).value
+            z_max = wInput.cell(row=1 +1, column=1 + 1).value
+            z_points = int(wInput.cell(row=1 +2, column=1 + 1).value)
+            y_min = wInput.cell(row=1 +3, column=1 + 1).value
+            y_max = wInput.cell(row=1 +4, column=1 + 1).value
+            y_points = int(wInput.cell(row=1 +5, column=1 + 1).value)
 
             coils = []
-            for i in range(wCoils.nrows - 1):
-                radius = wCoils.cell_value(i + 1, 0)
-                turns = int(wCoils.cell_value(i + 1, 1))
-                current = wCoils.cell_value(i + 1, 2)
-                position = wCoils.cell_value(i + 1, 3)
+            for i in range(wCoils.max_row - 1):
+                radius = wCoils.cell(row=1 + i + 1, column=1 + 0).value
+                turns = int(wCoils.cell(row=1 + i + 1, column=1 + 1).value)
+                current = wCoils.cell(row=1 + i + 1, column=1 + 2).value
+                position = wCoils.cell(row=1 + i + 1, column=1 + 3).value
                 coils.append(CreateCoil("Circular", radius, turns, current, position))
 
             z_arr = []
-            for i in range(wBz.ncols - 1):
-                z_arr.append(wBz.cell_value(0, i + 1))
+            for i in range(wBz.max_column - 1):
+                z_arr.append(wBz.cell(row=1 + 0, column=1 + i + 1).value)
 
             y_arr = []
-            for i in range(wBz.nrows - 1):
-                y_arr.append(wBz.cell_value(i + 1, 0))
+            for i in range(wBz.max_row - 1):
+                y_arr.append(wBz.cell(row=1 + i + 1, column=1 + 0).value)
 
             Bz_grid = numpy.zeros(shape=(len(z_arr), len(y_arr)))
             Brho_grid = numpy.zeros(shape=(len(z_arr), len(y_arr)))
             norm = numpy.zeros(shape=(len(z_arr), len(y_arr)))
             for i in range(len(z_arr) - 1):
                 for j in range(len(y_arr) - 1):
-                    Bz_grid[i, j] = wBz.cell_value(j + 1, i + 1)
-                    Brho_grid[i, j] = wBy.cell_value(j + 1, i + 1)
-                    norm[i, j] = wBnorm.cell_value(j + 1, i + 1)
+                    Bz_grid[i, j] = wBz.cell(row=1 + j + 1, column=1 + i + 1).value
+                    Brho_grid[i, j] = wBy.cell(row=1 + j + 1, column=1 + i + 1).value
+                    norm[i, j] = wBnorm.cell(row=1 + j + 1, column=1 + i + 1).value
 
             self.simulation.set_data(coils, z_min, z_max, z_points, y_min, y_max, y_points,
                  z_arr, y_arr, Bz_grid, Brho_grid, norm)

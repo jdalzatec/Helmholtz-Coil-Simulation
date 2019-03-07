@@ -17,6 +17,8 @@ from Simulation import Simulation
 from ErrorMessage import ErrorMessage
 import random
 
+import openpyxl
+
 
 class InputWindow():
     def __init__(self, glade_file):
@@ -43,7 +45,7 @@ class InputWindow():
         self.btnQuit = self.builder.get_object("btnQuit")
         self.btnAbout = self.builder.get_object("btnAbout")
         
-        self.listBox = CoilsListBox()
+        self.listBox = CoilsListBox(self.btnSimulate)
         self.scrListBox.add_with_viewport(self.listBox)
 
         self.window.connect("destroy", Gtk.main_quit)
@@ -242,13 +244,13 @@ class InputWindow():
         dialog = Gtk.FileChooserDialog("Please choose a file", self.window,
             Gtk.FileChooserAction.OPEN,
             (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
-             Gtk.STOCK_SAVE, Gtk.ResponseType.OK))
+             Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
 
         filters = Gtk.FileFilter()
         filters.set_name("Excel files")
         filters.add_pattern("*.*.csv")
-        filters.add_pattern("*.xls")
         filters.add_pattern("*.xlsx")
+        filters.add_pattern("*.XLSX")
         dialog.add_filter(filters)
 
         response = dialog.run()
@@ -256,25 +258,23 @@ class InputWindow():
         if response == Gtk.ResponseType.OK:
             filename = dialog.get_filename()
 
-            import xlrd
+            wb = openpyxl.load_workbook(filename)
+            wInput = wb["Simulation parameters"]
+            wCoils = wb['Input parameters']
 
-            wb = xlrd.open_workbook(filename)
-            wInput = wb.sheet_by_name("Simulation parameters")
-            wCoils = wb.sheet_by_name('Input parameters')
-
-            self.z_min = wInput.cell_value(0, 1)
-            self.z_max = wInput.cell_value(1, 1)
-            self.z_points = int(wInput.cell_value(2, 1))
-            self.y_min = wInput.cell_value(3, 1)
-            self.y_max = wInput.cell_value(4, 1)
-            self.y_points = int(wInput.cell_value(5, 1))
+            self.z_min = wInput.cell(row=1 + 0, column=1 + 1).value
+            self.z_max = wInput.cell(row=1 + 1, column=1 + 1).value
+            self.z_points = int(wInput.cell(row=1 + 2, column=1 + 1).value)
+            self.y_min = wInput.cell(row=1 + 3, column=1 + 1).value
+            self.y_max = wInput.cell(row=1 + 4, column=1 + 1).value
+            self.y_points = int(wInput.cell(row=1 + 5, column=1 + 1).value)
 
             coils = []
-            for i in range(wCoils.nrows - 1):
-                radius = wCoils.cell_value(i + 1, 0)
-                turns = int(wCoils.cell_value(i + 1, 1))
-                current = wCoils.cell_value(i + 1, 2)
-                position = wCoils.cell_value(i + 1, 3)
+            for i in range(wCoils.max_row - 1):
+                radius = wCoils.cell(row=1 + i + 1, column=1 + 0).value
+                turns = int(wCoils.cell(row=1 + i + 1, column=1 + 1).value)
+                current = wCoils.cell(row=1 + i + 1, column=1 + 2).value
+                position = wCoils.cell(row=1 + i + 1, column=1 + 3).value
                 coils.append(CreateCoil("Circular", radius, turns, current, position))
 
             coil_rows = []

@@ -6,10 +6,10 @@ from CoilListRow import CoilListRow
 
 
 class CoilsListBox(Gtk.ListBox):
-    def __init__(self):
+    def __init__(self, btnSimulate):
         Gtk.ListBox.__init__(self)
         self.set_property("selection-mode", Gtk.SelectionMode(0))
-
+        self.btnSimulate = btnSimulate
 
         self.btnAddInList = Gtk.Button.new_from_icon_name("list-add", Gtk.IconSize(2))
         self.btnAddInList.connect("clicked", self.create_coil_row)

@@ -52,7 +52,7 @@ class GridWindow():
         # see if we recognise a keypress
         if Gdk.keyval_name(event.keyval) == 'Return':
             print("Enter")
-            self.on_apply_zoom(None)
+            self.window.response(Gtk.ResponseType.OK)
 
 
 
