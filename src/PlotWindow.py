@@ -2,6 +2,8 @@ import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gdk
 
+import matplotlib
+matplotlib.rcParams['patch.linewidth'] = 2
 from matplotlib import pyplot
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_gtk3agg import FigureCanvasGTK3Agg as FigureCanvas
@@ -259,12 +261,11 @@ class PlotBox():
         self.ax.grid(True)
         cmap = pyplot.get_cmap(self.colormap)
         mesh = self.ax.pcolormesh(self.z_grid, self.y_grid, self.norm,
-            shading="gouraud", cmap=cmap, vmin=self.min_val, vmax=self.max_val)
+            shading="gouraud", cmap=cmap, vmin=self.min_val, vmax=self.max_val, zorder=-1)
 
 
         for coil in self.simulation.coils:
-            self.ax.plot([coil.pos_z, coil.pos_z], [-coil.radius, coil.radius],
-                lw=coil.num_turns / 10, color=coil.color)
+            self.draw_coil(coil)
 
         if not self.binary_colors:
             cbar = self.fig.colorbar(mesh, format=self.format)
@@ -296,6 +297,21 @@ class PlotBox():
 
         self.fig.tight_layout()
         self.fig.canvas.draw()
+
+    def draw_coil(self, coil):
+        gauge, diameter, section, resist, Inominal = numpy.loadtxt("awg.dat", unpack=True)
+        Imax = abs(coil.I)
+        index = numpy.argmin(Inominal > Imax) - 1
+        diameter = diameter[index] / 1000
+
+        width = numpy.sqrt(coil.num_turns) * diameter
+
+        rect = patches.Rectangle(
+            (coil.pos_z - width * 0.5, - coil.radius - width / 2),
+            width, 2 * coil.radius + width,
+            linewidth=1, facecolor="darkorange", edgecolor="black", hatch=r"||", )
+        self.ax.add_patch(rect)
+
 
     def update_cursor_position(self, event):
         if event.button != 1:
