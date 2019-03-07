@@ -138,13 +138,13 @@ class Results():
         length = sum([2*numpy.pi*coil.radius*coil.num_turns for coil in self.simulation.coils]) * 1.05
         
         text = "\n"
-        text += "\t{}\t\t\t\t\t=\t\t{:d}\n".format("AWG Gauge", int(gauge))
-        text += "\t{}\t\t\t=\t\t{:.5f}\n".format("Wire diameter [mm]", diameter)
-        text += "\t{}\t\t=\t\t{:.5f}\n".format("Wire sectional area [mm2]", section)
-        text += "\t{}\t\t\t=\t\t{:.5f}\n".format("Nominal current [A]", Inominal)
-        text += "\t{}\t\t\t=\t\t{:.5f}\n".format("Maximum current [A]", Inominal * 1.1)
-        text += "\t{}\t\t\t=\t\t{:.5f}\n".format("Total wire length [m]", length)
-        text += "\t{}\t\t=\t\t{:.5f}\n".format("Wire resistance [Ohm]", resist * length / 1000)
+        text += "\t{}\t\t\t\t\t\t=\t\t{:d}\n".format("AWG Gauge", int(gauge))
+        text += "\t{}\t\t\t\t=\t\t{:.5f}\n".format("Wire diameter [mm]", diameter)
+        text += "\t{}\t=\t\t{:.5f}\n".format("Wire cross sectional area [mm2]", section)
+        text += "\t{}\t\t\t\t=\t\t{:.5f}\n".format("Nominal current [A]", Inominal)
+        text += "\t{}\t\t\t\t=\t\t{:.5f}\n".format("Maximum current [A]", Inominal * 1.1)
+        text += "\t{}\t\t\t\t=\t\t{:.5f}\n".format("Total wire length [m]", length)
+        text += "\t{}\t\t\t=\t\t{:.5f}\n".format("Wire resistance [Ohm]", resist * length / 1000)
 
         self.txtElectircalParameters.get_buffer().set_text(text)
 

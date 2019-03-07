@@ -147,7 +147,7 @@ class InputWindow():
             ErrorMessage(self.window, "Invalid input parameters", "Electric current must be a real between -150 and 150.")
             return False
 
-        if not (position):
+        if (isinstance(position, bool) and not position):
             ErrorMessage(self.window, "Invalid input parameters", "Position must be a real number.")
             return False
 
@@ -217,10 +217,13 @@ class InputWindow():
             self.y_points = int(dialog.txtPointsY.get_text()) if self.isNumeric(dialog.txtPointsY.get_text(), int) else False
             dialog.window.destroy()
 
-
-            if not (self.z_min and self.z_max and self.y_min and self.y_max):
-                ErrorMessage(self.window, "Invalid input parameters", "Simulation limits must be real numbers.")
-                return False
+            if (isinstance(self.z_min, bool) or 
+                isinstance(self.z_max, bool) or 
+                isinstance(self.y_min, bool) or 
+                isinstance(self.y_max, bool)):
+                if not (self.z_min and self.z_max and self.y_min and self.y_max):
+                    ErrorMessage(self.window, "Invalid input parameters", "Simulation limits must be real numbers.")
+                    return False
 
             if not (self.z_min < self.z_max and self.y_min < self.y_max):
                 ErrorMessage(self.window, "Invalid input parameters", "Min. value must be lower than Max. value.")

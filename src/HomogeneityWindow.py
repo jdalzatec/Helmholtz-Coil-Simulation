@@ -115,7 +115,8 @@ class HomogeneityWindow():
             return False
 
     def on_apply_zoom(self, widget):
-        self.zoom = float(self.txtZoomValue.get_text()) if self.isNumeric(self.txtZoomValue.get_text()) else False
+        value = self.txtZoomValue.get_text().replace("%", "")
+        self.zoom = float(value) if self.isNumeric(value) else False
 
         if not (self.zoom and self.zoom > 0):
             ErrorMessage(self.window, "Invalid input parameters", "Zoom value must be a positive real.")
@@ -125,20 +126,22 @@ class HomogeneityWindow():
         zmin, zmax, ymin, ymax = self.plot.compute_zoom(self.zoom)
 
         self.parent.plot.draw_rectangle(zmin, zmax, ymin, ymax)
+        self.txtZoomValue.set_text("{}%".format(self.zoom))
 
 
     def on_apply_homo(self, widget):
-        self.homo = float(self.txtHomoValue.get_text()) if self.isNumeric(self.txtHomoValue.get_text()) else False
+        value = self.txtHomoValue.get_text().replace("%", "")
+        self.homo = float(value) if self.isNumeric(value) else False
 
         if not (self.homo and self.homo > 0 and self.homo <= 100):
             ErrorMessage(self.window, "Invalid input parameters", "Homogeneity value must be a positive real lower than 100.")
             return
 
 
-        self.txtZoomValue.set_text("100.0")
+        self.txtZoomValue.set_text("100.0%")
         
-
-        self.zoom = float(self.txtZoomValue.get_text()) if self.isNumeric(self.txtZoomValue.get_text()) else False
+        value = self.txtZoomValue.get_text().replace("%", "")
+        self.zoom = float(value) if self.isNumeric(value) else False
 
         if not (self.zoom and self.zoom > 0):
             ErrorMessage(self.window, "Invalid input parameters", "Zoom value must be a positive real.")
@@ -152,6 +155,8 @@ class HomogeneityWindow():
 
 
         self.parent.plot.draw_rectangle(zmin, zmax, ymin, ymax)
+        self.txtHomoValue.set_text("{}%".format(self.homo))
+        self.txtZoomValue.set_text("{}%".format(self.zoom))
 
 
 

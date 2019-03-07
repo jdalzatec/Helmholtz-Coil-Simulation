@@ -89,7 +89,8 @@ class ZoomWindow():
             return False
 
     def on_apply_zoom(self, widget):
-        self.zoom = float(self.txtZoomValue.get_text()) if self.isNumeric(self.txtZoomValue.get_text()) else False
+        value = self.txtZoomValue.get_text().replace("%", "")
+        self.zoom = float(value) if self.isNumeric(value) else False
 
         if not (self.zoom and self.zoom > 0):
             ErrorMessage(self.window, "Invalid input parameters", "Zoom value must be a positive real.")
@@ -98,6 +99,7 @@ class ZoomWindow():
         zmin, zmax, ymin, ymax = self.plot.compute_zoom(self.zoom)
         
         self.parent.plot.draw_rectangle(zmin, zmax, ymin, ymax)
+        self.txtZoomValue.set_text("{}%".format(self.zoom))
 
 
 
