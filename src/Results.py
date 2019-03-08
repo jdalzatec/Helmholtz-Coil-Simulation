@@ -108,12 +108,12 @@ class Results():
 
     def populate_input_parameters(self):
         text = "\n"
-        text += "\t{}\t\t=\t\t{}\n".format("Min Z", str(self.simulation.z_min))
-        text += "\t{}\t\t=\t\t{}\n".format("Max Z", str(self.simulation.z_max))
-        text += "\t{}\t\t=\t\t{}\n".format("Points Z", str(self.simulation.z_points))
-        text += "\t{}\t\t=\t\t{}\n".format("Min Y", str(self.simulation.y_min))
-        text += "\t{}\t\t=\t\t{}\n".format("Max Y", str(self.simulation.y_max))
-        text += "\t{}\t\t=\t\t{}\n".format("Points Y", str(self.simulation.y_points))
+        text += "\t{}\t\t=\t\t{}\n".format("Min. z [m]", str(self.simulation.z_min))
+        text += "\t{}\t\t=\t\t{}\n".format("Max. z [m]", str(self.simulation.z_max))
+        text += "\t{}\t\t=\t\t{}\n".format("Points z", str(self.simulation.z_points))
+        text += "\t{}\t\t=\t\t{}\n".format("Min. y [m]", str(self.simulation.y_min))
+        text += "\t{}\t\t=\t\t{}\n".format("Max. y [m]", str(self.simulation.y_max))
+        text += "\t{}\t\t=\t\t{}\n".format("Points y", str(self.simulation.y_points))
 
         text += "\n"
 
@@ -224,27 +224,27 @@ class Results():
             wBnorm = wb.create_sheet('B norm')
             title_style = openpyxl.styles.Font(bold=True) 
 
-            wInput.cell(row=1 + 0, column=1 + 0).value = "Min Z"
+            wInput.cell(row=1 + 0, column=1 + 0).value = "Min. z [m]"
             wInput.cell(row=1 + 0, column=1 + 0).font = title_style
             wInput.cell(row=1 + 0, column=1 + 1).value = self.simulation.z_min
             
-            wInput.cell(row=1 + 1, column=1 + 0).value = "Max Z"
+            wInput.cell(row=1 + 1, column=1 + 0).value = "Max. z [m]"
             wInput.cell(row=1 + 1, column=1 + 0).font = title_style
             wInput.cell(row=1 + 1, column=1 + 1).value = self.simulation.z_max
             
-            wInput.cell(row=1 + 2, column=1 + 0).value = "Points Z"
+            wInput.cell(row=1 + 2, column=1 + 0).value = "Points z"
             wInput.cell(row=1 + 2, column=1 + 0).font = title_style
             wInput.cell(row=1 + 2, column=1 + 1).value = self.simulation.z_points - 1
 
-            wInput.cell(row=1 + 3, column=1 + 0).value = "Min Y"
+            wInput.cell(row=1 + 3, column=1 + 0).value = "Min. y [m]"
             wInput.cell(row=1 + 3, column=1 + 0).font = title_style
             wInput.cell(row=1 + 3, column=1 + 1).value = self.simulation.y_min
 
-            wInput.cell(row=1 + 4, column=1 + 0).value = "Max Y"
+            wInput.cell(row=1 + 4, column=1 + 0).value = "Max. y [m]"
             wInput.cell(row=1 + 4, column=1 + 0).font = title_style
             wInput.cell(row=1 + 4, column=1 + 1).value = self.simulation.y_max
 
-            wInput.cell(row=1 + 5, column=1 + 0).value = "Points Y"
+            wInput.cell(row=1 + 5, column=1 + 0).value = "Points y"
             wInput.cell(row=1 + 5, column=1 + 0).font = title_style
             wInput.cell(row=1 + 5, column=1 + 1).value = self.simulation.y_points - 1
 
