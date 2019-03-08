@@ -73,7 +73,7 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Show coils</property>
                 <attributes>
-                  <attribute name="font-desc" value="Sans 12"/>
+                  <attribute name="font-desc" value="Sans 14"/>
                 </attributes>
               </object>
             </child>
@@ -157,7 +157,7 @@
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">Apply</property>
                     <attributes>
-                      <attribute name="font-desc" value="Sans 12"/>
+                      <attribute name="font-desc" value="Sans 14"/>
                     </attributes>
                   </object>
                 </child>

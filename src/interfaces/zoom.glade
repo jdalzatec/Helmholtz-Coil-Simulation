@@ -114,7 +114,7 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Zoom</property>
                         <attributes>
-                          <attribute name="font-desc" value="Sans 12"/>
+                          <attribute name="font-desc" value="Sans 14"/>
                         </attributes>
                       </object>
                     </child>

@@ -289,7 +289,7 @@
                     <property name="label" translatable="yes">_Simulate</property>
                     <property name="use_underline">True</property>
                     <attributes>
-                      <attribute name="font-desc" value="Sans 12"/>
+                      <attribute name="font-desc" value="Sans 14"/>
                     </attributes>
                   </object>
                 </child>
