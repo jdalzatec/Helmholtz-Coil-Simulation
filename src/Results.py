@@ -110,10 +110,10 @@ class Results():
         text = "\n"
         text += "\t{}\t\t=\t\t{}\n".format("Min. z [m]", str(self.simulation.z_min))
         text += "\t{}\t\t=\t\t{}\n".format("Max. z [m]", str(self.simulation.z_max))
-        text += "\t{}\t\t=\t\t{}\n".format("Points z", str(self.simulation.z_points))
+        text += "\t{}\t\t\t=\t\t{}\n".format("Points z", str(self.simulation.z_points))
         text += "\t{}\t\t=\t\t{}\n".format("Min. y [m]", str(self.simulation.y_min))
         text += "\t{}\t\t=\t\t{}\n".format("Max. y [m]", str(self.simulation.y_max))
-        text += "\t{}\t\t=\t\t{}\n".format("Points y", str(self.simulation.y_points))
+        text += "\t{}\t\t\t=\t\t{}\n".format("Points y", str(self.simulation.y_points))
 
         text += "\n"
 
