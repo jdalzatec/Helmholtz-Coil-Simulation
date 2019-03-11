@@ -257,6 +257,9 @@ class PlotBox():
         if colormap:
             self.colormap = colormap
 
+        if self.rect:
+            self.rect.remove()
+
         self.fig.clf()
         self.ax = self.fig.add_subplot(111)
         
@@ -299,6 +302,9 @@ class PlotBox():
 
         self.ax.set_aspect("equal")
 
+        if self.rect:
+            self.ax.add_patch(self.rect)
+
         self.fig.tight_layout()
         self.fig.canvas.draw()
 
@@ -327,6 +333,8 @@ class PlotBox():
             (coil.pos_z - width * 0.5, - coil.radius - width / 2),
             width, 2 * coil.radius + width,
             linewidth=0, facecolor="darkorange", edgecolor="black", hatch=r"|||||", )
+            
+
         self.ax.add_patch(rect)
 
 

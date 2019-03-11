@@ -2,6 +2,7 @@ import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gdk, GObject, GLib
 
+
 from GridWindow import GridWindow
 from About import AboutWindow
 from CoilsListBox import CoilsListBox

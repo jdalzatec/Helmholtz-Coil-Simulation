@@ -175,7 +175,7 @@ class HomogeneityWindow():
         high = max([abs(self.simulation.z_min), abs(self.simulation.z_max), abs(self.simulation.y_min), abs(self.simulation.y_max)])
         mid = (low + high) * 0.5
 
-        p = 5
+        p = 20
         ones = numpy.ones(p)
         while abs(high - low) > 1e-5:
             line = numpy.linspace(-mid, mid, p)
