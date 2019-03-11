@@ -301,7 +301,7 @@ class PlotBox():
         self.ax.set_ylim(self.y_lims)
 
         self.ax.set_yticklabels(["%.3f" % s for s in self.ax.get_yticks()], fontsize=15)
-        self.ax.set_xticklabels(["%.3f" % s for s in self.ax.get_xticks()], fontsize=15)
+        self.ax.set_xticklabels(["%.3f" % s for s in self.ax.get_xticks()], fontsize=15, rotation=45)
 
         self.ax.set_aspect("equal")
 
