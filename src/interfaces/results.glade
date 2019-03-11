@@ -191,7 +191,9 @@
                           <object class="GtkLabel">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Zoom</property>
+                            <property name="label" translatable="yes">_Zoom</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">btnZoom</property>
                             <attributes>
                               <attribute name="font-desc" value="Sans 14"/>
                             </attributes>
@@ -217,7 +219,9 @@
                           <object class="GtkLabel">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Homogeneity</property>
+                            <property name="label" translatable="yes">H_omogeneity</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">btnHomogeneity</property>
                             <attributes>
                               <attribute name="font-desc" value="Sans 14"/>
                             </attributes>

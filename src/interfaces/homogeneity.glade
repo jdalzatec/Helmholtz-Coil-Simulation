@@ -272,9 +272,10 @@
               </packing>
             </child>
             <child>
-              <object class="GtkTextView">
+              <object class="GtkTextView" id="txtExperimentationVolume">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="editable">False</property>
               </object>
               <packing>
                 <property name="position">1</property>

@@ -38,6 +38,7 @@ class HomogeneityWindow():
         self.menuColorMap = self.builder.get_object("menuColorMap")
         self.btnQuit = self.builder.get_object("btnQuit")
         self.btnAbout = self.builder.get_object("btnAbout")
+        self.txtExperimentationVolume = self.builder.get_object("txtExperimentationVolume")
 
 
         self.window.set_transient_for(self.parent.window)
@@ -157,6 +158,11 @@ class HomogeneityWindow():
         self.txtHomoValue.set_text("{}%".format(self.homo))
         self.txtZoomValue.set_text("{}%".format(self.zoom))
 
+        self.center = center
+
+        self.write_experimentation_values()
+
+
 
     def compute_uniformity(self):
         zmid = (self.simulation.z_max + self.simulation.z_min) * 0.5
@@ -204,10 +210,45 @@ class HomogeneityWindow():
 
 
     def plot_rectangle_homo(self):
-        self.homo_width = min([self.simulation.z_max, self.mid]) - max([self.simulation.z_min, -self.mid])
-        self.homo_height = min([self.simulation.y_max, self.mid]) - max([self.simulation.y_min, -self.mid])
+        self.homo_zmin = max([self.simulation.z_min, -self.mid])
+        self.homo_zmax = min([self.simulation.z_max, self.mid])
+        self.homo_ymin = max([self.simulation.y_min, -self.mid])
+        self.homo_ymax = min([self.simulation.y_max, self.mid])
+
+
+
+        self.homo_width = self.homo_zmax - self.homo_zmin 
+        self.homo_height = self.homo_ymax - self.homo_ymin
         self.plot.draw_rectangle(
-            max([self.simulation.z_min, -self.mid]),
-            min([self.simulation.z_max, self.mid]),
-            max([self.simulation.y_min, -self.mid]),
-            min([self.simulation.y_max, self.mid]))
+            self.homo_zmin,
+            self.homo_zmax,
+            self.homo_ymin,
+            self.homo_ymax)
+
+
+
+
+
+    def write_experimentation_values(self):
+        if numpy.sign(self.homo_ymax) == numpy.sign(self.homo_ymin):
+            r2 = max([abs(self.homo_ymax), abs(self.homo_ymin)])
+            r1 = min([abs(self.homo_ymax), abs(self.homo_ymin)])
+        else:
+            r2 = max([abs(self.homo_ymax), abs(self.homo_ymin)])
+            r1 = 0
+
+        volume = numpy.pi * self.homo_width * (r2 ** 2 - r1 ** 2)
+
+        Bo = compute_norm(self.simulation.coils, *self.center, self.simulation.mu0)
+
+
+        text = "\n"
+        text += " \t{}\n".format("Dimensions:")
+        text += " \t\t{}\t\t\t=\t\t{:.5f}\n".format("Width [m]", self.homo_width)
+        text += " \t\t{}\t\t\t=\t\t{:.5f}\n".format("Height [m]", self.homo_height)
+        text += " \t\t{}\t\t\t=\t\t{:.5f}\n".format("Volume [m3]", volume)
+        text += " \t{}\n".format("Magnetic field value at the center of the volume:")
+        text += " \t\t{}\t\t\t\t\t\t=\t\t{:.5f}\n".format("Bo [mT]", Bo)
+        text += " \t\t{}\t\t=\t\t(z = {:.5f}, y = {:.5f})\n".format("Centre coordinates [m]", *self.center)
+
+        self.txtExperimentationVolume.get_buffer().set_text(text)
