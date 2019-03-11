@@ -111,7 +111,6 @@ def main():
     pyplot.savefig("Bz_vs_z_several_r.pdf")
     pyplot.close()
     stop = timeit.default_timer()
-    print(stop - start)
 
     plot_coils(coils)
     

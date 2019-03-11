@@ -9,7 +9,7 @@ from matplotlib.backends.backend_gtk3agg import FigureCanvasGTK3Agg as FigureCan
 from matplotlib.backends.backend_gtk3 import NavigationToolbar2GTK3 as NavigationToolbar
 
 from PlotWindow import PlotBox
-from functions import uniformity
+from functions import uniformity, compute_norm
 from About import AboutWindow
 from ErrorMessage import ErrorMessage
 import numpy
@@ -81,30 +81,21 @@ class HomogeneityWindow():
 
     def on_key_press_event_zoom(self, widget, event):
 
-        print("Key press on widget: ", widget)
-        print("          Modifiers: ", event.state)
-        print("      Key val, name: ", event.keyval, Gdk.keyval_name(event.keyval))
 
         # check the event modifiers (can also use SHIFTMASK, etc)
         ctrl = (event.state & Gdk.ModifierType.CONTROL_MASK)
 
         # see if we recognise a keypress
         if Gdk.keyval_name(event.keyval) == 'Return':
-            print("Enter")
             self.on_apply_zoom(None)
 
     def on_key_press_event_homo(self, widget, event):
 
-        print("Key press on widget: ", widget)
-        print("          Modifiers: ", event.state)
-        print("      Key val, name: ", event.keyval, Gdk.keyval_name(event.keyval))
-
         # check the event modifiers (can also use SHIFTMASK, etc)
         ctrl = (event.state & Gdk.ModifierType.CONTROL_MASK)
 
         # see if we recognise a keypress
         if Gdk.keyval_name(event.keyval) == 'Return':
-            print("Enter")
             self.on_apply_homo(None)
 
     def isNumeric(self, val, func=float):
@@ -115,6 +106,7 @@ class HomogeneityWindow():
             return False
 
     def on_apply_zoom(self, widget):
+        self.plot.rect = None
         value = self.txtZoomValue.get_text().replace("%", "")
         self.zoom = float(value) if self.isNumeric(value) else False
 
@@ -122,14 +114,17 @@ class HomogeneityWindow():
             ErrorMessage(self.window, "Invalid input parameters", "Zoom value must be a positive real.")
             return
 
-        print(self.zoom)
         zmin, zmax, ymin, ymax = self.plot.compute_zoom(self.zoom)
 
         self.parent.plot.draw_rectangle(zmin, zmax, ymin, ymax)
         self.txtZoomValue.set_text("{}%".format(self.zoom))
 
+        self.plot_rectangle_homo()
+
+
 
     def on_apply_homo(self, widget):
+        self.plot.rect = None
         value = self.txtHomoValue.get_text().replace("%", "")
         self.homo = float(value) if self.isNumeric(value) else False
 
@@ -150,9 +145,12 @@ class HomogeneityWindow():
         center, uniformity_grid = self.compute_uniformity()
         homo_grid = numpy.where(uniformity_grid >= (self.homo / 100), 1, 0)
 
+
         self.plot.initial_norm = homo_grid.copy()
         zmin, zmax, ymin, ymax = self.plot.compute_zoom(self.zoom)
 
+        self.mid = self.compute_max_square(center)
+        self.plot_rectangle_homo()
 
         self.parent.plot.draw_rectangle(zmin, zmax, ymin, ymax)
         self.txtHomoValue.set_text("{}%".format(self.homo))
@@ -170,3 +168,46 @@ class HomogeneityWindow():
     def on_color_bar_menu(self, widget, name):
         self.colormap = name
         self.plot.update_plot(name)
+
+
+    def compute_max_square(self, center):
+        low = 0.0
+        high = max([abs(self.simulation.z_min), abs(self.simulation.z_max), abs(self.simulation.y_min), abs(self.simulation.y_max)])
+        mid = (low + high) * 0.5
+
+        p = 5
+        ones = numpy.ones(p)
+        while abs(high - low) > 1e-5:
+            line = numpy.linspace(-mid, mid, p)
+            line = numpy.linspace(-mid, mid, p)
+            down = numpy.array([line, - mid * ones]).T
+            up = numpy.array([line, mid * ones]).T
+            left = numpy.array([- mid * ones, line]).T
+            rigth = numpy.array([mid * ones, line]).T
+            points = numpy.concatenate((up, down, left, rigth), axis=0)
+            
+            decrease = False
+            for z, y in points:
+                val = compute_norm(self.simulation.coils, abs(y), z, self.simulation.mu0)
+                u = uniformity(self.simulation.coils, numpy.array([val]), self.simulation.mu0, center)[0]
+                if u < (self.homo / 100):
+                    decrease = True
+                    break
+
+            if decrease:
+                high = mid
+            else:
+                low = mid
+            mid = (low + high) * 0.5
+            
+        return mid
+
+
+    def plot_rectangle_homo(self):
+        self.homo_width = min([self.simulation.z_max, self.mid]) - max([self.simulation.z_min, -self.mid])
+        self.homo_height = min([self.simulation.y_max, self.mid]) - max([self.simulation.y_min, -self.mid])
+        self.plot.draw_rectangle(
+            max([self.simulation.z_min, -self.mid]),
+            min([self.simulation.z_max, self.mid]),
+            max([self.simulation.y_min, -self.mid]),
+            min([self.simulation.y_max, self.mid]))

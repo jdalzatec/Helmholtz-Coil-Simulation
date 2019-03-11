@@ -87,21 +87,7 @@ def uniformity(coils, norm, mu0, center):
 
 
     norm_mid = numpy.sqrt(Bz_mid**2 + Brho_mid**2)
-    print(Brho_mid, Bz_mid, norm_mid)
     
     values = 1.0 - numpy.abs((norm - norm_mid) / norm_mid)
     values[values <= 0.0] = 0.0
     return values
-
-def homogeneity(uniformity_grid, z_arr, rho_arr, homo):
-    # z, y = z_arr[0], -rho_arr[-1]
-    z, y = z_arr[0], -rho_arr[-1]
-    for i in range(int(len(z_arr)/2 + 1)):
-            if uniformity_grid[int(len(z_arr)/2) + i, 0] < homo/100:
-                    z = z_arr[int(len(z_arr)/2) - i + 1]
-                    break
-    for j in range(len(rho_arr)):
-            if uniformity_grid[int(len(z_arr)/2), j] < homo/100:
-                    y = -rho_arr[j - 1]
-                    break
-    return (z, y)

@@ -346,7 +346,7 @@ class PlotBox():
             self.rect.remove()
         
         self.rect = patches.Rectangle((xmin, ymin), (xmax - xmin), (ymax - ymin), 
-            linewidth=2, edgecolor='black', facecolor='none')
+            linewidth=2, edgecolor='black', facecolor='none', zorder=100)
         self.ax.add_patch(self.rect)
         self.fig.canvas.draw()
 
