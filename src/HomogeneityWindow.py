@@ -71,13 +71,14 @@ class HomogeneityWindow():
                 self.menuColorMap.append(item)
 
 
-        self.window.show_all()
 
         self.txtZoomValue.set_text(str(self.zoom))
         self.txtHomoValue.set_text(str(self.homo))
         self.btnApplyHomo.emit("clicked")
 
         self.plot.boxLimits.hide()
+        
+        self.window.show_all()
 
     def on_key_press_event_zoom(self, widget, event):
 
@@ -155,7 +156,6 @@ class HomogeneityWindow():
         self.parent.plot.draw_rectangle(zmin, zmax, ymin, ymax)
         self.txtHomoValue.set_text("{}%".format(self.homo))
         self.txtZoomValue.set_text("{}%".format(self.zoom))
-
 
 
     def compute_uniformity(self):
