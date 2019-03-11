@@ -276,7 +276,7 @@ class PlotBox():
 
         if not self.binary_colors:
             cbar = self.fig.colorbar(mesh, format=self.format)
-            cbar.set_label("B [mT]", fontsize=30)
+            cbar.set_label("B [mT]", fontsize=25)
 
             # set the ticks and ticks labels for the color bar
             labels = numpy.linspace(self.min_val, self.max_val, 5)
@@ -292,13 +292,16 @@ class PlotBox():
             if self.underpass:
                 labels[0] = "≤" + labels[0]
 
-            cbar.ax.set_yticklabels(labels)
+            cbar.ax.set_yticklabels(labels, fontsize=15)
 
-        self.ax.set_xlabel("z [m]", fontsize=30)
-        self.ax.set_ylabel("y [m]", fontsize=30)
+        self.ax.set_xlabel("z [m]", fontsize=25)
+        self.ax.set_ylabel("y [m]", fontsize=25)
         
         self.ax.set_xlim(self.z_lims)
         self.ax.set_ylim(self.y_lims)
+
+        self.ax.set_yticklabels(["%.3f" % s for s in self.ax.get_yticks()], fontsize=15)
+        self.ax.set_xticklabels(["%.3f" % s for s in self.ax.get_xticks()], fontsize=15)
 
         self.ax.set_aspect("equal")
 
