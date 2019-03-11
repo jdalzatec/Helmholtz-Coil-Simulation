@@ -39,12 +39,21 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="btnOpen">
-                        <property name="label">gtk-open</property>
+                      <object class="GtkImageMenuItem" id="btnLoadParams">
+                        <property name="label">Load _parameters</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
-                        <property name="use_stock">True</property>
+                        <property name="use_stock">False</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImageMenuItem" id="btnLoadResults">
+                        <property name="label">Load _results</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">False</property>
                       </object>
                     </child>
                     <child>

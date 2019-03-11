@@ -14,8 +14,10 @@ from Presets import LeeWhitingCoilPreset
 from Presets import RandomCoilPreset
 from coil import Coil, CreateCoil
 from Simulation import Simulation
+from Results import Results
 from ErrorMessage import ErrorMessage
 import random
+import numpy
 
 import openpyxl
 
@@ -40,7 +42,8 @@ class InputWindow():
         self.chbAutoGrid = self.builder.get_object("chbAutoGrid")
         self.menuColorMap = self.builder.get_object("menuColorMap")
         self.treeData = self.builder.get_object("treeData")
-        self.btnOpen = self.builder.get_object("btnOpen")
+        self.btnLoadParams = self.builder.get_object("btnLoadParams")
+        self.btnLoadResults = self.builder.get_object("btnLoadResults")
         self.btnNew = self.builder.get_object("btnNew")
         self.btnQuit = self.builder.get_object("btnQuit")
         self.btnAbout = self.builder.get_object("btnAbout")
@@ -59,7 +62,8 @@ class InputWindow():
 
         self.btnSimulate.connect("clicked", self.on_simulate)
         self.chbAutoGrid.connect("toggled", self.on_auto_grid)
-        self.btnOpen.connect("activate", self.on_import)
+        self.btnLoadParams.connect("activate", self.on_import_params)
+        self.btnLoadResults.connect("activate", self.on_import_results)
         self.btnQuit.connect("activate", Gtk.main_quit)
         self.btnNew.connect("activate", self.listBox.remove_all_coils)
         self.btnAbout.connect("activate", lambda _: AboutWindow(self.window))
@@ -187,6 +191,7 @@ class InputWindow():
             self.simulation = Simulation(self, self.coils,
                 self.z_min, self.z_max, self.z_points,
                 self.y_min, self.y_max, self.y_points)
+            self.simulation.simulate()
 
 
     def isNumeric(self, val, func=float):
@@ -240,7 +245,7 @@ class InputWindow():
         dialog.window.destroy()
         return False
 
-    def on_import(self, widget):
+    def on_import_params(self, widget):
         dialog = Gtk.FileChooserDialog("Please choose a file", self.window,
             Gtk.FileChooserAction.OPEN,
             (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
@@ -286,6 +291,89 @@ class InputWindow():
                     current=coil.I, position=coil.pos_z)
                 coil_rows.append(coil_row)
             self.listBox.update(coil_rows)
+
+        elif response == Gtk.ResponseType.CANCEL:
+            print("Cancel clicked")
+
+        dialog.destroy()
+
+    def on_import_results(self, widget):
+        dialog = Gtk.FileChooserDialog("Please choose a file", self.window,
+            Gtk.FileChooserAction.OPEN,
+            (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+             Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
+
+        filters = Gtk.FileFilter()
+        filters.set_name("Excel files")
+        filters.add_pattern("*.*.csv")
+        filters.add_pattern("*.xlsx")
+        filters.add_pattern("*.XLSX")
+        dialog.add_filter(filters)
+
+        response = dialog.run()
+        
+        if response == Gtk.ResponseType.OK:
+            filename = dialog.get_filename()
+
+
+            wb = openpyxl.load_workbook(filename)
+            wInput = wb["Simulation parameters"]
+            wCoils = wb['Input parameters']
+            wBy = wb['B y']
+            wBz = wb['B z']
+            wBnorm = wb['B norm']
+
+            z_min = wInput.cell(row=1 +0, column=1 + 1).value
+            z_max = wInput.cell(row=1 +1, column=1 + 1).value
+            z_points = int(wInput.cell(row=1 +2, column=1 + 1).value)
+            y_min = wInput.cell(row=1 +3, column=1 + 1).value
+            y_max = wInput.cell(row=1 +4, column=1 + 1).value
+            y_points = int(wInput.cell(row=1 +5, column=1 + 1).value)
+
+            coils = []
+            for i in range(wCoils.max_row - 1):
+                radius = wCoils.cell(row=1 + i + 1, column=1 + 0).value
+                turns = int(wCoils.cell(row=1 + i + 1, column=1 + 1).value)
+                current = wCoils.cell(row=1 + i + 1, column=1 + 2).value
+                position = wCoils.cell(row=1 + i + 1, column=1 + 3).value
+                coils.append(CreateCoil("Circular", radius, turns, current, position))
+
+            z_arr = []
+            for i in range(wBz.max_column - 1):
+                z_arr.append(wBz.cell(row=1 + 0, column=1 + i + 1).value)
+
+            y_arr = []
+            for i in range(wBz.max_row - 1):
+                y_arr.append(wBz.cell(row=1 + i + 1, column=1 + 0).value)
+
+            Bz_grid = numpy.zeros(shape=(len(z_arr), len(y_arr)))
+            Brho_grid = numpy.zeros(shape=(len(z_arr), len(y_arr)))
+            norm = numpy.zeros(shape=(len(z_arr), len(y_arr)))
+            for i in range(len(z_arr) - 1):
+                for j in range(len(y_arr) - 1):
+                    Bz_grid[i, j] = wBz.cell(row=1 + j + 1, column=1 + i + 1).value
+                    Brho_grid[i, j] = wBy.cell(row=1 + j + 1, column=1 + i + 1).value
+                    norm[i, j] = wBnorm.cell(row=1 + j + 1, column=1 + i + 1).value
+
+            self.simulation = Simulation(self, coils,
+                            z_min, z_max, 1,
+                            y_min, y_max, 1)
+            self.simulation.set_data(coils, z_min, z_max, z_points, y_min, y_max, y_points,
+                 z_arr, y_arr, Bz_grid, Brho_grid, norm)
+
+            results = Results(self, self.simulation)
+            results.load_simulation()
+
+            coil_rows = []
+            for coil in coils:
+                coil_row = CoilListRow()
+                coil_row.set_values(
+                    radius=coil.radius,
+                    turns=coil.num_turns,
+                    current=coil.I, position=coil.pos_z)
+                coil_rows.append(coil_row)
+            self.listBox.update(coil_rows)
+            self.window.hide()
 
         elif response == Gtk.ResponseType.CANCEL:
             print("Cancel clicked")

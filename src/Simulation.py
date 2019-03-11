@@ -43,13 +43,16 @@ class Simulation(object):
         self.finish = False
         self.times = []
 
-        self.window.show_all()
 
+    
+    def simulate(self):
         self.thread = threading.Thread(target=self.run)
         self.thread.daemon = True
         self.thread.start()
 
         self.wait_for_the_simulation()
+
+        self.window.show_all()
 
     def build_data(self, coils, z_min, z_max, z_points, y_min, y_max, y_points):
         self.coils = coils
