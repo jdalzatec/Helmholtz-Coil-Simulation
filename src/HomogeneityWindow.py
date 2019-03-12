@@ -244,11 +244,13 @@ class HomogeneityWindow():
 
         text = "\n"
         text += " \t{}\n".format("Dimensions:")
+        text += "\n"
         text += " \t\t{}\t\t\t=\t\t{:.5f}\n".format("Width [m]", self.homo_width)
         text += " \t\t{}\t\t\t=\t\t{:.5f}\n".format("Height [m]", self.homo_height)
         text += " \t\t{}\t\t\t=\t\t{:.5f}\n".format("Volume [m3]", volume)
         text += "\n"
         text += " \t{}\n".format("Magnetic field value at the center of the volume:")
+        text += "\n"
         text += " \t\t{}\t\t\t\t\t\t=\t\t{:.5f}\n".format("Bo [mT]", Bo)
         text += " \t\t{}\t\t=\t\t(z = {:.5f}, y = {:.5f})\n".format("Center coordinates [m]", *self.center)
 
