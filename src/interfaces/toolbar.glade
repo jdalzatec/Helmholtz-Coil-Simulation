@@ -95,7 +95,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes">Minimum value of the color bar</property>
-                <property name="label" translatable="yes">Min. =</property>
+                <property name="label" translatable="yes">Bmin [mT] =</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -121,7 +121,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes">Maximum value of the color bar</property>
-                <property name="label" translatable="yes">Max. =</property>
+                <property name="label" translatable="yes">Bmax [mT] =</property>
               </object>
               <packing>
                 <property name="expand">False</property>
