@@ -1,3 +1,20 @@
+import sys
+
+is_frozen = getattr(sys, 'frozen', False)
+frozen_temp_path = getattr(sys, '_MEIPASS', '')
+
+import os
+
+# This is needed to find resources when using pyinstaller
+if is_frozen:
+    basedir = frozen_temp_path
+else:
+    basedir = os.path.dirname(os.path.abspath(__file__))
+resource_dir = os.path.join(basedir, 'resources')
+
+
+
+
 import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gdk
@@ -24,7 +41,8 @@ class PlotBox():
         self.statBar = statBar
 
         self.builder = Gtk.Builder()
-        self.builder.add_from_file("./interfaces/toolbar.glade")
+        
+        self.builder.add_from_file(resource_dir + "/toolbar.glade")
         wnd = self.builder.get_object("wndToolBar")
         self.toolbar = self.builder.get_object("boxToolBar")
         self.boxLimits = self.builder.get_object("boxLimits")
@@ -328,7 +346,7 @@ class PlotBox():
 
 
     def draw_coil(self, coil):
-        gauge, diameter, section, resist, Inominal = numpy.loadtxt("awg.dat", unpack=True)
+        gauge, diameter, section, resist, Inominal = numpy.loadtxt(resource_dir + "/awg.dat", unpack=True)
         Imax = abs(coil.I)
         index = numpy.argmin(Inominal > Imax) - 1
         diameter = diameter[index] / 1000

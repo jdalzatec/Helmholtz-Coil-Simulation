@@ -1,3 +1,20 @@
+import sys
+
+is_frozen = getattr(sys, 'frozen', False)
+frozen_temp_path = getattr(sys, '_MEIPASS', '')
+
+import os
+
+# This is needed to find resources when using pyinstaller
+if is_frozen:
+    basedir = frozen_temp_path
+else:
+    basedir = os.path.dirname(os.path.abspath(__file__))
+resource_dir = os.path.join(basedir, 'resources')
+
+
+
+
 import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
@@ -24,7 +41,8 @@ class Results():
         self.parent = parent
         
         self.builder = Gtk.Builder()
-        self.builder.add_from_file("./interfaces/results.glade")
+        
+        self.builder.add_from_file(resource_dir + "/results.glade")
         self.window = self.builder.get_object("wndResults")
         self.boxPlot = self.builder.get_object("boxPlot")
         self.btnBack = self.builder.get_object("btnBack")
@@ -128,7 +146,7 @@ class Results():
 
 
     def populate_electrical_parameters(self):
-        gauge, diameter, section, resist, Inominal = numpy.loadtxt("awg.dat", unpack=True)
+        gauge, diameter, section, resist, Inominal = numpy.loadtxt(resource_dir + "/awg.dat", unpack=True)
         Imax = max([abs(coil.I) for coil in self.simulation.coils])
         index = numpy.argmin(Inominal > Imax) - 1
         gauge = gauge[index]

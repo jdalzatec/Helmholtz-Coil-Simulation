@@ -1,3 +1,20 @@
+import sys
+
+is_frozen = getattr(sys, 'frozen', False)
+frozen_temp_path = getattr(sys, '_MEIPASS', '')
+
+import os
+
+# This is needed to find resources when using pyinstaller
+if is_frozen:
+    basedir = frozen_temp_path
+else:
+    basedir = os.path.dirname(os.path.abspath(__file__))
+resource_dir = os.path.join(basedir, 'resources')
+
+
+
+
 import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gdk
@@ -27,7 +44,7 @@ class HomogeneityWindow():
 
         
         self.builder = Gtk.Builder()
-        self.builder.add_from_file("./interfaces/homogeneity.glade")
+        self.builder.add_from_file(resource_dir + "/homogeneity.glade")
         self.window = self.builder.get_object("wndHomo")
         self.statBar = self.builder.get_object("statBar")
         self.btnApplyHomo = self.builder.get_object("btnApplyHomo")

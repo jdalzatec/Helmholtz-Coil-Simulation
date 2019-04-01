@@ -1,3 +1,20 @@
+import sys
+
+is_frozen = getattr(sys, 'frozen', False)
+frozen_temp_path = getattr(sys, '_MEIPASS', '')
+
+import os
+
+# This is needed to find resources when using pyinstaller
+if is_frozen:
+    basedir = frozen_temp_path
+else:
+    basedir = os.path.dirname(os.path.abspath(__file__))
+resource_dir = os.path.join(basedir, 'resources')
+
+
+
+
 import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gdk, GLib
@@ -21,7 +38,7 @@ class Simulation(object):
     def __init__(self, parent, coils, z_min, z_max, z_points, y_min, y_max, y_points):
         self.parent = parent
         self.builder = Gtk.Builder()
-        self.builder.add_from_file("./interfaces/running.glade")
+        self.builder.add_from_file(resource_dir + "/running.glade")
         self.window = self.builder.get_object("wndRunning")
         self.progressBar = self.builder.get_object("progressBar")
         self.lblETA = self.builder.get_object("lblETA")
