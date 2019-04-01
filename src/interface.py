@@ -109,7 +109,7 @@ class InputWindow():
 
     def on_auto_grid(self, check):
         self.auto_grid = check.get_active()
-        print(self.auto_grid)
+        # print(self.auto_grid)
 
     def compute_grid(self):
         if len(self.coils) > 0:
@@ -125,7 +125,7 @@ class InputWindow():
                 self.z_min = self.z_min - self.y_max
                 self.z_max = self.z_max + self.y_max
 
-            PMAX = 50
+            PMAX = 100
             if abs(self.z_max - self.z_min) > abs(self.y_max - self.y_min):
                 self.z_points = PMAX
                 self.y_points = int(abs(self.y_max - self.y_min) * PMAX / abs(self.z_max - self.z_min))
@@ -140,7 +140,7 @@ class InputWindow():
         turns = values["turns"]
         current = values["current"]
         position = values["position"]
-        print(radius, turns, current, position)
+        # print(radius, turns, current, position)
         
         if not (radius and radius > 0.0):
             ErrorMessage(self.window, "Invalid input parameters", "Radius must be a positive real.")
@@ -188,7 +188,7 @@ class InputWindow():
             ready = self.insert_grid_manually()
 
         if ready:
-            print("lets go")
+            # print("lets go")
             self.simulation = Simulation(self, self.coils,
                 self.z_min, self.z_max, self.z_points,
                 self.y_min, self.y_max, self.y_points)
@@ -294,7 +294,8 @@ class InputWindow():
             self.listBox.update(coil_rows)
 
         elif response == Gtk.ResponseType.CANCEL:
-            print("Cancel clicked")
+            pass
+            # print("Cancel clicked")
 
         dialog.destroy()
 
@@ -377,10 +378,10 @@ class InputWindow():
             self.window.hide()
 
         elif response == Gtk.ResponseType.CANCEL:
-            print("Cancel clicked")
+            pass
+            # print("Cancel clicked")
 
         dialog.destroy()
 
 GObject.threads_init()
 window = InputWindow("./interfaces/input.glade")
-print("hola")

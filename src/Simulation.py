@@ -109,7 +109,7 @@ class Simulation(object):
             self.thread.join()
 
             if self.finish:
-                print("finish")
+                # print("finish")
                 self.parent.window.hide()
                 self.norm = numpy.sqrt(self.Brho_grid**2 + self.Bz_grid**2)
                 results = Results(self.parent, self)

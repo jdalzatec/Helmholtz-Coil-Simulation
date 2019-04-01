@@ -42,9 +42,9 @@ class GridWindow():
 
     def on_key_press_event(self, widget, event):
 
-        print("Key press on widget: ", widget)
-        print("          Modifiers: ", event.state)
-        print("      Key val, name: ", event.keyval, Gdk.keyval_name(event.keyval))
+        # print("Key press on widget: ", widget)
+        # print("          Modifiers: ", event.state)
+        # print("      Key val, name: ", event.keyval, Gdk.keyval_name(event.keyval))
 
         # check the event modifiers (can also use SHIFTMASK, etc)
         ctrl = (event.state & Gdk.ModifierType.CONTROL_MASK)

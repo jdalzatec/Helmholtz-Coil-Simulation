@@ -53,7 +53,9 @@ class HomogeneityWindow():
         self.btnAbout.connect("activate", lambda _: AboutWindow(self.window))
 
         self.plot = PlotBox(self, self.simulation, self.colormap, self.statBar, binary_colors=True)
+        
         self.boxPlot.pack_start(self.plot.boxPlot, True, True, 0)
+
 
         # Get a list of the colormaps in matplotlib.  Ignore the ones that end with
         # '_r' because these are simply reversed versions of ones that don't end
@@ -80,6 +82,12 @@ class HomogeneityWindow():
         self.plot.boxLimits.hide()
         
         self.window.show_all()
+        
+        self.plot.txtMinLimit.hide()
+        self.plot.txtMaxLimit.hide()
+        self.plot.lblBmin.hide()
+        self.plot.lblBmax.hide()
+        self.plot.btnApplyLimits.hide()
 
     def on_key_press_event_zoom(self, widget, event):
 

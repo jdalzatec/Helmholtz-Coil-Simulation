@@ -32,6 +32,8 @@ class PlotBox():
         self.btnApplyLimits = self.builder.get_object("btnApplyLimits")
         self.txtMinLimit = self.builder.get_object("txtMinLimit")
         self.txtMaxLimit = self.builder.get_object("txtMaxLimit")
+        self.lblBmin = self.builder.get_object("lblBmin")
+        self.lblBmax = self.builder.get_object("lblBmax")
         self.btnRestore = self.builder.get_object("btnRestore")
         self.btnSave = self.builder.get_object("btnSave")
         self.btnHideShowCoils = self.builder.get_object("btnHideShowCoils")
@@ -76,16 +78,16 @@ class PlotBox():
 
     def on_key_press_event(self, widget, event):
 
-        print("Key press on widget: ", widget)
-        print("          Modifiers: ", event.state)
-        print("      Key val, name: ", event.keyval, Gdk.keyval_name(event.keyval))
+        # print("Key press on widget: ", widget)
+        # print("          Modifiers: ", event.state)
+        # print("      Key val, name: ", event.keyval, Gdk.keyval_name(event.keyval))
 
         # check the event modifiers (can also use SHIFTMASK, etc)
         ctrl = (event.state & Gdk.ModifierType.CONTROL_MASK)
 
         # see if we recognise a keypress
         if Gdk.keyval_name(event.keyval) == 'Return':
-            print("Enter")
+            # print("Enter")
             self.on_apply_limits(None)
 
 
@@ -104,14 +106,15 @@ class PlotBox():
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
             filename = dialog.get_filename()
-            print("Open clicked")
-            print("File selected: " + filename)
+            # print("Open clicked")
+            # print("File selected: " + filename)
             if "." not in filename:
                 filename += ".pdf"
 
             self.fig.savefig(filename)
         elif response == Gtk.ResponseType.CANCEL:
-            print("Cancel clicked")
+            pass
+            # print("Cancel clicked")
 
         dialog.destroy()
 
@@ -155,7 +158,7 @@ class PlotBox():
         self.y_lims = (self.simulation.y_min, self.simulation.y_max)
 
 
-        print(self.parent, hasattr(self.parent, "on_apply_zoom"))
+        # print(self.parent, hasattr(self.parent, "on_apply_zoom"))
         if hasattr(self.parent, "on_apply_zoom"):
             self.parent.parent.plot.clear_rectangle()
 
@@ -208,7 +211,7 @@ class PlotBox():
         self.points.set_data(*self.selected_point)
         self.fig.canvas.draw()
         val = compute_norm(self.simulation.coils, abs(y), z, self.simulation.mu0)
-        print(val)
+        # print(val)
         self.statBar.push(1, ("Coordinates: z = {:.3f}; y = {:.3f}; B = {:.2E} mT".format(
             z, y, val)))
 

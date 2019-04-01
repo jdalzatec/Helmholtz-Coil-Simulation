@@ -207,8 +207,8 @@ class Results():
         
         if response == Gtk.ResponseType.OK:
             filename = dialog.get_filename()
-            print("Open clicked")
-            print("File selected: " + filename)
+            # print("Open clicked")
+            # print("File selected: " + filename)
             if "." not in filename:
                 filename += ".xlsx"
 
@@ -321,7 +321,8 @@ class Results():
             wb.save(filename)
 
         elif response == Gtk.ResponseType.CANCEL:
-            print("Cancel clicked")
+            pass
+            # print("Cancel clicked")
 
         dialog.destroy()
 
@@ -392,6 +393,7 @@ class Results():
             self.load_simulation()
 
         elif response == Gtk.ResponseType.CANCEL:
-            print("Cancel clicked")
+            # print("Cancel clicked")
+            pass
 
         dialog.destroy()

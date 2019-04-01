@@ -68,16 +68,16 @@ class ZoomWindow():
 
     def on_key_press_event(self, widget, event):
 
-        print("Key press on widget: ", widget)
-        print("          Modifiers: ", event.state)
-        print("      Key val, name: ", event.keyval, Gdk.keyval_name(event.keyval))
+        # print("Key press on widget: ", widget)
+        # print("          Modifiers: ", event.state)
+        # print("      Key val, name: ", event.keyval, Gdk.keyval_name(event.keyval))
 
         # check the event modifiers (can also use SHIFTMASK, etc)
         ctrl = (event.state & Gdk.ModifierType.CONTROL_MASK)
 
         # see if we recognise a keypress
         if Gdk.keyval_name(event.keyval) == 'Return':
-            print("Enter")
+            # print("Enter")
             self.on_apply_zoom(None)
 
 
