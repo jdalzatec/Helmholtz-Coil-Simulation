@@ -171,11 +171,11 @@ class Results():
         text = "\n"
         text += "\t{}\t\t\t\t\t\t=\t\t{:d}\n".format("AWG Gauge", self.electrical_values["AWG Gauge"])
         text += "\t{}\t\t\t\t=\t\t{:.5f}\n".format("Wire diameter [mm]", self.electrical_values["Wire diameter [mm]"])
-        text += "\t{}\t=\t\t{:.5f}\n".format("Wire cross sectional area [mm2]", self.electrical_values["Wire cross sectional area [mm2]"])
+        text += "\t{}\t=\t\t{:.5f}\n".format("Wire cross sectional area [mm²]", self.electrical_values["Wire cross sectional area [mm2]"])
         text += "\t{}\t\t\t\t=\t\t{:.5f}\n".format("Nominal current [A]", self.electrical_values["Nominal current [A]"])
         text += "\t{}\t\t\t\t=\t\t{:.5f}\n".format("Maximum current [A]", self.electrical_values["Maximum current [A]"])
         text += "\t{}\t\t\t\t=\t\t{:.5f}\n".format("Total wire length [m]", self.electrical_values["Total wire length [m]"])
-        text += "\t{}\t\t\t=\t\t{:.5f}\n".format("Wire resistance [Ohm]", self.electrical_values["Wire resistance [Ohm]"])
+        text += "\t{}\t\t\t=\t\t{:.5f}\n".format("Wire resistance [Ω]", self.electrical_values["Wire resistance [Ohm]"])
 
         self.txtElectircalParameters.get_buffer().set_text(text)
 

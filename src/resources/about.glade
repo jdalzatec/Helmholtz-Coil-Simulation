@@ -127,7 +127,7 @@ Daniel Alejandro Sabogal Suárez.</property>
                     <property name="margin_top">20</property>
                     <property name="margin_bottom">20</property>
                     <property name="label" translatable="yes">For more information, usage and applications please visit:
-&lt;a href="https://github.com/pcm-ca/Helmholtz-Coil-Simulation"&gt;Arxiv paper&lt;/a&gt;</property>
+&lt;a href="https://github.com/pcm-ca/MFV"&gt;Arxiv paper&lt;/a&gt;</property>
                     <property name="use_markup">True</property>
                   </object>
                   <packing>
@@ -144,7 +144,7 @@ Daniel Alejandro Sabogal Suárez.</property>
                     <property name="margin_top">20</property>
                     <property name="margin_bottom">20</property>
                     <property name="label" translatable="yes">For implementation, coding and executables please visit:
-&lt;a href="https://github.com/pcm-ca/Helmholtz-Coil-Simulation"&gt;Magnetic Field Visualizer&lt;/a&gt;</property>
+&lt;a href="https://github.com/pcm-ca/MFV"&gt;Magnetic Field Visualizer&lt;/a&gt;</property>
                     <property name="use_markup">True</property>
                   </object>
                   <packing>

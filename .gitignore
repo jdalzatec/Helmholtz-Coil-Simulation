@@ -122,3 +122,6 @@ Pipfile.lock
 *.xlsx
 
 !icon.png
+
+# requirements
+requirements.txt
