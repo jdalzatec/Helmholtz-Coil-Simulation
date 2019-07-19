@@ -1,4 +1,4 @@
-# MFV
+# MFV: Application software for the visualization and characterization of the DC magnetic field distribution in circular coil systems
 
 For information, usage and applications please visit http://arxiv.org/abs/1904.04327.
 
