@@ -9,7 +9,7 @@ Installation
 Linux and Mac OS X
 -------------------
 
-On Linux and Mac OS X operating systems, MFV does not require to be built or installed in order to be executed. You just have to download and run the corresponding stand-alone <a href="https://github.com/pcm-ca/MFV/tree/master/executable">Executables</a>.
+On Linux and Mac OS X operating systems, MFV does not require to be built or installed in order to be executed. You just have to download and run the corresponding stand-alone <a href="https://github.com/pcm-ca/MFV/tree/master/Executables">executable</a>.
 
 Windows
 -------
@@ -19,10 +19,10 @@ In order to run MFV on Windows, you need to install PyGObject, GTK and their dep
 1. Go to http://www.msys2.org/ and download the x86_64 installer
 2. Follow the instructions on the page for setting up the basic environment
 3. Run C:\msys64\mingw64.exe - a terminal window should pop up
-4. Execute pacman -Suy
-5. Execute pacman -S git mingw-w64-x86_64-gtk3 mingw-w64-x86_64-python3-gobject mingw-w64-x86_64-python3-numpy mingw-w64-x86_64-python3-scipy mingw-w64-x86_64-python3-matplotlib mingw-w64-x86_64-python3-openpyxl
-6. Execute git clone https://github.com/pcm-ca/MFV.git
-7. Execute cd MFV/src/
-8. Execute python3 interface.py - the MFV input parameters window should appear
+4. Execute <code>pacman -Suy</code>
+5. Execute <code>pacman -S git mingw-w64-x86_64-gtk3 mingw-w64-x86_64-python3-gobject mingw-w64-x86_64-python3-numpy mingw-w64-x86_64-python3-scipy mingw-w64-x86_64-python3-matplotlib mingw-w64-x86_64-python3-openpyxl</code>
+6. Execute <code>git clone https://github.com/pcm-ca/MFV.git</code>
+7. Execute <code>cd MFV/src/</code>
+8. Execute <code>python3 interface.py - the MFV input parameters window should appear</code>
 
 
