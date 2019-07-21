@@ -123,6 +123,3 @@ Pipfile.lock
 
 !icon.png
 !interface.spec
-
-# requirements
-requirements.txt

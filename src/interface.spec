@@ -13,7 +13,6 @@ def get_resources():
     return data_files
 
 a = Analysis(['interface.py'],
-             pathex=['/home/jdalzatec/Desktop/github-repos/Helmholtz-Coil-Simulation/src'],
              binaries=[],
              datas=get_resources(),
              hiddenimports=[],
