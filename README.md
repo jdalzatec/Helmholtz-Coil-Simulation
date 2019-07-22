@@ -11,6 +11,8 @@ Linux and Mac OS X
 
 On Linux and Mac OS X operating systems, MFV does not require to be built or installed in order to be executed. You just have to <a href="https://github.com/pcm-ca/MFV/tree/master/Executables">download</a> and run the corresponding stand-alone executable.
 
+To run the Linux executable properly, first open the executable properties and check the "Allow executing file as program" option.
+
 Windows
 -------
 
