@@ -110,8 +110,10 @@
                     <property name="halign">start</property>
                     <property name="margin_top">20</property>
                     <property name="margin_bottom">20</property>
-                    <property name="label" translatable="yes">Developed by Juan David Alzate Cardona and
-Daniel Alejandro Sabogal Suárez.</property>
+                    <property name="label" translatable="yes">Developed by Juan David Alzate Cardona, 
+Daniel Alejandro Sabogal Suárez,
+Javier Torres Osorio and
+Elisabeth Restrepo Parra.</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>

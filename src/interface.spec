@@ -1,20 +1,12 @@
 # -*- mode: python -*-
 
-import os
-import platform
-
 block_cipher = None
 
 
-def get_resources():
-    data_files = []
-    for file_name in os.listdir('resources'):
-        data_files.append((os.path.join('resources', file_name), 'resources'))
-    return data_files
-
 a = Analysis(['interface.py'],
+             pathex=['/Users/daniel/Desktop/Daniel/U/GitHub/MFV/src'],
              binaries=[],
-             datas=get_resources(),
+             datas=[],
              hiddenimports=[],
              hookspath=[],
              runtime_hooks=[],
@@ -28,7 +20,6 @@ pyz = PYZ(a.pure, a.zipped_data,
 exe = EXE(pyz,
           a.scripts,
           a.binaries,
-          Tree('resources'),
           a.zipfiles,
           a.datas,
           [],
